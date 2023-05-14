@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Sejmet.API.Models.DTOs;
+using Sejmet.API.Models.DTOs.Customers;
 
 namespace Sejmet.API.Commands.Customers.Update
 {

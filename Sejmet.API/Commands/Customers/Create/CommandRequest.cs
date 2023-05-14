@@ -1,12 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Sejmet.API.Models.DTOs;
+using Sejmet.API.Models.DTOs.Customers;
 
 namespace Sejmet.API.Commands.Customers.Create
 {
     public class CommandRequest : IRequest<IActionResult>
     {
         [FromBody]
-        public CreateProductDTO Body { get; set; }
+        public CustomerDTO Body { get; set; }
     }
 }
