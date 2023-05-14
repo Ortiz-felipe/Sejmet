@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Sejmet.API.Models.DTOs;
+using Sejmet.API.Models.DTOs.Customers;
 using Sejmet.API.Models.Entities;
 
 namespace Sejmet.API.Models.Mappings
@@ -8,7 +8,7 @@ namespace Sejmet.API.Models.Mappings
     {
         public CustomerProfile() 
         {
-            this.CreateMap<Customer, CreateProductDTO>()
+            this.CreateMap<Customer, CustomerDTO>()
                 .ForMember(destination => destination.Id, origin => origin.MapFrom(x => x.Id))
                 .ForMember(destination => destination.FirstName, origin => origin.MapFrom(x => x.FirstName))
                 .ForMember(destination => destination.LastName, origin => origin.MapFrom(x => x.LastName))

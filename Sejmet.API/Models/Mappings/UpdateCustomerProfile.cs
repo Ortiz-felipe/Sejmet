@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Sejmet.API.Models.DTOs;
+using Sejmet.API.Models.DTOs.Customers;
 using Sejmet.API.Models.Entities;
 
 namespace Sejmet.API.Models.Mappings
