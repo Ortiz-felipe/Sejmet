@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Sejmet.API.Models.DTOs;
+using Sejmet.API.Models.DTOs.Customers;
 using Sejmet.API.Models.Entities;
 using Sejmet.API.Repositories.Interfaces;
 
@@ -17,7 +17,7 @@ namespace Sejmet.API.Repositories
             _mapper = mapper;
         }
 
-        public async Task<IList<CreateProductDTO>> GetAllAsync(int? provinceId, Guid? cityId, string? firstName, string? lastName, CancellationToken cancellationToken)
+        public async Task<IList<CustomerDTO>> GetAllAsync(int? provinceId, Guid? cityId, string? firstName, string? lastName, CancellationToken cancellationToken)
         {
             var query = _context.Customers.Include(x => x.HealtcareProvider).AsQueryable();
 
@@ -44,7 +44,7 @@ namespace Sejmet.API.Repositories
             try
             {
                 var customers = await query.ToListAsync(cancellationToken).ConfigureAwait(false);
-                var customersDTOs = _mapper.Map<List<CreateProductDTO>>(customers);
+                var customersDTOs = _mapper.Map<List<CustomerDTO>>(customers);
 
                 return customersDTOs;
             }
@@ -54,7 +54,7 @@ namespace Sejmet.API.Repositories
             }
         }
 
-        public async Task<CreateProductDTO> CreateCustomerAsync(CreateProductDTO customerDTO, CancellationToken cancellationToken)
+        public async Task<CustomerDTO> CreateCustomerAsync(CustomerDTO customerDTO, CancellationToken cancellationToken)
         {
             var customer = _mapper.Map<Customer>(customerDTO);
 
@@ -62,7 +62,7 @@ namespace Sejmet.API.Repositories
             {
                 await _context.Customers.AddAsync(customer, cancellationToken);
                 await _context.SaveChangesAsync(cancellationToken);
-                return _mapper.Map<CreateProductDTO>(customer);
+                return _mapper.Map<CustomerDTO>(customer);
             }
             catch (Exception)
             {
@@ -73,7 +73,7 @@ namespace Sejmet.API.Repositories
 
         public async Task<UpdateCustomerDTO?> UpdateCustomerAsync(Guid customerId, UpdateCustomerDTO customerDTO, CancellationToken cancellationToken)
         {
-            var customer = await _context.Customers.FirstOrDefaultAsync(x =>  x.Id == customerId, cancellationToken);
+            var customer = await _context.Customers.FirstOrDefaultAsync(x => x.Id == customerId, cancellationToken);
 
             if (customer == null)
             {
@@ -86,7 +86,7 @@ namespace Sejmet.API.Repositories
             return customerDTO;
         }
 
-        public async Task<CreateProductDTO?> DeleteCustomerAsync(Guid customerId, CancellationToken cancellationToken)
+        public async Task<CustomerDTO?> DeleteCustomerAsync(Guid customerId, CancellationToken cancellationToken)
         {
             var customer = await _context.Customers.FirstOrDefaultAsync(x => x.Id == customerId, cancellationToken);
 
@@ -99,7 +99,7 @@ namespace Sejmet.API.Repositories
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return _mapper.Map<CreateProductDTO>(customer);
+            return _mapper.Map<CustomerDTO>(customer);
         }
     }
 }
