@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sejmet.API.Commands.Customers.Create;
-using Sejmet.API.Models.DTOs;
+using Sejmet.API.Models.DTOs.Products;
 using Sejmet.API.Queries.Customers.GetAll;
 
 namespace Sejmet.API.Controllers
@@ -29,7 +29,7 @@ namespace Sejmet.API.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(CreateProductDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateCustomerAsync(CommandRequest commandRequest)
+        public async Task<IActionResult> CreateCustomerAsync([FromBody] CommandRequest commandRequest)
         {
             return await _mediator.Send(commandRequest).ConfigureAwait(false);
         }
