@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Sejmet.API.Models.DTOs;
+using Sejmet.API.Models.DTOs.HealthcareProvider;
 using Sejmet.API.Queries.Customers.GetAll;
 using System;
 
@@ -21,7 +21,7 @@ namespace Sejmet.API.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(List<HealthcareProviderDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAllHealthcareProvidersAsync(QueryRequest request)
+        public async Task<IActionResult> GetAllHealthcareProvidersAsync([FromQuery] QueryRequest request)
         {
             return await _mediator.Send(request).ConfigureAwait(false);
         }

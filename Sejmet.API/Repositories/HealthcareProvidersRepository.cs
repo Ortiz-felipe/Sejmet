@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Sejmet.API.Models.DTOs;
+using Sejmet.API.Models.DTOs.HealthcareProvider;
 using Sejmet.API.Models.Entities;
 using Sejmet.API.Repositories.Interfaces;
 

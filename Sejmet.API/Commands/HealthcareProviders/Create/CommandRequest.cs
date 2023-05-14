@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Sejmet.API.Models.DTOs;
+using Sejmet.API.Models.DTOs.HealthcareProvider;
 
 namespace Sejmet.API.Commands.HealthcareProviders.Create
 {

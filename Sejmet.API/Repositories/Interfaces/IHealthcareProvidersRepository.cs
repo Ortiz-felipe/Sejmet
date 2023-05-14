@@ -1,4 +1,4 @@
-﻿using Sejmet.API.Models.DTOs;
+﻿using Sejmet.API.Models.DTOs.HealthcareProvider;
 
 namespace Sejmet.API.Repositories.Interfaces
 {
