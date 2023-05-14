@@ -18,6 +18,7 @@ builder.Services.AddSwaggerGen(options =>
         Version = "v1",
         Title = "Sejmet API"
     });
+    options.CustomSchemaIds(type => type.FullName);
 });
 
 builder.Services.AddMediatR(config => config.RegisterServicesFromAssemblyContaining<Program>());
@@ -26,12 +27,14 @@ builder.Services.AddDbContext<SejmetDbContext>();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<ICustomersRepository, CustomersRepository>();
 builder.Services.AddScoped<IHealthcareProvidersRepository, HealthcareProvidersRepository>();
+builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
