@@ -1,24 +1,31 @@
 import ButtonDrawner from "./ButtonDrawner"
 import { StyledNavBar } from "./StyledDrawner"
+import { redirect } from "react-router-dom";
+
 /* eslint-disable prettier/prettier */
 const Drawner = () => {
+
     const drawnersButtons = [
         {
-            title: "Medicamentos",
-            onClick: () => console.log('medicamentos')
+            title: "Home",
+            location: '/'
         },
         {
-            title: "Laboratios",
-            onClick: () => console.log('Laboratios')
+            title: "Inventario",
+            location: '/Inventario'
         },
         {
-            title: "Doctores",
-            onClick: () => console.log('Doctores')
+            title: "Pedidos",
+            location: '/Pedidos'
+        },
+        {
+            title: "Ventas",
+            location: '/Ventas'
         }
     ]
     return <StyledNavBar>
         <div className="drawner">
-            {drawnersButtons.map((obj) => <ButtonDrawner title={obj.title} onClick={obj.onClick} />)}
+            {drawnersButtons.map((obj) => <ButtonDrawner key={obj.title} title={obj.title} location={obj.location} />)}
         </div>
     </StyledNavBar>
 }

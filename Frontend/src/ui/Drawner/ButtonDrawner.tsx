@@ -3,13 +3,13 @@ import { StyledButtonDrawner } from "./StyledDrawner"
 
 interface buttonDrwanerItf {
     title: string
-    onClick: () => {}
+    location: string
 }
 
-const ButtonDrawner = ({ title, onClick }: buttonDrwanerItf) => {
+const ButtonDrawner = ({ title, location }: buttonDrwanerItf) => {
     return (
         <div>
-            <StyledButtonDrawner type="button" onClick={onClick} >{title}</StyledButtonDrawner>
+            <StyledButtonDrawner type="button" href={location}>{title}</StyledButtonDrawner>
         </div>
     )
 }
