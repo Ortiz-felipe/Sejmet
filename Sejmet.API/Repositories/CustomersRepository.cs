@@ -8,18 +8,18 @@ namespace Sejmet.API.Repositories
 {
     public class CustomersRepository : ICustomersRepository
     {
-        private readonly SejmetDbContext _context;
+        private readonly SejmetDbContext _dbContext;
         private readonly IMapper _mapper;
 
         public CustomersRepository(SejmetDbContext context, IMapper mapper)
         {
-            _context = context;
+            _dbContext = context;
             _mapper = mapper;
         }
 
         public async Task<IList<CustomerDTO>> GetAllAsync(int? provinceId, Guid? cityId, string? firstName, string? lastName, CancellationToken cancellationToken)
         {
-            var query = _context.Customers.Include(x => x.HealtcareProvider).AsQueryable();
+            var query = _dbContext.Customers.Include(x => x.HealtcareProvider).AsQueryable();
 
             if (provinceId.HasValue)
             {
@@ -60,8 +60,8 @@ namespace Sejmet.API.Repositories
 
             try
             {
-                await _context.Customers.AddAsync(customer, cancellationToken);
-                await _context.SaveChangesAsync(cancellationToken);
+                await _dbContext.Customers.AddAsync(customer, cancellationToken);
+                await _dbContext.SaveChangesAsync(cancellationToken);
                 return _mapper.Map<CustomerDTO>(customer);
             }
             catch (Exception)
@@ -73,7 +73,7 @@ namespace Sejmet.API.Repositories
 
         public async Task<UpdateCustomerDTO?> UpdateCustomerAsync(Guid customerId, UpdateCustomerDTO customerDTO, CancellationToken cancellationToken)
         {
-            var customer = await _context.Customers.FirstOrDefaultAsync(x => x.Id == customerId, cancellationToken);
+            var customer = await _dbContext.Customers.FirstOrDefaultAsync(x => x.Id == customerId, cancellationToken);
 
             if (customer == null)
             {
@@ -81,23 +81,23 @@ namespace Sejmet.API.Repositories
             }
 
             _mapper.Map(customerDTO, customer);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
 
             return customerDTO;
         }
 
         public async Task<CustomerDTO?> DeleteCustomerAsync(Guid customerId, CancellationToken cancellationToken)
         {
-            var customer = await _context.Customers.FirstOrDefaultAsync(x => x.Id == customerId, cancellationToken);
+            var customer = await _dbContext.Customers.FirstOrDefaultAsync(x => x.Id == customerId, cancellationToken);
 
             if (customer == null)
             {
                 return null;
             }
 
-            _context.Customers.Remove(customer);
+            _dbContext.Customers.Remove(customer);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
 
             return _mapper.Map<CustomerDTO>(customer);
         }

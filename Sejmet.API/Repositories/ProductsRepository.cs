@@ -8,12 +8,12 @@ namespace Sejmet.API.Repositories
 {
     public class ProductsRepository : IProductsRepository
     {
-        private readonly SejmetDbContext _context;
+        private readonly SejmetDbContext _dbContext;
         private readonly IMapper _mapper;
 
         public ProductsRepository(SejmetDbContext context, IMapper mapper)
         {
-            _context = context;
+            _dbContext = context;
             _mapper = mapper;
         }
 
@@ -24,8 +24,8 @@ namespace Sejmet.API.Repositories
 
             try
             {
-                await _context.AddAsync(product, cancellationToken);
-                await _context.SaveChangesAsync(cancellationToken);
+                await _dbContext.AddAsync(product, cancellationToken);
+                await _dbContext.SaveChangesAsync(cancellationToken);
 
                 return _mapper.Map<CreateProductDTO>(product);
             }
@@ -72,7 +72,7 @@ namespace Sejmet.API.Repositories
 
         private IQueryable<Product> GetProductsQuery()
         {
-            return _context.Products.Include(x => x.ActiveCompound)
+            return _dbContext.Products.Include(x => x.ActiveCompound)
                                     .Include(x => x.Laboratory)
                                     .Include(x => x.ActiveCompound.TherapeuticEffect)
                                     .Include(x => x.DosageForm)
