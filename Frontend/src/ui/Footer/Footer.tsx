@@ -5,7 +5,7 @@ import { StyledFooter } from "./StyledFooter"
 const Footer = () => {
     return (
         <StyledFooter>
-            <h3>Footer</h3>
+            <h3>Sejmet 2023 </h3>
         </StyledFooter>
     )
 }

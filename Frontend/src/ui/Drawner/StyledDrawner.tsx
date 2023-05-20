@@ -19,8 +19,9 @@ export const StyledNavBar = styled.div`
  `
 
 export const StyledButtonDrawner = styled(Button)`
-    .MuiButton-root {        
+    .button {
         color: white  !important;
+
     }
         border: none;
         background-color: transparent;

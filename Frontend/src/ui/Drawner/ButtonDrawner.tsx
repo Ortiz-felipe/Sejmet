@@ -8,9 +8,7 @@ interface buttonDrwanerItf {
 
 const ButtonDrawner = ({ title, location }: buttonDrwanerItf) => {
     return (
-        <div>
-            <StyledButtonDrawner type="button" href={location}>{title}</StyledButtonDrawner>
-        </div>
+        <StyledButtonDrawner classes={"button"} type="button" size="large" href={location}>{title}</StyledButtonDrawner>
     )
 }
 export default ButtonDrawner

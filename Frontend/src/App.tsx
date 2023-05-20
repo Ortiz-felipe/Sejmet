@@ -11,6 +11,7 @@ import Home from "./pages/Home"
 import Inventario from "./pages/Inventario"
 import Ventas from "./pages/Ventas"
 import Pedidos from "./pages/Pedidos"
+import StyledEngineProvider from "@mui/material/StyledEngineProvider";
 
 const router = createBrowserRouter([
   {
@@ -34,11 +35,12 @@ const router = createBrowserRouter([
 function App() {
   return (
     <div className="App">
-      <NavBar className="navBar" />
-      <Drawner className="drawner" />
-      <RouterProvider router={router} />
-      <Footer className="footer" />
-
+      <StyledEngineProvider injectFirst>
+        <NavBar className="navBar" />
+        <Drawner className="drawner" />
+        <RouterProvider router={router} />
+        <Footer className="footer" />
+      </StyledEngineProvider>
     </div>
   )
 }

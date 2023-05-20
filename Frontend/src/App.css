@@ -59,3 +59,7 @@ h1{
 	grid-template-rows: 5rem minmax(10px, 4fr)
 
 }
+
+.MuiButton-root {
+	color: white;
+  }
