@@ -28,6 +28,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<ICustomersRepository, CustomersRepository>();
 builder.Services.AddScoped<IHealthcareProvidersRepository, HealthcareProvidersRepository>();
 builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
+builder.Services.AddScoped<ILaboratoriesRepository, LaboratoriesRepository>();
 
 var app = builder.Build();
 
