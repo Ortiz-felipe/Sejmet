@@ -1,5 +1,6 @@
 ﻿
 using FluentValidation;
+using Sejmet.API.Errors.Laboratory;
 
 namespace Sejmet.API.Queries.Laboratories.GetAll
 {
@@ -10,7 +11,8 @@ namespace Sejmet.API.Queries.Laboratories.GetAll
             this.When(x => !string.IsNullOrWhiteSpace(x.LaboratoryName), () =>
             {
                 this.RuleFor(x => x.LaboratoryName)
-                    .NotEmpty();
+                    .NotEmpty()
+                    .WithMessage(LaboratoryErrors.LaboratoryNameIsEmpty.Message);
             });
         }
     }

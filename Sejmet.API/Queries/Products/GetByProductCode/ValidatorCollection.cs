@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Sejmet.API.Errors.Product;
 
 namespace Sejmet.API.Queries.Products.GetByProductCode
 {
@@ -9,7 +10,8 @@ namespace Sejmet.API.Queries.Products.GetByProductCode
             this.ClassLevelCascadeMode = CascadeMode.Stop;
 
             this.RuleFor(x => x.ProductCode)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage(ProductErrors.ProductIdIsEmpty.Message);
         }
     }
 }

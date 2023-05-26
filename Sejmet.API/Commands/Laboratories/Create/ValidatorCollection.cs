@@ -1,21 +1,21 @@
 ﻿using FluentValidation;
-using Sejmet.API.Errors.HealthcareProvider;
+using Sejmet.API.Errors.Laboratory;
 
-namespace Sejmet.API.Commands.HealthcareProviders.Create
+namespace Sejmet.API.Commands.Laboratories.Create
 {
     public class ValidatorCollection : AbstractValidator<CommandRequest>
     {
-        public ValidatorCollection() 
+        public ValidatorCollection()
         {
             this.ClassLevelCascadeMode = CascadeMode.Stop;
 
             this.RuleFor(x => x.Body)
                 .NotNull()
-                .WithMessage(HealthcareProviderErrors.CreateHealthcareProviderBodyIsEmpty.Message);
+                .WithMessage(LaboratoryErrors.CreateLaboratoryBodyIsEmpty.Message);
 
             this.RuleFor(x => x.Body.Name)
                 .NotEmpty()
-                .WithMessage(HealthcareProviderErrors.HealthcareProviderNameIsEmpty.Message);
+                .WithMessage(LaboratoryErrors.LaboratoryNameIsEmpty.Message);
         }
     }
 }

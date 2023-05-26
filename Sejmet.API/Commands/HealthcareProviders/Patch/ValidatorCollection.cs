@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Sejmet.API.Errors.HealthcareProvider;
 
 namespace Sejmet.API.Commands.HealthcareProviders.Patch
 {
@@ -9,7 +10,8 @@ namespace Sejmet.API.Commands.HealthcareProviders.Patch
             this.ClassLevelCascadeMode = CascadeMode.Stop;
 
             this.RuleFor(x => x.ProviderID)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage(HealthcareProviderErrors.HealthcareProviderIdIsEmpty.Message);
         }
     }
 }

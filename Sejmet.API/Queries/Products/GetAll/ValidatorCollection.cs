@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Sejmet.API.Errors.Product;
 
 namespace Sejmet.API.Queries.Products.GetAll
 {
@@ -8,12 +9,11 @@ namespace Sejmet.API.Queries.Products.GetAll
         {
             this.ClassLevelCascadeMode = CascadeMode.Stop;
 
-            this.When(x => !string.IsNullOrWhiteSpace(x.SearchExpression), () =>
-            {
-                this.RuleFor(x => x.SearchExpression)
-                    .NotEmpty();
-            });
-            
+            this.RuleFor(x => x.SearchExpression)
+                .NotNull()
+                .WithMessage(ProductErrors.ProductSearchExpressionIsEmpty.Message)
+                .When(x => !string.IsNullOrWhiteSpace(x.SearchExpression));
+
         }
     }
 }

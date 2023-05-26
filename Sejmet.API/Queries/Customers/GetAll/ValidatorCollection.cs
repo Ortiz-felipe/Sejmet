@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Sejmet.API.Errors.Customer;
 
 namespace Sejmet.API.Queries.Customers.GetAll
 {
@@ -8,28 +9,29 @@ namespace Sejmet.API.Queries.Customers.GetAll
         {
             this.ClassLevelCascadeMode = CascadeMode.Stop;
 
-            this.When(model => model.CityID != null, () =>
+            this.When(model => model.CityID == Guid.Empty, () =>
             {
-                RuleFor(x => x.CityID).NotEmpty();
+                this.RuleFor(x => x.CityID)
+                    .NotEmpty()
+                    .WithMessage(CustomerErrors.CustomerCityIdIsEmpty.Message);
             });
 
             this.When(model => model.ProvinceID > 0, () =>
             {
-                RuleFor(x => x.ProvinceID).GreaterThanOrEqualTo(1);
+                this.RuleFor(x => x.ProvinceID)
+                    .GreaterThan(0)
+                    .WithMessage(CustomerErrors.CustomerProvinceIdIsEmpty.Message);
             });
 
-            this.When(model => model.FirstName != null, () =>
+            this.When(model => !string.IsNullOrWhiteSpace(model.Name), () =>
             {
-                RuleFor(x => x.FirstName).NotEmpty()
-                                         .MaximumLength(200);
+                this.RuleFor(x => x.Name)
+                    .NotEmpty()
+                    .WithMessage(CustomerErrors.CustomerNameIsEmptyError.Message)
+                    .MaximumLength(200)
+                    .WithMessage(CustomerErrors.CustomerNameExceededLength.Message);
             });
 
-            this.When(model => model.LastName != null, () =>
-            {
-                RuleFor(x => x.LastName).NotEmpty()
-                                        .MaximumLength(200);
-            });
-                
         }
     }
 }
