@@ -6,9 +6,7 @@ namespace Sejmet.API.Queries.Customers.GetAll
     public class QueryRequest : IRequest<IActionResult>
     {
         [FromQuery]
-        public string? FirstName { get; set; }
-        [FromQuery]
-        public string? LastName { get; set; }
+        public string? Name { get; set; }
         [FromQuery]
         public int? ProvinceID { get; set; }
         [FromQuery]
