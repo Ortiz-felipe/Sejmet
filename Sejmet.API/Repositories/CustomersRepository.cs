@@ -17,7 +17,7 @@ namespace Sejmet.API.Repositories
             _mapper = mapper;
         }
 
-        public async Task<IList<CustomerDTO>> GetAllAsync(int? provinceId, Guid? cityId, string? firstName, string? lastName, CancellationToken cancellationToken)
+        public async Task<IList<CustomerDTO>> GetAllAsync(int? provinceId, Guid? cityId, string? name, CancellationToken cancellationToken)
         {
             var query = _dbContext.Customers.Include(x => x.HealtcareProvider).AsQueryable();
 
@@ -31,15 +31,11 @@ namespace Sejmet.API.Repositories
                 query = query.Where(x => x.CityId == cityId);
             }
 
-            if (!string.IsNullOrWhiteSpace(firstName))
+            if (!string.IsNullOrWhiteSpace(name))
             {
-                query = query.Where(x => x.FirstName == firstName);
+                query = query.Where(x => x.FirstName.Contains(name) || x.LastName.Contains(name) );
             }
-
-            if (!string.IsNullOrWhiteSpace(lastName))
-            {
-                query = query.Where(x => x.LastName == lastName);
-            }
+            
 
             try
             {
