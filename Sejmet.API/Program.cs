@@ -1,3 +1,4 @@
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR.Extensions.FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
@@ -23,12 +24,15 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddMediatR(config => config.RegisterServicesFromAssemblyContaining<Program>());
 builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddDbContext<SejmetDbContext>();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<ICustomersRepository, CustomersRepository>();
 builder.Services.AddScoped<IHealthcareProvidersRepository, HealthcareProvidersRepository>();
 builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
 builder.Services.AddScoped<ILaboratoriesRepository, LaboratoriesRepository>();
+builder.Services.AddScoped<ISalesRepository, SalesRepository>();
+builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
 
 var app = builder.Build();
 
