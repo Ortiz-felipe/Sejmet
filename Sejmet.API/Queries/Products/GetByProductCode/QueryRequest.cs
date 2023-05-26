@@ -5,7 +5,7 @@ namespace Sejmet.API.Queries.Products.GetByProductCode
 {
     public class QueryRequest : IRequest<IActionResult>
     {
-        [FromQuery]
+        [FromRoute]
         public string ProductCode { get; set; }
     }
 }
