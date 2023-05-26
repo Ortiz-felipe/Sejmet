@@ -23,7 +23,7 @@ namespace Sejmet.API.Repositories
 
             if (isActive)
             {
-                query = query.Where(x => x.IsActive);
+                query = query.Where(x => x.IsActive).OrderBy(x => x.Name);
             }
 
             try
