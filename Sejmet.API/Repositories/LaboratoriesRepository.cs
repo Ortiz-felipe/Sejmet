@@ -40,12 +40,12 @@ namespace Sejmet.API.Repositories
 
             if (!string.IsNullOrWhiteSpace(searchExpression))
             {
-                query = query.Where(x => x.Name.Contains(searchExpression));
+                query = query.Where(x => x.Name.Contains(searchExpression)).OrderBy(x => x.Name);
             }
 
             try
             {
-                var laboratories = query.ToListAsync(cancellationToken);
+                var laboratories = await query.ToListAsync(cancellationToken);
 
                 return _mapper.Map<List<LaboratoryDTO>>(laboratories);
             }
