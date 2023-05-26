@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Sejmet.API.Errors.Laboratory;
+using Sejmet.API.Extensions;
 using Sejmet.API.Repositories.Interfaces;
 
 namespace Sejmet.API.Commands.Laboratories.Create
@@ -18,11 +20,11 @@ namespace Sejmet.API.Commands.Laboratories.Create
             try
             {
                 var createdLaboratory = await _laboratoriesRepository.CreateLaboratoryAsync(request.Body, cancellationToken);
-                return new CreatedAtRouteResult(createdLaboratory.Id, createdLaboratory);
+                return this.CreatedAtRoute("laboratories", createdLaboratory.Id, createdLaboratory);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return new ObjectResult(new ProblemDetails() { Detail = e.Message }) { StatusCode = 500 };
+                return this.InternalServerError(LaboratoryErrors.CreateNewLaboratoryError);
             }
         }
     }

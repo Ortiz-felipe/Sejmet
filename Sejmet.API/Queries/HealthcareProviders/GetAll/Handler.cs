@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Sejmet.API.Errors.HealthcareProvider;
+using Sejmet.API.Extensions;
 using Sejmet.API.Repositories.Interfaces;
 
 namespace Sejmet.API.Queries.HealthcareProviders.GetAll
@@ -19,11 +21,11 @@ namespace Sejmet.API.Queries.HealthcareProviders.GetAll
             try
             {
                 var providers = await _healthcareProvidersRepository.GetHealthcareProvidersAsync(request.IncludeDeactivedProviders.GetValueOrDefault(), cancellationToken);
-                return new OkObjectResult(providers);
+                return this.Ok(providers);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return new ObjectResult(new ProblemDetails() { Detail = e.Message }) { StatusCode = 500 };
+                return this.InternalServerError(HealthcareProviderErrors.GetAllHealthcareProvidersError);
             }
             
         }

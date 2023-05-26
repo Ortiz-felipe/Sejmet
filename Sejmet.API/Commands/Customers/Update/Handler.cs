@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Sejmet.API.Errors.Customer;
+using Sejmet.API.Extensions;
 using Sejmet.API.Repositories.Interfaces;
 
 namespace Sejmet.API.Commands.Customers.Update
@@ -21,14 +23,14 @@ namespace Sejmet.API.Commands.Customers.Update
 
                 if (updatedCustomer is null)
                 {
-                    return new NotFoundObjectResult(request.Body);
+                    return this.NotFound(CustomerErrors.CustomerNotFound);
                 }
-                return new OkObjectResult(updatedCustomer);
+                return this.Ok(updatedCustomer);
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return new ObjectResult(new ProblemDetails() { Detail = e.Message }) { StatusCode = 500 };
+                return this.InternalServerError(CustomerErrors.UpdateCustomerError);
             }
         }
     }

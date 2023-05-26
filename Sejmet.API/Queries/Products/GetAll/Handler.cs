@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Sejmet.API.Errors.Product;
+using Sejmet.API.Extensions;
 using Sejmet.API.Repositories.Interfaces;
 
 namespace Sejmet.API.Queries.Products.GetAll
@@ -18,12 +20,11 @@ namespace Sejmet.API.Queries.Products.GetAll
             try
             {
                 var products = await _productsRepository.GetProductsAsync(request.SearchExpression, cancellationToken).ConfigureAwait(false);
-
-                return new OkObjectResult(products);
+                return this.Ok(products);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return new ObjectResult(new ProblemDetails() { Detail = e.Message }) { StatusCode = 500 };
+                return this.InternalServerError(ProductErrors.GetAllProductsError);
             }
             
         }

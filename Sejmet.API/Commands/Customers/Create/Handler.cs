@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Sejmet.API.Errors.Customer;
+using Sejmet.API.Extensions;
 using Sejmet.API.Repositories.Interfaces;
 
 namespace Sejmet.API.Commands.Customers.Create
@@ -20,9 +22,9 @@ namespace Sejmet.API.Commands.Customers.Create
                 var createdCustomer = await _customersRepository.CreateCustomerAsync(request.Body, cancellationToken);
                 return new CreatedAtRouteResult(createdCustomer.Id, createdCustomer);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return new ObjectResult(new ProblemDetails() { Detail = e.Message }) { StatusCode = 500 };
+                return this.InternalServerError(CustomerErrors.CreateNewCustomerError);
             }
         }
     }

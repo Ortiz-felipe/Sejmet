@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Sejmet.API.Errors.HealthcareProvider;
+using Sejmet.API.Extensions;
 using Sejmet.API.Repositories.Interfaces;
 
 namespace Sejmet.API.Commands.HealthcareProviders.Patch
@@ -19,16 +21,11 @@ namespace Sejmet.API.Commands.HealthcareProviders.Patch
             {
                 var healthcareProvider = await _healthcareProvidersRepository.DisableHealthcareProviderAsync(request.ProviderID, cancellationToken);
 
-                if (healthcareProvider is null)
-                {
-                    return new NotFoundResult();
-                }
-
-                return new OkObjectResult(healthcareProvider);
+                return healthcareProvider is null ? this.NotFound(HealthcareProviderErrors.HealthcareProviderNotFound) : this.Ok(healthcareProvider);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return new ObjectResult(new ProblemDetails() { Detail = e.Message }) { StatusCode = 500 };
+                return this.InternalServerError(HealthcareProviderErrors.PatchHealthcareProviderError);
             }
         }
     }

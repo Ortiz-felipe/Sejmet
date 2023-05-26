@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Sejmet.API.Errors.Product;
+using Sejmet.API.Extensions;
 using Sejmet.API.Repositories.Interfaces;
 
 namespace Sejmet.API.Queries.Products.GetByProductCode
@@ -17,18 +19,13 @@ namespace Sejmet.API.Queries.Products.GetByProductCode
         {
             try
             {
-                var product = _productsRepository.GetProductByUPCAsync(request.ProductCode, cancellationToken);
+                var product = await _productsRepository.GetProductByUPCAsync(request.ProductCode, cancellationToken);
 
-                if (product is null)
-                {
-                    return new NotFoundObjectResult(request.ProductCode);
-                }
-
-                return new OkObjectResult(product);
+                return product is null ? this.NotFound(ProductErrors.ProductNotFound) : this.Ok(product);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return new ObjectResult(new ProblemDetails() { Detail = e.Message }) { StatusCode = 500 };
+                return this.InternalServerError(ProductErrors.GetByProductByIdError);
             }
         }
     }

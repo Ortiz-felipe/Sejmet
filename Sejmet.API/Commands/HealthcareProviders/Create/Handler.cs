@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Sejmet.API.Errors.HealthcareProvider;
+using Sejmet.API.Extensions;
 using Sejmet.API.Repositories.Interfaces;
 
 namespace Sejmet.API.Commands.HealthcareProviders.Create
@@ -18,11 +20,11 @@ namespace Sejmet.API.Commands.HealthcareProviders.Create
             try
             {
                 var createdHealthcareProvider = await _healthcareProvidersRepository.CreateHealthcareProviderAsync(request.Body, cancellationToken);
-                return new CreatedAtRouteResult(createdHealthcareProvider.Id, new { createdHealthcareProvider.Id, Name = createdHealthcareProvider.Name, IsActive = createdHealthcareProvider.IsActive});
+                return this.CreatedAtRoute("healthcareProvider", createdHealthcareProvider.Id, createdHealthcareProvider);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return new ObjectResult(new ProblemDetails() { Detail = e.Message }) { StatusCode = 500 };
+                return this.InternalServerError(HealthcareProviderErrors.CreateHealthcareProviderError);
             }
             
         }

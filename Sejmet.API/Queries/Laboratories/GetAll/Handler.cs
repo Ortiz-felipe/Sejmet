@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Sejmet.API.Errors.Laboratory;
+using Sejmet.API.Extensions;
 using Sejmet.API.Repositories.Interfaces;
 
 namespace Sejmet.API.Queries.Laboratories.GetAll
@@ -19,11 +21,11 @@ namespace Sejmet.API.Queries.Laboratories.GetAll
             {
                 var laboratories = await _laboratoriesRepository.GetAllLaboratoriesAsync(request.LaboratoryName, cancellationToken);
 
-                return new OkObjectResult(laboratories);
+                return this.Ok(laboratories);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                return new ObjectResult(new ProblemDetails() { Detail = e.Message }) { StatusCode = 500 };
+                return this.InternalServerError(LaboratoryErrors.GetAllLaboratoriesError);
             }
         }
     }

@@ -17,7 +17,7 @@ namespace Sejmet.API.Queries.Customers.GetAll
         {
             try
             {
-                var customers = await _customersRepository.GetAllAsync(request.ProvinceID, request.CityID, request.FirstName, request.LastName, cancellationToken);
+                var customers = await _customersRepository.GetAllAsync(request.ProvinceID, request.CityID, request.Name, cancellationToken);
 
                 return new OkObjectResult(customers);
             }

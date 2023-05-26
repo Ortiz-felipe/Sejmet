@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Sejmet.API.Errors.Product;
+using Sejmet.API.Extensions;
 using Sejmet.API.Repositories.Interfaces;
 
 namespace Sejmet.API.Commands.Products.Create
@@ -15,14 +17,19 @@ namespace Sejmet.API.Commands.Products.Create
 
         public async Task<IActionResult> Handle(CommandRequest request, CancellationToken cancellationToken)
         {
+            if (request.Body is null)
+            {
+                return this.BadRequest(ProductErrors.CreateProductBodyIsEmpty);
+            }
+
             try
             {
                 var createdProduct = await _productsRepository.CreateProductAsync(request.Body, cancellationToken);
-                return new CreatedAtRouteResult(createdProduct.Id, createdProduct);
+                return this.CreatedAtRoute("products", createdProduct.Id, createdProduct);
             }
             catch (Exception e)
             {
-                return new ObjectResult(new ProblemDetails() { Detail = e.Message }) { StatusCode = 500 };
+                return this.InternalServerError(ProductErrors.CreateProductError);
             }
         }
     }
