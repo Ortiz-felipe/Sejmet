@@ -6,6 +6,6 @@ namespace Sejmet.API.Queries.Products.GetAll
     public class QueryRequest : IRequest<IActionResult>
     {
         [FromQuery]
-        public string SearchExpression { get; set; }
+        public string? SearchExpression { get; set; }
     }
 }
