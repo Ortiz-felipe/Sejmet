@@ -76,6 +76,7 @@ namespace Sejmet.API.Repositories
                                     .Include(x => x.Laboratory)
                                     .Include(x => x.ActiveCompound.TherapeuticEffect)
                                     .Include(x => x.DosageForm)
+                                    .OrderBy(x => x.ActiveCompound.Name)
                                     .AsQueryable();
         }
     }
