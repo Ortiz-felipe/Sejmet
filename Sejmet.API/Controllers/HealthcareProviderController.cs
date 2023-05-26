@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sejmet.API.Models.DTOs.HealthcareProvider;
-using Sejmet.API.Queries.Customers.GetAll;
 using System;
+using Sejmet.API.Errors;
+using Sejmet.API.Queries.HealthcareProviders.GetAll;
 
 namespace Sejmet.API.Controllers
 {
@@ -20,7 +21,7 @@ namespace Sejmet.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(List<HealthcareProviderDTO>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllHealthcareProvidersAsync([FromQuery] QueryRequest request)
         {
             return await _mediator.Send(request).ConfigureAwait(false);
@@ -28,7 +29,7 @@ namespace Sejmet.API.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(HealthcareProviderDTO), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateHealthcareProviderAsync([FromBody] Commands.HealthcareProviders.Create.CommandRequest commandRequest)
         {
             return await _mediator.Send(commandRequest).ConfigureAwait(false);
@@ -37,7 +38,8 @@ namespace Sejmet.API.Controllers
         [HttpPatch]
         [Route("/{providerId}")]
         [ProducesResponseType(typeof(HealthcareProviderDTO), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DisableHealthcareProvider([FromRoute] Commands.HealthcareProviders.Patch.CommandRequest commandRequest)
         {
             return await _mediator.Send(commandRequest).ConfigureAwait(false);

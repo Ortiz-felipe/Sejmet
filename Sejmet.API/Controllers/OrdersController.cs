@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sejmet.API.Commands.Orders.Create;
+using Sejmet.API.Errors;
 using Sejmet.API.Models.DTOs.Orders;
 using Sejmet.API.Queries.Orders.GetAll;
 
@@ -20,7 +21,7 @@ namespace Sejmet.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(IList<OrderDTO>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllOrdersAsync([FromQuery] QueryRequest queryRequest)
         {
             return await mediator.Send(queryRequest).ConfigureAwait(false);
@@ -29,7 +30,8 @@ namespace Sejmet.API.Controllers
         [HttpGet]
         [Route("OrderId/{OrderId}")]
         [ProducesResponseType(typeof(OrderDTO), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetOrderByIdAsync([FromRoute] Queries.Orders.GetById.QueryRequest queryRequest)
         {
             return await mediator.Send(queryRequest).ConfigureAwait(false);
@@ -37,8 +39,8 @@ namespace Sejmet.API.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(CreateOrderDTO), StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateOrderAsync([FromBody] CommandRequest commandRequest)
         {
             return await mediator.Send(commandRequest).ConfigureAwait(false);
@@ -46,8 +48,8 @@ namespace Sejmet.API.Controllers
 
         [HttpPatch]
         [ProducesResponseType(typeof(CreateOrderDTO), StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateOrderStatusAsync(
             [FromBody] Commands.Orders.Update.CommandRequest commandRequest)
         {
