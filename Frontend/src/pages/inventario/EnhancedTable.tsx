@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useState } from 'react'
 import { alpha } from "@mui/material/styles"
 import Box from "@mui/material/Box"
 import Table from "@mui/material/Table"
@@ -15,13 +15,14 @@ import Paper from "@mui/material/Paper"
 import Checkbox from "@mui/material/Checkbox"
 import IconButton from "@mui/material/IconButton"
 import Tooltip from "@mui/material/Tooltip"
-import FormControlLabel from "@mui/material/FormControlLabel"
-import Switch from "@mui/material/Switch"
 import DeleteIcon from "@mui/icons-material/Delete"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import { visuallyHidden } from "@mui/utils"
 import { Products } from "../../schemas/products"
 import { getComparator, stableSort, Order } from "../../utils/sort"
+import ModalProduct from './ModalProduct'
+import Button from '@mui/material/Button';
+import { StyledEnhancedTable } from './StyledEnhancedTable'
 
 
 interface HeadCell {
@@ -41,26 +42,32 @@ const headCells: readonly HeadCell[] = [
     {
         id: "laboratoryName",
         numeric: false,
-        disablePadding: false,
+        disablePadding: true,
         label: "Laboratory Name",
     },
     {
         id: "activeCompoundName",
         numeric: false,
-        disablePadding: false,
+        disablePadding: true,
         label: "Active Compound Name",
     },
     {
         id: "currentStock",
-        numeric: true,
-        disablePadding: false,
+        numeric: false,
+        disablePadding: true,
         label: "Current Stock",
     },
     {
         id: "price",
-        numeric: true,
-        disablePadding: false,
+        numeric: false,
+        disablePadding: true,
         label: "Price",
+    },
+    {
+        id: "details",
+        numeric: false,
+        disablePadding: false,
+        label: "details",
     },
 ]
 
@@ -100,7 +107,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                         checked={rowCount > 0 && numSelected === rowCount}
                         onChange={onSelectAllClick}
                         inputProps={{
-                            "aria-label": "select all desserts",
+                            "aria-label": "select all products",
                         }}
                     />
                 </TableCell>
@@ -167,7 +174,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                     id="tableTitle"
                     component="div"
                 >
-                    Nutrition
+                    Products
                 </Typography>
             )}
             {numSelected > 0 ? (
@@ -187,14 +194,17 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     )
 }
 
-export default function EnhancedTable({ data }) {
-    const [order, setOrder] = React.useState<Order>("asc")
-    const [orderBy, setOrderBy] = React.useState<keyof Data>("calories")
-    const [selected, setSelected] = React.useState<readonly string[]>([])
-    const [page, setPage] = React.useState(0)
-    const [dense, setDense] = React.useState(false)
-    const [rowsPerPage, setRowsPerPage] = React.useState(5)
-
+export default function EnhancedTable({ data }: { data: Products[] }) {
+    const rows: Products[] = data
+    const [order, setOrder] = useState<Order>("asc")
+    const [orderBy, setOrderBy] = useState<keyof Products>("tradeName")
+    const [selected, setSelected] = useState<readonly string[]>([])
+    const [page, setPage] = useState(0)
+    const [dense, setDense] = useState(false)
+    const [rowsPerPage, setRowsPerPage] = useState(5)
+    const [openModal, setOpenModal] = useState(false)
+    const [upc, setUpc] = useState("");
+    const handleOpen = (upc: string) => { setOpenModal(true); setUpc(upc) }
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
         property: keyof Products,
@@ -206,7 +216,7 @@ export default function EnhancedTable({ data }) {
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-            const newSelected = rows.map((n) => n.name)
+            const newSelected = rows.map((n) => n.upc)
             setSelected(newSelected)
             return
         }
@@ -264,7 +274,8 @@ export default function EnhancedTable({ data }) {
     )
 
     return (
-        <Box sx={{ width: "100%" }}>
+        <StyledEnhancedTable sx={{ width: "100%" }}>
+            <ModalProduct open={openModal} setOpen={setOpenModal} upc={upc} />
             <Paper sx={{ width: "100%", mb: 2 }}>
                 <EnhancedTableToolbar numSelected={selected.length} />
                 <TableContainer>
@@ -283,17 +294,17 @@ export default function EnhancedTable({ data }) {
                         />
                         <TableBody>
                             {visibleRows.map((row, index) => {
-                                const isItemSelected = isSelected(row.name)
+                                const isItemSelected = isSelected(row.upc)
                                 const labelId = `enhanced-table-checkbox-${index}`
 
                                 return (
                                     <TableRow
                                         hover
-                                        onClick={(event) => handleClick(event, row.name)}
+                                        onClick={(event) => handleClick(event, row.upc)}
                                         role="checkbox"
                                         aria-checked={isItemSelected}
                                         tabIndex={-1}
-                                        key={row.name}
+                                        key={row.upc}
                                         selected={isItemSelected}
                                         sx={{ cursor: "pointer" }}
                                     >
@@ -307,17 +318,21 @@ export default function EnhancedTable({ data }) {
                                             />
                                         </TableCell>
                                         <TableCell
+                                            align="left"
                                             component="th"
                                             id={labelId}
                                             scope="row"
                                             padding="none"
                                         >
-                                            {row.name}
+                                            {row.tradeName}
                                         </TableCell>
-                                        <TableCell align="right">{row.calories}</TableCell>
-                                        <TableCell align="right">{row.fat}</TableCell>
-                                        <TableCell align="right">{row.carbs}</TableCell>
-                                        <TableCell align="right">{row.protein}</TableCell>
+                                        <TableCell align="left">{row.laboratoryName}</TableCell>
+                                        <TableCell align="left">{row.activeCompoundName}</TableCell>
+                                        <TableCell align="left">{row.currentStock}</TableCell>
+                                        <TableCell align="left">{row.price}</TableCell>
+                                        <TableCell align="left"><Button onClick={() => handleOpen(row.upc)}>Details</Button>
+                                        </TableCell>
+
                                     </TableRow>
                                 )
                             })}
@@ -343,10 +358,7 @@ export default function EnhancedTable({ data }) {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
             </Paper>
-            <FormControlLabel
-                control={<Switch checked={dense} onChange={handleChangeDense} />}
-                label="Dense padding"
-            />
-        </Box>
+
+        </StyledEnhancedTable>
     )
 }
