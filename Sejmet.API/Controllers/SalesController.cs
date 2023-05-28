@@ -20,9 +20,9 @@ namespace Sejmet.API.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(IList<SaleDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetSalesDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAllSalesAsync(QueryRequest queryRequest)
+        public async Task<IActionResult> GetAllSalesAsync([FromQuery]QueryRequest queryRequest)
         {
             return await _mediator.Send(queryRequest);
         }
@@ -32,7 +32,7 @@ namespace Sejmet.API.Controllers
         [ProducesResponseType(typeof(SaleDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetSaleByIdAsync(Queries.Sales.GetById.QueryRequest queryRequest)
+        public async Task<IActionResult> GetSaleByIdAsync([FromQuery] Queries.Sales.GetById.QueryRequest queryRequest)
         {
             return await _mediator.Send(queryRequest);
         }
@@ -41,7 +41,7 @@ namespace Sejmet.API.Controllers
         [ProducesResponseType(typeof(CreateSaleDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateSaleAsync(CommandRequest commandRequest)
+        public async Task<IActionResult> CreateSaleAsync([FromBody]CommandRequest commandRequest)
         {
             return await _mediator.Send(commandRequest);
         }
