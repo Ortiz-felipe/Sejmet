@@ -3,7 +3,7 @@ import styled from "styled-components"
 import Button from '@mui/material/Button';
 
 export const StyledNavBar = styled.div`
-     background-color: #7eddf2;
+     background-color: ${props => props.theme.colors.primary};
      color: white;
      display: flex;
      flex-direction: column;
