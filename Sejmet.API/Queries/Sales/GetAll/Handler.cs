@@ -19,7 +19,7 @@ namespace Sejmet.API.Queries.Sales.GetAll
         {
             try
             {
-                var sales = await _salesRepository.GetAllSalesAsync(request.CustomerName, cancellationToken);
+                var sales = await _salesRepository.GetAllSalesAsync(request.CustomerName, request.Skip, request.Take, cancellationToken);
                 return this.Ok(sales);
             }
             catch (Exception )

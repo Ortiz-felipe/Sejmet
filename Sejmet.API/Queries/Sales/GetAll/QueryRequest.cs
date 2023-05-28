@@ -5,6 +5,14 @@ namespace Sejmet.API.Queries.Sales.GetAll
 {
     public class QueryRequest : IRequest<IActionResult>
     {
-        public string CustomerName { get; set; }
+        [FromQuery]
+        public string? CustomerName { get; set; }
+        
+        [FromQuery] 
+        public int Skip { get; set; }
+
+        [FromQuery] 
+        public int Take { get; set; }
+
     }
 }

@@ -17,7 +17,7 @@ namespace Sejmet.API.Repositories
             _mapper = mapper;
         }
 
-        public async Task<IList<SaleDTO>> GetAllSalesAsync(string customerName, CancellationToken cancellationToken)
+        public async Task<GetSalesDTO> GetAllSalesAsync(string customerName, int skip, int take, CancellationToken cancellationToken)
         {
             var query = _context.Sales.Include(x => x.Customer)
                                                     .Include(x => x.SaleProducts)
@@ -30,9 +30,17 @@ namespace Sejmet.API.Repositories
                     x.Customer.FirstName.Contains(customerName) || x.Customer.LastName.Contains(customerName));
             }
 
-            var sales = await query.ToListAsync(cancellationToken);
+            var totalRecords = query.Count();
+            var sales = await query.Skip(skip).Take(take).ToListAsync(cancellationToken);
+            
 
-            return _mapper.Map<List<SaleDTO>>(sales);
+            return new GetSalesDTO()
+            {
+                Sales = _mapper.Map<List<SaleDTO>>(sales),
+                Skip = skip,
+                Take = take,
+                TotalRecords = totalRecords     
+            };
         }
 
         public async Task<SaleDTO?> GetSaleByIdAsync(Guid saleId, CancellationToken cancellationToken)

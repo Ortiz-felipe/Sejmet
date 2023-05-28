@@ -35,5 +35,11 @@
             new(MajorErrorCodes.Sales, 15, "Customer name cannot be empty");
 
         public static ApiError SaleNotFound => new(MajorErrorCodes.Sales, 16, "Sale cannot be found");
+
+        public static ApiError GetAllCustomersTakeIsEmpty =>
+            new(MajorErrorCodes.Sales, 17, "Take amount cannot be empty");
+
+        public static ApiError GetAllCustomersSkipIsEmpty =>
+            new(MajorErrorCodes.Sales, 18, "Skip amount cannot be empty");
     }
 }
