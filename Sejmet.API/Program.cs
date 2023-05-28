@@ -7,6 +7,7 @@ using Sejmet.API.Repositories;
 using Sejmet.API.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
+var allowedOrigins = "_allowedOrigins";
 
 // Get Environment Variables for the DB Connection String
 //var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
@@ -27,6 +28,15 @@ builder.Services.AddSwaggerGen(options =>
         Title = "Sejmet API"
     });
     options.CustomSchemaIds(type => type.FullName);
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: allowedOrigins, builder =>
+    {
+        builder.WithOrigins("*");
+        builder.AllowAnyMethod();
+    });
 });
 
 builder.Services.AddMediatR(config => config.RegisterServicesFromAssemblyContaining<Program>());
@@ -55,6 +65,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(allowedOrigins);
 
 app.UseAuthorization();
 
