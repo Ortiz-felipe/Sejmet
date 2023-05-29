@@ -15,3 +15,8 @@ export interface OrderProduct {
     quantity: number,
     unitPrice: number
 }
+
+export interface UpdateOrder {
+    orderId: string,
+    transactionStatusID: number
+}
