@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sejmet.API.Errors;
+using Sejmet.API.Models.DTOs;
 using Sejmet.API.Models.DTOs.Products;
 
 namespace Sejmet.API.Controllers
@@ -18,7 +19,7 @@ namespace Sejmet.API.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(IList<ProductDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PagedResponseDTO<ProductDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllProductsAsync([FromQuery]Queries.Products.GetAll.QueryRequest queryRequest)
         {
@@ -26,7 +27,7 @@ namespace Sejmet.API.Controllers
         }
 
         [HttpGet]
-        [Route("ProductCode/{ProductCode}")]
+        [Route("{ProductCode}")]
         [ProducesResponseType(typeof(ProductDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]

@@ -1,11 +1,13 @@
-﻿using Sejmet.API.Models.DTOs.Sales;
+﻿using Sejmet.API.Models.DTOs;
+using Sejmet.API.Models.DTOs.Sales;
 
 namespace Sejmet.API.Repositories.Interfaces
 {
     public interface ISalesRepository
     {
-        Task<GetSalesDTO> GetAllSalesAsync(string customerName, int skip, int take, CancellationToken cancellationToken);
+        Task<PagedResponseDTO<SaleDTO>> GetAllSalesAsync(string customerName, int currentPage, int pageSize, CancellationToken cancellationToken);
         Task<SaleDTO?> GetSaleByIdAsync(Guid saleId, CancellationToken cancellationToken);
         Task<CreateSaleDTO> CreateSaleAsync(CreateSaleDTO sale, CancellationToken cancellationToken);
+        Task<IList<SalesByMonthDTO>> GetSalesByMonthAsync(int year, CancellationToken cancellationToken);
     }
 }

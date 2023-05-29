@@ -39,5 +39,14 @@
             new(MajorErrorCodes.Orders, 15, "Ordered Product unit price cannot be empty");
 
         public static ApiError OrderIdIsEmpty => new(MajorErrorCodes.Orders, 16, "Order Id cannot be empty");
+
+        public static ApiError OrderProviderNameIsEmpty =>
+            new(MajorErrorCodes.Orders, 17, "Provider name cannot be empty");
+
+        public static ApiError OrderCurrentPageIsEmpty =>
+            new(MajorErrorCodes.Orders, 18, "Current page cannot be empty");
+
+        public static ApiError OrderPageSizeIsEmpty => new(MajorErrorCodes.Orders, 19, "Page size cannot be empty");
+        public static ApiError OrderIDNotFound => new(MajorErrorCodes.Orders, 20, "Order ID wasn't found");
     }
 }

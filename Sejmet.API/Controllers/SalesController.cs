@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sejmet.API.Commands.Sales.Create;
 using Sejmet.API.Errors;
+using Sejmet.API.Models.DTOs;
 using Sejmet.API.Models.DTOs.Sales;
 using Sejmet.API.Queries.Sales.GetAll;
 
@@ -20,7 +21,7 @@ namespace Sejmet.API.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(GetSalesDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PagedResponseDTO<SaleDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllSalesAsync([FromQuery]QueryRequest queryRequest)
         {
@@ -28,11 +29,21 @@ namespace Sejmet.API.Controllers
         }
 
         [HttpGet]
-        [Route("SaleId/{SaleId}")]
+        [Route("{SaleId}")]
         [ProducesResponseType(typeof(SaleDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetSaleByIdAsync([FromQuery] Queries.Sales.GetById.QueryRequest queryRequest)
+        {
+            return await _mediator.Send(queryRequest);
+        }
+
+        [HttpGet]
+        [Route("GetSalesByMonth/{Year}")]
+        [ProducesResponseType(typeof(IList<SalesByMonthDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetSalesByMonthAsync(
+            [FromRoute] Queries.Sales.GetSalesByMonth.QueryRequest queryRequest)
         {
             return await _mediator.Send(queryRequest);
         }

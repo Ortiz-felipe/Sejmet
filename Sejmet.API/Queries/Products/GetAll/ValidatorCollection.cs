@@ -14,6 +14,11 @@ namespace Sejmet.API.Queries.Products.GetAll
                 .WithMessage(ProductErrors.ProductSearchExpressionIsEmpty.Message)
                 .When(x => !string.IsNullOrWhiteSpace(x.SearchExpression));
 
+            this.RuleFor(x => x.CurrentPage)
+                .NotEmpty();
+
+            this.RuleFor(x => x.PageSize)
+                .NotEmpty();
         }
     }
 }

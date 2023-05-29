@@ -36,10 +36,15 @@
 
         public static ApiError SaleNotFound => new(MajorErrorCodes.Sales, 16, "Sale cannot be found");
 
-        public static ApiError GetAllCustomersTakeIsEmpty =>
-            new(MajorErrorCodes.Sales, 17, "Take amount cannot be empty");
+        public static ApiError GetAllCustomersPageSizeIsEmpty =>
+            new(MajorErrorCodes.Sales, 17, "CurrentPage amount cannot be empty");
 
-        public static ApiError GetAllCustomersSkipIsEmpty =>
-            new(MajorErrorCodes.Sales, 18, "Skip amount cannot be empty");
+        public static ApiError GetAllCustomersCurrentPageIsEmpty =>
+            new(MajorErrorCodes.Sales, 18, "PageSize amount cannot be empty");
+
+        public static ApiError GetSalesByMonthInvalidYear => new(MajorErrorCodes.Sales, 19,
+            "Year to analyze cannot be greater than current year");
+
+        public static ApiError GetSalesByMonthError => new(MajorErrorCodes.Sales, 20, "Get sales by month has failed");
     }
 }

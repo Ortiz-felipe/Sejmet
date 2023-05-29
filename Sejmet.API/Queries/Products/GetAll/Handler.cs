@@ -19,7 +19,7 @@ namespace Sejmet.API.Queries.Products.GetAll
         {
             try
             {
-                var products = await _productsRepository.GetProductsAsync(request.SearchExpression, cancellationToken).ConfigureAwait(false);
+                var products = await _productsRepository.GetProductsAsync(request.SearchExpression, request.CurrentPage, request.PageSize, cancellationToken).ConfigureAwait(false);
                 return this.Ok(products);
             }
             catch (Exception)

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Sejmet.API.Models.DTOs;
 using Sejmet.API.Models.DTOs.Orders;
 using Sejmet.API.Models.Entities;
 using Sejmet.API.Repositories.Interfaces;
@@ -17,7 +18,7 @@ namespace Sejmet.API.Repositories
             _mapper = mapper;
         }
 
-        public async Task<IList<OrderDTO>> GetAllOrdersAsync(string providerName, CancellationToken cancellationToken)
+        public async Task<PagedResponseDTO<OrderDTO>> GetAllOrdersAsync(string providerName, int currentPage, int pageSize, CancellationToken cancellationToken)
         {
             var query = _context.Orders
                                             .Include(x => x.Provider)
@@ -29,9 +30,18 @@ namespace Sejmet.API.Repositories
                 query = query.Where(x => x.Provider.Name.Contains(providerName));
             }
 
-            var orders = await query.ToListAsync(cancellationToken);
+            var totalRecords = query.Count();
 
-            return _mapper.Map<List<OrderDTO>>(orders);
+            var orders = await query.Skip((pageSize * (currentPage - 1))).Take(pageSize).ToListAsync(cancellationToken);
+
+            return new PagedResponseDTO<OrderDTO>()
+            {
+                Items = _mapper.Map<List<OrderDTO>>(orders),
+                PageSize = pageSize,
+                CurrentPage = currentPage,
+                TotalRecords = totalRecords,
+                TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize),
+            };
         }
 
         public async Task<OrderDTO?> GetOrderByIdAsync(Guid orderId, CancellationToken cancellationToken)

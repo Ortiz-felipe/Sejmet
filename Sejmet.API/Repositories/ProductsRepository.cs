@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Sejmet.API.Models.DTOs;
 using Sejmet.API.Models.DTOs.Products;
 using Sejmet.API.Models.Entities;
 using Sejmet.API.Repositories.Interfaces;
@@ -49,7 +50,7 @@ namespace Sejmet.API.Repositories
             return _mapper.Map<ProductDTO>(product);
         }
 
-        public async Task<IList<ProductDTO>> GetProductsAsync(string searchExpression, CancellationToken cancellationToken)
+        public async Task<PagedResponseDTO<ProductDTO>> GetProductsAsync(string searchExpression, int currentPage, int pageSize, CancellationToken cancellationToken)
         {
             var query = GetProductsQuery();
 
@@ -58,10 +59,18 @@ namespace Sejmet.API.Repositories
                 query = query.Where(x => x.TradeName.Contains(searchExpression) || x.ActiveCompound.Name.Contains(searchExpression));
             }
 
-            var products = await query.ToListAsync(cancellationToken);
+            var totalRecords = query.Count();
+            var products = await query.Skip((pageSize * (currentPage - 1))).Take(pageSize).ToListAsync(cancellationToken);
 
 
-            return _mapper.Map<List<ProductDTO>>(products);
+            return new PagedResponseDTO<ProductDTO>()
+            {
+                Items = _mapper.Map<List<ProductDTO>>(products),
+                PageSize = pageSize,
+                CurrentPage = currentPage,
+                TotalRecords = totalRecords,
+                TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize)
+            };
         }
 
 

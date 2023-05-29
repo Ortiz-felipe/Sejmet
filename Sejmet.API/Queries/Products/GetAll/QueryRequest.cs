@@ -7,5 +7,9 @@ namespace Sejmet.API.Queries.Products.GetAll
     {
         [FromQuery]
         public string? SearchExpression { get; set; }
+        [FromQuery]
+        public int CurrentPage { get; set; }
+        [FromQuery]
+        public int PageSize { get; set; }
     }
 }

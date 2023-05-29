@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sejmet.API.Commands.Orders.Create;
 using Sejmet.API.Errors;
+using Sejmet.API.Models.DTOs;
 using Sejmet.API.Models.DTOs.Orders;
 using Sejmet.API.Queries.Orders.GetAll;
 
@@ -20,7 +21,7 @@ namespace Sejmet.API.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(IList<OrderDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PagedResponseDTO<OrderDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllOrdersAsync([FromQuery] QueryRequest queryRequest)
         {
@@ -28,7 +29,7 @@ namespace Sejmet.API.Controllers
         }
 
         [HttpGet]
-        [Route("OrderId/{OrderId}")]
+        [Route("{OrderId}")]
         [ProducesResponseType(typeof(OrderDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]

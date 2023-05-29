@@ -7,12 +7,11 @@ namespace Sejmet.API.Queries.Sales.GetAll
     {
         [FromQuery]
         public string? CustomerName { get; set; }
-        
-        [FromQuery] 
-        public int Skip { get; set; }
 
-        [FromQuery] 
-        public int Take { get; set; }
+        [FromQuery]
+        public int CurrentPage { get; set; }
+        [FromQuery]
+        public int PageSize { get; set; }
 
     }
 }

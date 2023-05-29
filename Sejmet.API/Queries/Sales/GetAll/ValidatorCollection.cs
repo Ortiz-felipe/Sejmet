@@ -14,13 +14,13 @@ namespace Sejmet.API.Queries.Sales.GetAll
                 .WithMessage(SaleErrors.SaleCustomerNameIsEmpty.Message)
                 .When(x => !string.IsNullOrWhiteSpace(x.CustomerName));
 
-            this.RuleFor(x => x.Skip)
-                .GreaterThan(-1)
-                .WithMessage(SaleErrors.GetAllCustomersSkipIsEmpty.Message);
-
-            this.RuleFor(x => x.Take)
+            this.RuleFor(x => x.CurrentPage)
                 .NotEmpty()
-                .WithMessage(SaleErrors.GetAllCustomersTakeIsEmpty.Message);
+                .WithMessage(SaleErrors.GetAllCustomersCurrentPageIsEmpty.Message);
+
+            this.RuleFor(x => x.PageSize)
+                .NotEmpty()
+                .WithMessage(SaleErrors.GetAllCustomersPageSizeIsEmpty.Message);
         }
     }
 }

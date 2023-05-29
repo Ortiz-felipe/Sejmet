@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Sejmet.API.Models.DTOs;
 using Sejmet.API.Models.DTOs.Sales;
 using Sejmet.API.Models.Entities;
 using Sejmet.API.Repositories.Interfaces;
+using System.Globalization;
 
 namespace Sejmet.API.Repositories
 {
@@ -17,7 +19,7 @@ namespace Sejmet.API.Repositories
             _mapper = mapper;
         }
 
-        public async Task<GetSalesDTO> GetAllSalesAsync(string customerName, int skip, int take, CancellationToken cancellationToken)
+        public async Task<PagedResponseDTO<SaleDTO>> GetAllSalesAsync(string customerName, int currentPage, int pageSize, CancellationToken cancellationToken)
         {
             var query = _context.Sales.Include(x => x.Customer)
                                                     .Include(x => x.SaleProducts)
@@ -31,15 +33,16 @@ namespace Sejmet.API.Repositories
             }
 
             var totalRecords = query.Count();
-            var sales = await query.Skip(skip).Take(take).ToListAsync(cancellationToken);
+            var sales = await query.Skip((pageSize * (currentPage - 1))).Take(pageSize).ToListAsync(cancellationToken);
             
 
-            return new GetSalesDTO()
+            return new PagedResponseDTO<SaleDTO>()
             {
-                Sales = _mapper.Map<List<SaleDTO>>(sales),
-                Skip = skip,
-                Take = take,
-                TotalRecords = totalRecords     
+                Items = _mapper.Map<List<SaleDTO>>(sales),
+                PageSize = pageSize,
+                CurrentPage = currentPage,
+                TotalRecords = totalRecords,
+                TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize)
             };
         }
 
@@ -62,6 +65,21 @@ namespace Sejmet.API.Repositories
             await _context.SaveChangesAsync(cancellationToken);
 
             return _mapper.Map<CreateSaleDTO>(newSale);
+        }
+
+        public async Task<IList<SalesByMonthDTO>> GetSalesByMonthAsync(int year, CancellationToken cancellationToken)
+        {
+            var salesByMonth = await _context.Sales
+                .Where(sale => sale.SaleDate.Year == year)
+                .GroupBy(sale => sale.SaleDate.Month)
+                .OrderBy(group => group.Key)
+                .Select(group => new SalesByMonthDTO() {
+                    Month = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(group.Key),
+                    TotalAmount = group.Sum(sale => sale.TotalAmount)
+                })
+                .ToListAsync(cancellationToken);
+
+            return salesByMonth;
         }
     }
 }
