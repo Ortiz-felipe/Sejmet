@@ -9,7 +9,9 @@ namespace Sejmet.API.Models.Mappings
         public LaboratoryProfile()
         {
             this.CreateMap<Laboratory, LaboratoryDTO>()
-                .ForMember(destination => destination.Name, origin => origin.MapFrom(x => x.Name));
+                .ForMember(destination => destination.Id, origin => origin.MapFrom(x => x.Id))
+                .ForMember(destination => destination.Name, origin => origin.MapFrom(x => x.Name))
+                .ReverseMap();
         }
     }
 }
