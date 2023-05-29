@@ -3,7 +3,7 @@ import styled from "styled-components"
 
 const StyledNavBar = styled.div`
     z-index: 20;
-    background-color: #7eddf2;
+    background-color: ${props => props.theme.colors.primary};
      color: white;
      flex-direction: row;
      justify-content: left;

@@ -7,7 +7,8 @@ export const StyledCard = styled.div(({ size }: { size: "square" | "WideRectangl
     padding: `2rem`,
     display: `flex`,
     flexDirection: `column`,
-    gap: `1rem`
+    gap: `1rem`,
+    backgroundColor: 'white'
 }))
 
 
