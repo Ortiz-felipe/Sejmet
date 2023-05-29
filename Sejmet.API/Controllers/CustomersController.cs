@@ -21,7 +21,7 @@ namespace Sejmet.API.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<CustomerDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IList<CustomerDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllAsync([FromQuery]QueryRequest queryRequest)
         {

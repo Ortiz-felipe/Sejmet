@@ -36,7 +36,7 @@ namespace Sejmet.API.Controllers
         }
 
         [HttpPatch]
-        [Route("/{providerId}")]
+        [Route("{providerId}")]
         [ProducesResponseType(typeof(HealthcareProviderDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
