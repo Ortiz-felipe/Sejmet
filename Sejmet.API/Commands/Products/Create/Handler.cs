@@ -27,7 +27,7 @@ namespace Sejmet.API.Commands.Products.Create
                 var createdProduct = await _productsRepository.CreateProductAsync(request.Body, cancellationToken);
                 return this.CreatedAtRoute("products", createdProduct.Id, createdProduct);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return this.InternalServerError(ProductErrors.CreateProductError);
             }

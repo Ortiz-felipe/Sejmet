@@ -17,7 +17,7 @@ namespace Sejmet.API.Commands.Customers.Delete
         {
             try
             {
-                var deletedCustomer = _customersRepository.DeleteCustomerAsync(request.CustomerId, cancellationToken);
+                var deletedCustomer = await _customersRepository.DeleteCustomerAsync(request.CustomerId, cancellationToken);
 
                 if (deletedCustomer is null)
                 {
