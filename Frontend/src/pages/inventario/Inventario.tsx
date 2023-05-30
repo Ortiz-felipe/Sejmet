@@ -9,43 +9,49 @@ import { useState, useEffect } from "react"
 const baseURL = import.meta.env.VITE_BACKEND_URL
 
 const Inventario = () => {
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(0)
   const [pageSize, setPageSize] = useState(5)
-//   const [productData, setProductData] = useState<PagedResponse<Products>>()
-  const url = `${baseURL}/Products?currentPage=${currentPage}&pageSize=${pageSize}`
-  const { data, error } = useFetch<PagedResponse<Products>>(url)
-
-//   useEffect(() => {
-//     setProductData(data)
-//   }, [])
-
-//   useEffect(() => {
-//     setCurrentPage()
-//   }, [currentPage])
+  const [url, setUrl] = useState<string>(`${baseURL}/Products?CurrentPage=${currentPage + 1}&PageSize=${pageSize}`)
+  const [dataTable, setDataTable] = useState<Products[]>([])
+  const callData = async () => {
+    const elements = await fetch(url)
+    const data = await elements.json()
+    console.log('data', data)
+    setDataTable(data)
+  }
+  useEffect(() => {
+    console.log('currentPage', currentPage)
+    console.log('pageSize', pageSize)
+    setUrl(`${baseURL}/Products?CurrentPage=${currentPage + 1}&PageSize=${pageSize}`)
+    callData()
+  }, [currentPage, pageSize])
 
   const pageChangeHandler = (currentPage: number): void => {
+    console.log('current Page', currentPage)
     setCurrentPage(currentPage)
   }
 
   const pageSizeHandler = (pageSize: number): void => {
+    console.log('pageSize', pageSize)
+
     setPageSize(pageSize)
+    setCurrentPage(0)
   }
 
-  if (error) return <p>There is an error.</p>
-  if (!data) return <p>Loading...</p>
+  if (dataTable.length < 1) return <p>Loading...</p>
 
   return (
     <StyledInventario>
       <div className="inventario">
         <Card title="Inventario">
-          {" "}
           Lista de medicamentos
           {/* <p>{data.items[0].title}</p> */}
+          {console.log('la data final sobre la tabla es', dataTable)}
           <EnhancedTable
-            data={data.items}
-            count={data.totalRecords}
-            currentPage={data.currentPage}
-            pageSize={data.pageSize}
+            data={dataTable.items}
+            count={76}
+            currentPage={currentPage}
+            pageSize={pageSize}
             onPageChange={pageChangeHandler}
             onPageSizeChange={pageSizeHandler}
           />

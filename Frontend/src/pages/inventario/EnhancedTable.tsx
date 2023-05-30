@@ -212,9 +212,7 @@ export default function EnhancedTable({
   const [order, setOrder] = useState<Order>("asc")
   const [orderBy, setOrderBy] = useState<keyof Products>("tradeName")
   const [selected, setSelected] = useState<readonly string[]>([])
-  const [page, setPage] = useState(currentPage)
   const [dense, setDense] = useState(false)
-  const [rowsPerPage, setRowsPerPage] = useState(pageSize)
   const [openModal, setOpenModal] = useState(false)
   const [upc, setUpc] = useState("")
   const handleOpen = (upc: string) => {
@@ -260,36 +258,36 @@ export default function EnhancedTable({
   }
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
+    console.log('se va a cambiar la pagina', newPage, currentPage, event)
     onPageChange(newPage);
+
   }
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    onPageSizeChange(parseInt(event.target.value, 10));
-    onPageChange(1);
-    setPage(0);
+    console.log('se va a cambiar la cantidad de elementos', event.target.value, pageSize)
+
+    onPageSizeChange(parseInt(event.target.value));
+    onPageChange(0);
+
   }
 
-  const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDense(event.target.checked)
-  }
+
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1
 
-  // Avoid a layout jump when reaching the last page with empty rows.
+  // Avoid a layout jump when reaching the last currentPage with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
+    currentPage > 0 ? Math.max(0, (1 + currentPage) * pageSize - rows.length) : 0
 
   const visibleRows = React.useMemo(
     () =>
       stableSort(rows, getComparator(order, orderBy)).slice(
-        page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage,
+        currentPage * pageSize,
+        currentPage * pageSize + pageSize,
       ),
-    [order, orderBy, page, rowsPerPage],
+    [order, orderBy, currentPage, pageSize],
   )
 
   return (
@@ -373,10 +371,11 @@ export default function EnhancedTable({
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={count}
-          rowsPerPage={rowsPerPage}
-          page={page}
+          rowsPerPage={pageSize}
+          page={currentPage}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
+
         />
       </Paper>
     </StyledEnhancedTable>

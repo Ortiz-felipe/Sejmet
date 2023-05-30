@@ -4,10 +4,10 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<UserSecretsId>0ead7b38-c387-424e-8fc9-fc7b497c30a7</UserSecretsId>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<NoWarn>$(NoWarn);1591</NoWarn>
-	</PropertyGroup>
+	  <UserSecretsId>b737918a-2b3a-4d7b-bd87-0c4c6d37d23c</UserSecretsId>
+  </PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="12.0.1" />
