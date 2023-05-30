@@ -8,34 +8,62 @@ import { Products } from "../../schemas/products"
 import { useState, useEffect } from "react"
 const baseURL = import.meta.env.VITE_BACKEND_URL
 
+interface PaginationOptions {
+  pageSize: number
+  currentPage: number
+  totalRecords?: number
+}
+
 const Inventario = () => {
-  const [currentPage, setCurrentPage] = useState(0)
-  const [pageSize, setPageSize] = useState(5)
-  const [url, setUrl] = useState<string>(`${baseURL}/Products?CurrentPage=${currentPage + 1}&PageSize=${pageSize}`)
+  const [paginationOptions, setPaginationOptions] = useState<PaginationOptions>(
+    {
+      currentPage: 0,
+      pageSize: 5,
+    },
+  )
+  const [url, setUrl] = useState<string>(
+    `${baseURL}/Products?CurrentPage=${
+      paginationOptions.currentPage + 1
+    }&PageSize=${paginationOptions.pageSize}`,
+  )
   const [dataTable, setDataTable] = useState<Products[]>([])
+
   const callData = async () => {
     const elements = await fetch(url)
-    const data = await elements.json()
-    console.log('data', data)
-    setDataTable(data)
+    const data = (await elements.json()) as PagedResponse<Products>
+    console.log("data", data)
+    setDataTable(data.items)
+    setPaginationOptions((prev) => {
+      return { ...prev, totalRecords: data.totalRecords }
+    })
   }
+
   useEffect(() => {
-    console.log('currentPage', currentPage)
-    console.log('pageSize', pageSize)
-    setUrl(`${baseURL}/Products?CurrentPage=${currentPage + 1}&PageSize=${pageSize}`)
+    console.log("currentPage", paginationOptions.currentPage)
+    console.log("pageSize", paginationOptions.pageSize)
+    setUrl(
+      `${baseURL}/Products?CurrentPage=${
+        paginationOptions.currentPage + 1
+      }&PageSize=${paginationOptions.pageSize}`,
+    )
+  }, [paginationOptions.currentPage, paginationOptions.pageSize])
+
+  useEffect(() => {
     callData()
-  }, [currentPage, pageSize])
+  }, [url])
 
   const pageChangeHandler = (currentPage: number): void => {
-    console.log('current Page', currentPage)
-    setCurrentPage(currentPage)
+    console.log("current Page", currentPage)
+    setPaginationOptions((prev) => {
+      return { ...prev, currentPage: currentPage }
+    })
   }
 
   const pageSizeHandler = (pageSize: number): void => {
-    console.log('pageSize', pageSize)
-
-    setPageSize(pageSize)
-    setCurrentPage(0)
+    console.log("pageSize", pageSize)
+    setPaginationOptions((prev) => {
+      return { ...prev, currentPage: 0, pageSize: pageSize }
+    })
   }
 
   if (dataTable.length < 1) return <p>Loading...</p>
@@ -46,12 +74,11 @@ const Inventario = () => {
         <Card title="Inventario">
           Lista de medicamentos
           {/* <p>{data.items[0].title}</p> */}
-          {console.log('la data final sobre la tabla es', dataTable)}
           <EnhancedTable
-            data={dataTable.items}
-            count={76}
-            currentPage={currentPage}
-            pageSize={pageSize}
+            data={dataTable}
+            count={paginationOptions.totalRecords || 0}
+            currentPage={paginationOptions.currentPage}
+            pageSize={paginationOptions.pageSize}
             onPageChange={pageChangeHandler}
             onPageSizeChange={pageSizeHandler}
           />

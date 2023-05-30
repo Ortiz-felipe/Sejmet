@@ -18,10 +18,13 @@ const style = {
     boxShadow: 24,
     p: 4,
 };
+
+const baseURL = import.meta.env.VITE_BACKEND_URL;
+
 const ModalProduct = ({ open, setOpen, upc }) => {
     let { userUPC } = useParams();
 
-    const url = `http://localhost:5149/api/Products/ProductCode/${upc}`
+    const url = `${baseURL}/Products/${upc}`
     const { data, error } = useFetch<Products>(url)
     const handleClose = () => setOpen(false);
 
