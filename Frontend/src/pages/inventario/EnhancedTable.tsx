@@ -277,9 +277,9 @@ export default function EnhancedTable({
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1
 
-  // Avoid a layout jump when reaching the last currentPage with empty rows.
-  const emptyRows =
-    currentPage > 0 ? Math.max(0, (1 + currentPage) * pageSize - rows.length) : 0
+  //whit this code void a layout jump when reaching the last currentPage with empty rows, but don't work fine.
+  //const emptyRows =  currentPage > 0 ? Math.max(0, (1 + currentPage) * pageSize - rows.length) : 0
+  const emptyRows = 0
 
   const visibleRows = React.useMemo(
     () => {
@@ -289,7 +289,7 @@ export default function EnhancedTable({
       )
       return pepe;
     }
-      ,
+    ,
     [order, orderBy, currentPage, pageSize],
   )
 
@@ -316,7 +316,7 @@ export default function EnhancedTable({
               {rows.map((row, index) => {
                 const isItemSelected = isSelected(row.upc)
                 const labelId = `enhanced-table-checkbox-${index}`
-
+                console.log('el row total es', rows, emptyRows, visibleRows)
                 return (
                   <TableRow
                     hover
