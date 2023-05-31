@@ -17,14 +17,14 @@ namespace Sejmet.API.Queries.Sales.GetById
 
         public async Task<IActionResult> Handle(QueryRequest request, CancellationToken cancellationToken)
         {
-            if (request.SaleId == Guid.Empty)
+            if (request.Id == Guid.Empty)
             {
                 return this.BadRequest(SaleErrors.CreateSaleCustomerIdIsEmpty);
             }
 
             try
             {
-                var sale = await _salesRepository.GetSaleByIdAsync(request.SaleId, cancellationToken);
+                var sale = await _salesRepository.GetSaleByIdAsync(request.Id, cancellationToken);
 
                 if (sale is null)
                 {

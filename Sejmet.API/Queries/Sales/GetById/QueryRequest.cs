@@ -6,6 +6,6 @@ namespace Sejmet.API.Queries.Sales.GetById
     public class QueryRequest : IRequest<IActionResult>
     {
         [FromRoute]
-        public Guid SaleId { get; set; }
+        public Guid Id { get; set; }
     }
 }

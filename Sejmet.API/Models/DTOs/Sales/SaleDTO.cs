@@ -4,7 +4,7 @@ namespace Sejmet.API.Models.DTOs.Sales
 {
     public class SaleDTO
     {
-        public Guid SaleId { get; set; }
+        public Guid Id { get; set; }
         public Guid CustomerId { get; set; }
         public string CustomerName { get; set; }
         public decimal TotalAmount { get; set; }

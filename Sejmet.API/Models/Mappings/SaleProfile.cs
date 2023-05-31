@@ -9,7 +9,7 @@ namespace Sejmet.API.Models.Mappings
         public SaleProfile()
         {
             this.CreateMap<Sale, SaleDTO>()
-                .ForMember(destination => destination.SaleId, origin => origin.MapFrom(x => x.Id))
+                .ForMember(destination => destination.Id, origin => origin.MapFrom(x => x.Id))
                 .ForMember(destination => destination.CustomerId, origin => origin.MapFrom(x => x.CustomerId))
                 .ForMember(destination => destination.CustomerName,
                     origin => origin.MapFrom(x => $"{x.Customer.FirstName} {x.Customer.LastName}"))

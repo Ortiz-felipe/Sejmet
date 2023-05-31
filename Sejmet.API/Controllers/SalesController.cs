@@ -29,7 +29,7 @@ namespace Sejmet.API.Controllers
         }
 
         [HttpGet]
-        [Route("{SaleId}")]
+        [Route("{Id}")]
         [ProducesResponseType(typeof(SaleDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]

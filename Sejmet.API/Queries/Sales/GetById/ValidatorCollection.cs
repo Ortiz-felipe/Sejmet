@@ -9,7 +9,7 @@ namespace Sejmet.API.Queries.Sales.GetById
         {
             this.ClassLevelCascadeMode = CascadeMode.Stop;
 
-            this.RuleFor(x => x.SaleId)
+            this.RuleFor(x => x.Id)
                 .NotEmpty()
                 .WithMessage(SaleErrors.CreateSaleCustomerIdIsEmpty.Message);
         }
