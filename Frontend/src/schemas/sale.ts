@@ -1,9 +1,9 @@
 export interface Sale {
-    saleId: string,
+    id: string,
     customerId: string,
     customerName: string,
     totalAmount: number,
-    saleDate: Date,
+    saleDate: string,
     soldProducts: SaleProduct[]
 }
 

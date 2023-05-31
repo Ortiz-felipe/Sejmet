@@ -3,8 +3,8 @@ export interface Orders {
     providerId: string,
     providerName: string,
     totalAmount: number,
-    orderDate: Date,
-    recievedDate: Date,
+    orderDate: string,
+    recievedDate: string,
     transactionStatusId: number,
     orderedProducts: OrderProduct[]
 }

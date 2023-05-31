@@ -23,6 +23,7 @@ import ModalProduct from "./ModalProduct"
 import Button from "@mui/material/Button"
 import { StyledEnhancedTable } from "./StyledEnhancedTable"
 import { Sale } from "../../schemas/sale"
+import { formatDate } from "../../utils/utils"
 
 interface HeadCell {
   disablePadding: boolean
@@ -33,7 +34,7 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
   {
-    id: "saleId",
+    id: "id",
     numeric: false,
     disablePadding: true,
     label: "ID Venta",
@@ -226,7 +227,7 @@ export default function EnhancedTable({
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.saleId)
+      const newSelected = rows.map((n) => n.id)
       setSelected(newSelected)
       return
     }
@@ -288,7 +289,7 @@ export default function EnhancedTable({
 
   return (
     <StyledEnhancedTable sx={{ width: "100%" }}>
-      <ModalProduct open={openModal} setOpen={setOpenModal} upc={upc} />
+      {/* <ModalProduct open={openModal} setOpen={setOpenModal} upc={upc} /> */}
       <Paper sx={{ width: "100%", mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
@@ -307,17 +308,17 @@ export default function EnhancedTable({
             />
             <TableBody>
               {rows.map((row, index) => {
-                const isItemSelected = isSelected(row.saleId)
+                const isItemSelected = isSelected(row.id)
                 const labelId = `enhanced-table-checkbox-${index}`
 
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.saleId)}
+                    onClick={(event) => handleClick(event, row.id)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row.saleId}
+                    key={row.id}
                     selected={isItemSelected}
                     sx={{ cursor: "pointer" }}
                   >
@@ -337,12 +338,13 @@ export default function EnhancedTable({
                       scope="row"
                       padding="none"
                     >
-                      {row.customerName}
+                      {row.id}
                     </TableCell>
-                    <TableCell align="left">{row.saleDate.toLocaleDateString("DD/MM/YYYY")}</TableCell>
+                    <TableCell align="left">{row.customerName}</TableCell>
+                    <TableCell align="left">{formatDate(row.saleDate)}</TableCell>
                     <TableCell align="left">{row.totalAmount}</TableCell>
                     <TableCell align="left">
-                      <Button onClick={() => handleOpen(row.saleId)}>
+                      <Button onClick={() => handleOpen(row.id)}>
                         Detalles
                       </Button>
                     </TableCell>

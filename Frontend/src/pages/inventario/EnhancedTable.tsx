@@ -199,13 +199,13 @@ export default function EnhancedTable({
   currentPage,
   pageSize,
   onPageChange,
-  onPageSizeChange
+  onPageSizeChange,
 }: {
   data: Products[]
   count: number
   currentPage: number
-  pageSize: number,
-  onPageChange: (currentPage: number) => void,
+  pageSize: number
+  onPageChange: (currentPage: number) => void
   onPageSizeChange: (pageSize: number) => void
 }) {
   const rows: Products[] = data
@@ -258,44 +258,44 @@ export default function EnhancedTable({
   }
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    console.log('se va a cambiar la pagina', newPage, currentPage, event)
-    onPageChange(newPage);
-
+    console.log("se va a cambiar la pagina", newPage, currentPage, event)
+    onPageChange(newPage)
   }
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    console.log('se va a cambiar la cantidad de elementos', event.target.value, pageSize)
+    console.log(
+      "se va a cambiar la cantidad de elementos",
+      event.target.value,
+      pageSize,
+    )
 
-    onPageSizeChange(parseInt(event.target.value));
-    onPageChange(0);
-
+    onPageSizeChange(parseInt(event.target.value))
+    onPageChange(0)
   }
-
-
 
   const isSelected = (name: string) => selected.indexOf(name) !== -1
 
   // Avoid a layout jump when reaching the last currentPage with empty rows.
   const emptyRows =
-    currentPage > 0 ? Math.max(0, (1 + currentPage) * pageSize - rows.length) : 0
+    currentPage > 0
+      ? Math.max(0, (1 + currentPage) * pageSize - rows.length)
+      : 0
 
-  const visibleRows = React.useMemo(
-    () => {
-      const pepe = stableSort(rows, getComparator(order, orderBy)).slice(
-        currentPage * pageSize,
-        currentPage * pageSize + pageSize,
-      )
-      return pepe;
-    }
-      ,
-    [order, orderBy, currentPage, pageSize],
-  )
+  const visibleRows = React.useMemo(() => {
+    const pepe = stableSort(rows, getComparator(order, orderBy)).slice(
+      currentPage * pageSize,
+      currentPage * pageSize + pageSize,
+    )
+    return pepe
+  }, [order, orderBy, currentPage, pageSize])
 
   return (
     <StyledEnhancedTable sx={{ width: "100%" }}>
-      <ModalProduct open={openModal} setOpen={setOpenModal} upc={upc} />
+      {openModal && (
+        <ModalProduct open={openModal} setOpen={setOpenModal} upc={upc} />
+      )}
       <Paper sx={{ width: "100%", mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
@@ -378,7 +378,6 @@ export default function EnhancedTable({
           page={currentPage}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-
         />
       </Paper>
     </StyledEnhancedTable>

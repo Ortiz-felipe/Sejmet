@@ -34,3 +34,9 @@ export function stableSort<T>(
     })
     return stabilizedThis.map((el) => el[0])
 }
+
+export interface PaginationOptions {
+    pageSize: number
+    currentPage: number
+    totalRecords?: number
+  }

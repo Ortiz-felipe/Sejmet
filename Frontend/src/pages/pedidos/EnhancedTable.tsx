@@ -19,11 +19,12 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import { visuallyHidden } from "@mui/utils"
 import { getComparator, stableSort, Order } from "../../utils/sort"
-import ModalProduct from "./ModalProduct"
+import ModalPedido from "./ModalPedido"
 import Button from "@mui/material/Button"
 import { StyledEnhancedTable } from "./StyledEnhancedTable"
 import { Orders } from "../../schemas/order"
 import { TransactionStatusNames } from "../../schemas/transactionStatusEnum"
+import { formatDate } from "../../utils/utils"
 
 interface HeadCell {
   disablePadding: boolean
@@ -194,13 +195,13 @@ export default function EnhancedTable({
   currentPage,
   pageSize,
   onPageChange,
-  onPageSizeChange
+  onPageSizeChange,
 }: {
   data: Orders[]
   count: number
   currentPage: number
-  pageSize: number,
-  onPageChange: (currentPage: number) => void,
+  pageSize: number
+  onPageChange: (currentPage: number) => void
   onPageSizeChange: (pageSize: number) => void
 }) {
   const rows: Orders[] = data
@@ -211,10 +212,10 @@ export default function EnhancedTable({
   const [dense, setDense] = useState(false)
   const [rowsPerPage, setRowsPerPage] = useState(pageSize)
   const [openModal, setOpenModal] = useState(false)
-  const [upc, setUpc] = useState("")
-  const handleOpen = (upc: string) => {
+  const [orderId, setOrderId] = useState("")
+  const handleOpen = (orderId: string) => {
     setOpenModal(true)
-    setUpc(upc)
+    setOrderId(orderId)
   }
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -255,17 +256,17 @@ export default function EnhancedTable({
   }
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-    onPageChange(newPage);
+    setPage(newPage)
+    onPageChange(newPage)
   }
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    onPageSizeChange(parseInt(event.target.value, 10));
-    onPageChange(1);
-    setPage(0);
+    setRowsPerPage(parseInt(event.target.value, 10))
+    onPageSizeChange(parseInt(event.target.value, 10))
+    onPageChange(1)
+    setPage(0)
   }
 
   const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -278,18 +279,24 @@ export default function EnhancedTable({
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
-//   const visibleRows = React.useMemo(
-//     () =>
-//       stableSort(rows, getComparator(order, orderBy)).slice(
-//         page * rowsPerPage,
-//         page * rowsPerPage + rowsPerPage,
-//       ),
-//     [order, orderBy, page, rowsPerPage],
-//   )
+  //   const visibleRows = React.useMemo(
+  //     () =>
+  //       stableSort(rows, getComparator(order, orderBy)).slice(
+  //         page * rowsPerPage,
+  //         page * rowsPerPage + rowsPerPage,
+  //       ),
+  //     [order, orderBy, page, rowsPerPage],
+  //   )
 
   return (
     <StyledEnhancedTable sx={{ width: "100%" }}>
-      <ModalProduct open={openModal} setOpen={setOpenModal} upc={upc} />
+      {openModal && (
+        <ModalPedido
+          open={openModal}
+          setOpen={setOpenModal}
+          orderId={orderId}
+        />
+      )}
       <Paper sx={{ width: "100%", mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
@@ -340,9 +347,13 @@ export default function EnhancedTable({
                     >
                       {row.providerName}
                     </TableCell>
-                    <TableCell align="left">{row.orderDate.toLocaleDateString("DD/MM/YYYY")}</TableCell>
+                    <TableCell align="left">
+                      {formatDate(row.orderDate)}
+                    </TableCell>
                     <TableCell align="left">{row.totalAmount}</TableCell>
-                    <TableCell align="left">{TransactionStatusNames[row.transactionStatusId]}</TableCell>
+                    <TableCell align="left">
+                      {TransactionStatusNames[row.transactionStatusId]}
+                    </TableCell>
                     <TableCell align="left">
                       <Button onClick={() => handleOpen(row.id)}>
                         Detalles

@@ -24,7 +24,7 @@ const Inventario = () => {
   const [url, setUrl] = useState<string>(
     `${baseURL}/Products?CurrentPage=${
       paginationOptions.currentPage + 1
-    }&PageSize=${paginationOptions.pageSize}`,
+    }&PageSize=${paginationOptions.pageSize}`
   )
   const [dataTable, setDataTable] = useState<Products[]>([])
 
