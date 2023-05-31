@@ -1,4 +1,4 @@
-export interface Order {
+export interface Orders {
     id: string,
     providerId: string,
     providerName: string,

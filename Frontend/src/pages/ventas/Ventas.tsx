@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import Card from "../ui/Card/Card"
+import Card from "../../ui/Card/Card"
 import { StyledVentas } from "./StyledVentas"
 
 // this home is whit 2 squares and 1 rectangle
