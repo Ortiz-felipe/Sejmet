@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Sejmet.API.Models.DTOs;
 using Sejmet.API.Models.DTOs.Products;
+using Sejmet.API.Models.DTOs.Sales;
 using Sejmet.API.Models.Entities;
 using Sejmet.API.Repositories.Interfaces;
 
@@ -35,7 +36,7 @@ namespace Sejmet.API.Repositories
                 throw;
             }
 
-            
+
         }
 
         public async Task<ProductDTO?> GetProductByUPCAsync(string productUPC, CancellationToken cancellationToken)
@@ -77,6 +78,46 @@ namespace Sejmet.API.Repositories
         public Task<CreateProductDTO> UpdateProductStockAsync(string productUPC, int quantity, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<IList<TopSoldProductDTO>> GetTopSoldProductsAsync(CancellationToken cancellationToken)
+        {
+            var products = GetProductsQuery();
+            var sales = _dbContext.Sales.AsQueryable();
+
+            var soldProducts = sales.SelectMany(sale => sale.SaleProducts);
+
+            var productSales = soldProducts.GroupBy(sp => sp.ProductId)
+                .Select(group => new
+                {
+                    ProductId = group.Key,
+                    TotalQuantitySold = group.Sum(sp => sp.Quantity)
+                });
+
+            var topSellingProductIds = productSales.OrderByDescending(product => product.TotalQuantitySold)
+                        .Take(5)
+                        .Select(product => product.ProductId);
+
+            var topSellingProducts = await topSellingProductIds.Join(products, productId => productId, product => product.Id,
+                (productId, product) => new TopSoldProductDTO()
+                {
+                    Id = product.Id,
+                    Upc = product.Upc,
+                    LaboratoryName = product.Laboratory.Name,
+                    TradeName = product.TradeName
+                }).ToListAsync(cancellationToken);
+
+            return topSellingProducts;
+        }
+
+        public async Task<IList<CriticalStockProductDTO>> GetTopProductsInCriticalStock(CancellationToken cancellationToken)
+        {
+            var criticalStockProducts = await _dbContext.Products.Where(x => x.CurrentStock < 5)
+                            .OrderBy(x => x.CurrentStock)
+                            .Take(5)
+                            .ToListAsync(cancellationToken);
+
+            return _mapper.Map<List<CriticalStockProductDTO>>(criticalStockProducts);
         }
 
         private IQueryable<Product> GetProductsQuery()

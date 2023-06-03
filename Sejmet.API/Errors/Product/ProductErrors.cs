@@ -38,5 +38,11 @@
 
         public static ApiError ProductIdIsEmpty => new(MajorErrorCodes.Products, 14, "Product Id cannot be empty");
         public static ApiError ProductNotFound => new(MajorErrorCodes.Products, 15, "Product does not exists");
+
+        public static ApiError GetTopSoldProductsError =>
+            new(MajorErrorCodes.Products, 16, "Get Top Sold Products has failed");
+
+        public static ApiError GetTopProductsInCriticalStockError => new(MajorErrorCodes.Products, 17,
+            "Get top products in critical stock has failed");
     }
 }

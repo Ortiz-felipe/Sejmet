@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Sejmet.API.Errors;
 using Sejmet.API.Models.DTOs;
 using Sejmet.API.Models.DTOs.Products;
+using Sejmet.API.Models.DTOs.Sales;
+using Sejmet.API.Queries.Products.GetTopSoldProducts;
 
 namespace Sejmet.API.Controllers
 {
@@ -22,6 +24,25 @@ namespace Sejmet.API.Controllers
         [ProducesResponseType(typeof(PagedResponseDTO<ProductDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllProductsAsync([FromQuery]Queries.Products.GetAll.QueryRequest queryRequest)
+        {
+            return await _mediator.Send(queryRequest);
+        }
+
+        [HttpGet]
+        [Route("TopSoldProducts")]
+        [ProducesResponseType(typeof(IList<TopSoldProductDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetTopSoldProductsAsync([FromQuery]QueryRequest queryRequest)
+        {
+            return await _mediator.Send(queryRequest);
+        }
+
+        [HttpGet]
+        [Route("CriticalStockProducts")]
+        [ProducesResponseType(typeof(IList<CriticalStockProductDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetCriticalStockProductsAsync(
+            [FromQuery] Queries.Products.GetTopProductInCriticalStock.QueryRequest queryRequest)
         {
             return await _mediator.Send(queryRequest);
         }
