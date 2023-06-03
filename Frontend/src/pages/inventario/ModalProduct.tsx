@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import useFetch from "../../hook/useFetch";
 import { Products } from "../../schemas/products";
 import Button from "@mui/material/Button"
+import CloseIcon from '@mui/icons-material/Close';
 import { StyledModal } from "./StyledModal";
 
 const style = {
@@ -37,7 +38,7 @@ const ModalProduct = ({ open, setOpen, upc }) => {
         >
 
             <Box sx={style}>
-                <Button onClick={handleClose}>X</Button>
+                <Button variant="contained" onClick={handleClose} endIcon={<CloseIcon />} />
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     {data?.tradeName}
                 </Typography>
