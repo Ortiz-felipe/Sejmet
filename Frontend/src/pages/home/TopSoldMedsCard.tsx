@@ -12,7 +12,7 @@ const TopSoldMedsCard = () => {
   )
 
   return (
-    <StyledCard>
+    <StyledCard floor="2floor" size="3lines">
       <div className="inventario">
         {data && data?.length < 0 ? (
           <CircularProgress />
