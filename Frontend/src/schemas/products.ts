@@ -9,3 +9,17 @@ export interface Products {
     price: number;
     currentStock: number;
 }
+
+export interface TopSoldProduct {
+    id: string,
+    upc: string,
+    tradeName: string,
+    laboratoryName: string
+}
+
+export interface CriticalStockProduct {
+    id: string,
+    upc: string,
+    productName: string,
+    currentStock: number
+}

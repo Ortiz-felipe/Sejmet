@@ -20,3 +20,10 @@ export interface UpdateOrder {
     orderId: string,
     transactionStatusID: number
 }
+
+export interface LatestOrder {
+    id: string,
+    providerName: string,
+    totalAmount: number,
+    orderDate: string
+}
