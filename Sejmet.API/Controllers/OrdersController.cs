@@ -38,6 +38,18 @@ namespace Sejmet.API.Controllers
             return await mediator.Send(queryRequest).ConfigureAwait(false);
         }
 
+
+        [HttpGet]
+        [Route("GetTopLatestOrders")]
+        [ProducesResponseType(typeof(IList<LatestOrderDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetTopLatestOrdersAsync(
+            [FromQuery] Queries.Orders.GetLatestOrders.QueryRequest queryRequest)
+        {
+            return await mediator.Send(queryRequest);
+        }
+
+
         [HttpPost]
         [ProducesResponseType(typeof(CreateOrderDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status400BadRequest)]

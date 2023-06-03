@@ -99,5 +99,15 @@ namespace Sejmet.API.Repositories
             return _mapper.Map<OrderDTO>(orderToUpdate);
 
         }
+
+        public async Task<IList<LatestOrderDTO>> GetTopLatestOrdersAsync(CancellationToken cancellationToken)
+        {
+            var latestOrders = await _context.Orders.Include(x => x.Provider)
+                                                            .OrderByDescending(x => x.OrderDate)
+                                                            .Take(5)
+                                                            .ToListAsync(cancellationToken);
+
+            return _mapper.Map<List<LatestOrderDTO>>(latestOrders);
+        }
     }
 }

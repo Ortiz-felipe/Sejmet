@@ -9,5 +9,6 @@ namespace Sejmet.API.Repositories.Interfaces
         Task<OrderDTO?> GetOrderByIdAsync(Guid orderId, CancellationToken cancellationToken);
         Task<CreateOrderDTO> CreateOrderAsync(CreateOrderDTO orderDTO, CancellationToken cancellationToken);
         Task<OrderDTO?> UpdateOrderAsync(UpdateOrderDTO orderDTO, CancellationToken cancellationToken);
+        Task<IList<LatestOrderDTO>> GetTopLatestOrdersAsync(CancellationToken cancellationToken);
     }
 }

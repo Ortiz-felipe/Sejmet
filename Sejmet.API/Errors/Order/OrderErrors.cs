@@ -48,5 +48,8 @@
 
         public static ApiError OrderPageSizeIsEmpty => new(MajorErrorCodes.Orders, 19, "Page size cannot be empty");
         public static ApiError OrderIDNotFound => new(MajorErrorCodes.Orders, 20, "Order ID wasn't found");
+
+        public static ApiError GetTopLatestOrderError =>
+            new(MajorErrorCodes.Orders, 21, "Get top latest orders has failed");
     }
 }
