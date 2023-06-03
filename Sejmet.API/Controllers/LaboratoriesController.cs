@@ -22,7 +22,7 @@ namespace Sejmet.API.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(IList<LaboratoryDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAllLaboratoriesAsync(QueryRequest queryRequest)
+        public async Task<IActionResult> GetAllLaboratoriesAsync([FromQuery]QueryRequest queryRequest)
         {
             return await _mediator.Send(queryRequest);
         }
