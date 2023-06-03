@@ -2,7 +2,7 @@ import { useState } from "react";
 import Box from '@mui/material/Box';
 import Typography from "@mui/material/Typography"
 import { useParams } from "react-router-dom";
-import useFetch from "../../hook/useFecth";
+import useFetch from "../../hook/useFetch";
 import { Products } from "../../schemas/products";
 import Button from "@mui/material/Button"
 import { StyledModal } from "./StyledModal";
