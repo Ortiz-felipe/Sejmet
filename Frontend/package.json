@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --force",
     "start": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
@@ -27,6 +27,7 @@
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.1",
     "react-router-dom": "^6.11.2",
+    "recharts": "^2.6.2",
     "sort-by": "^1.2.0",
     "styled-components": "^4.0.0"
   },
