@@ -3,7 +3,7 @@ import StyledNavBar from "./StyledNavbar"
 const NavBar = () => {
     return <StyledNavBar>
         <div className="nav">
-            <h1>Sejmet</h1>
+            <h1>Sejmet - Admin de Farmacias</h1>
         </div>
     </StyledNavBar>
 }

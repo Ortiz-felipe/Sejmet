@@ -3,12 +3,13 @@ import { StyledButtonDrawner } from "./StyledDrawner"
 
 interface buttonDrwanerItf {
     title: string
-    location: string
+    location: string,
+    icon: React.ReactNode
 }
 
-const ButtonDrawner = ({ title, location }: buttonDrwanerItf) => {
+const ButtonDrawner = ({ title, location, icon }: buttonDrwanerItf) => {
     return (
-        <StyledButtonDrawner classes={"button"} type="button" size="large" href={location}>{title}</StyledButtonDrawner>
+        <StyledButtonDrawner classes={"button"} type="button" size="large" href={location} startIcon={icon}>{title}</StyledButtonDrawner>
     )
 }
 export default ButtonDrawner
