@@ -36,37 +36,37 @@ const headCells: readonly HeadCell[] = [
     id: "tradeName",
     numeric: false,
     disablePadding: true,
-    label: "Trade Name",
+    label: "Nombre comercial",
   },
   {
     id: "laboratoryName",
     numeric: false,
     disablePadding: true,
-    label: "Laboratory Name",
+    label: "Laboratorio",
   },
   {
     id: "activeCompoundName",
     numeric: false,
     disablePadding: true,
-    label: "Active Compound Name",
+    label: "Principio activo",
   },
   {
     id: "currentStock",
     numeric: false,
     disablePadding: true,
-    label: "Current Stock",
+    label: "Stock disponible",
   },
   {
     id: "price",
     numeric: false,
     disablePadding: true,
-    label: "Price",
+    label: "Precio",
   },
   {
     id: "details",
     numeric: false,
     disablePadding: false,
-    label: "details",
+    label: "Detalles",
   },
 ]
 
@@ -164,7 +164,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           variant="subtitle1"
           component="div"
         >
-          {numSelected} selected
+          {numSelected} seleccionados
         </Typography>
       ) : (
         <Typography
@@ -354,7 +354,7 @@ export default function EnhancedTable({
                     <TableCell align="left">{row.price}</TableCell>
                     <TableCell align="left">
                       <Button onClick={() => handleOpen(row.upc)}>
-                        Details
+                        Detalles
                       </Button>
                     </TableCell>
                   </TableRow>
