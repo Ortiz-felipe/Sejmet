@@ -10,13 +10,14 @@ import TableSortLabel from "@mui/material/TableSortLabel"
 import Toolbar from "@mui/material/Toolbar"
 import Typography from "@mui/material/Typography"
 import Paper from "@mui/material/Paper"
-import { Products } from "../../schemas/products"
+import { Products, TopSoldProduct } from "../../schemas/products"
 import ModalProduct from "./ModalProduct"
 import { StyledTables } from "./StyledsTables"
+import { CircularProgress } from "@mui/material"
 
 interface HeadCell {
   disablePadding: boolean
-  id: keyof Products
+  id: keyof TopSoldProduct
   label: string
   numeric: boolean
 }
@@ -33,7 +34,7 @@ const headCells: readonly HeadCell[] = [
     numeric: false,
     disablePadding: true,
     label: "Laboratory Name",
-  }
+  },
 ]
 
 interface EnhancedTableProps {
@@ -51,10 +52,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={false}
           >
-            <TableSortLabel
-            >
-              {headCell.label}
-            </TableSortLabel>
+            <TableSortLabel>{headCell.label}</TableSortLabel>
           </TableCell>
         ))}
       </TableRow>
@@ -62,14 +60,12 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   )
 }
 
-
-
 function EnhancedTableToolbar() {
   return (
     <Toolbar
       sx={{
         pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 }
+        pr: { xs: 1, sm: 1 },
       }}
     >
       <Typography
@@ -78,18 +74,14 @@ function EnhancedTableToolbar() {
         id="tableTitle"
         component="div"
       >
-        Products
+        Medicamentos mas vendidos
       </Typography>
     </Toolbar>
   )
 }
 
-export default function MedsTable({
-  data,
-}: {
-  data: Products[]
-}) {
-  const rows: Products[] = data
+export default function TopSoldMedsTable({ data }: { data: TopSoldProduct[] }) {
+  const rows: TopSoldProduct[] = data
   const [openModal, setOpenModal] = useState(false)
   const [upc, setUpc] = useState("")
   const handleOpen = (upc: string) => {
@@ -99,7 +91,9 @@ export default function MedsTable({
 
   return (
     <StyledTables sx={{ width: "100%" }}>
-      <ModalProduct open={openModal} setOpen={setOpenModal} upc={upc} />
+      {openModal && (
+        <ModalProduct open={openModal} setOpen={setOpenModal} upc={upc} />
+      )}
       <Paper sx={{ width: "100%", mb: 2 }}>
         <EnhancedTableToolbar />
         <TableContainer>
@@ -110,34 +104,36 @@ export default function MedsTable({
             aria-labelledby="tableTitle"
             size={"small"}
           >
-            <EnhancedTableHead
-              rowCount={rows.length}
-            />
+            <EnhancedTableHead rowCount={rows.length} />
             <TableBody>
-              {rows.map((row, index) => {
-                const labelId = `enhanced-table-checkbox-${index}`
-                return (
-                  <TableRow
-                    hover
-                    onClick={(event) => handleOpen(row.upc)}
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={row.upc}
-                    sx={{ cursor: "pointer" }}
-                  >
-                    <TableCell
-                      align="center"
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                      padding="none"
+              {rows.length < 0 ? (
+                <CircularProgress />
+              ) : (
+                rows.map((row, index) => {
+                  const labelId = `enhanced-table-checkbox-${index}`
+                  return (
+                    <TableRow
+                      hover
+                      onClick={(event) => handleOpen(row.upc)}
+                      role="checkbox"
+                      tabIndex={-1}
+                      key={row.id}
+                      sx={{ cursor: "pointer" }}
                     >
-                      {row.tradeName}
-                    </TableCell>
-                    <TableCell align="center">{row.laboratoryName}</TableCell>
-                  </TableRow>
-                )
-              })}
+                      <TableCell
+                        align="center"
+                        component="th"
+                        id={labelId}
+                        scope="row"
+                        padding="none"
+                      >
+                        {row.tradeName}
+                      </TableCell>
+                      <TableCell align="center">{row.laboratoryName}</TableCell>
+                    </TableRow>
+                  )
+                })
+              )}
             </TableBody>
           </Table>
         </TableContainer>
