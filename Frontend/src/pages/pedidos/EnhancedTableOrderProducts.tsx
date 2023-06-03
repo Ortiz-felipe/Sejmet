@@ -26,19 +26,19 @@ const headCells: readonly HeadCell[] = [
     id: "productName",
     numeric: false,
     disablePadding: true,
-    label: "Proveedor",
+    label: "Producto",
   },
   {
     id: "quantity",
     numeric: false,
     disablePadding: true,
-    label: "Fecha de orden",
+    label: "Cantidad",
   },
   {
     id: "unitPrice",
     numeric: false,
     disablePadding: true,
-    label: "Valor total orden",
+    label: "Precio unitario",
   },
 ]
 
