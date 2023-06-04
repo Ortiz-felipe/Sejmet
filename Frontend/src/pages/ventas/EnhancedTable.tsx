@@ -24,6 +24,7 @@ import Button from "@mui/material/Button"
 import { StyledEnhancedTable } from "./StyledEnhancedTable"
 import { Sale } from "../../schemas/sale"
 import { formatDate } from "../../utils/utils"
+import ModalSale from "./ModalSale"
 
 interface HeadCell {
   disablePadding: boolean
@@ -211,10 +212,10 @@ export default function EnhancedTable({
   const [dense, setDense] = useState(false)
   const [rowsPerPage, setRowsPerPage] = useState(pageSize)
   const [openModal, setOpenModal] = useState(false)
-  const [upc, setUpc] = useState("")
-  const handleOpen = (upc: string) => {
+  const [saleId, setSaleId] = useState("")
+  const handleOpen = (saleId: string) => {
     setOpenModal(true)
-    setUpc(upc)
+    setSaleId(saleId)
   }
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -288,7 +289,7 @@ export default function EnhancedTable({
 
   return (
     <StyledEnhancedTable sx={{ width: "100%" }}>
-      {/* <ModalProduct open={openModal} setOpen={setOpenModal} upc={upc} /> */}
+      <ModalSale open={openModal} setOpen={setOpenModal} saleId={saleId} />
       <Paper sx={{ width: "100%", mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>

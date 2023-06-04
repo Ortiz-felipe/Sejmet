@@ -10,6 +10,7 @@ namespace Sejmet.API.Models.Mappings
         {
             this.CreateMap<Customer, CustomerDTO>()
                 .ForMember(destination => destination.Id, origin => origin.MapFrom(x => x.Id))
+                .ForMember(destination => destination.Dni, origin => origin.MapFrom(x => x.Dni))
                 .ForMember(destination => destination.FirstName, origin => origin.MapFrom(x => x.FirstName))
                 .ForMember(destination => destination.LastName, origin => origin.MapFrom(x => x.LastName))
                 .ForMember(destination => destination.Birthdate, origin => origin.MapFrom(x => x.Birthdate))
@@ -17,7 +18,8 @@ namespace Sejmet.API.Models.Mappings
                 .ForMember(destination => destination.HealthCareProviderId, origin => origin.MapFrom(x => x.HealtcareProviderId))
                 .ForMember(destination => destination.PhoneNumber, origin => origin.MapFrom(x => x.PhoneNumber))
                 .ForMember(destination => destination.CityId, origin => origin.MapFrom(x => x.CityId))
-                .ForMember(destination => destination.ProvinceId, origin => origin.MapFrom(x => x.ProvinceId));
+                .ForMember(destination => destination.ProvinceId, origin => origin.MapFrom(x => x.ProvinceId))
+                .ReverseMap();
         }
     }
 }

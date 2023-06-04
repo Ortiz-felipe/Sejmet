@@ -1,14 +1,13 @@
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
-import { useParams } from "react-router-dom"
 import useFetch from "../../hook/useFetch"
-import { Products } from "../../schemas/products"
 import Button from "@mui/material/Button"
 import { StyledModal } from "./StyledModal"
 import { Orders } from "../../schemas/order"
 import { formatDate } from "../../utils/utils"
 import { TransactionStatusNames } from "../../schemas/transactionStatusEnum"
 import EnhancedTable from "./EnhancedTableOrderProducts"
+import CloseIcon from '@mui/icons-material/Close';
 
 const style = {
   position: "absolute" as "absolute",
@@ -45,7 +44,7 @@ const ModalProduct = ({
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <Button onClick={handleClose}>X</Button>
+      <Button variant="contained" onClick={handleClose} endIcon={<CloseIcon />} />
         <Typography id="modal-modal-title" variant="h6" component="h2">
           Detalles
         </Typography>

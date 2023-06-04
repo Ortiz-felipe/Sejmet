@@ -12,11 +12,11 @@ import Paper from "@mui/material/Paper"
 import { visuallyHidden } from "@mui/utils"
 import { Order } from "../../utils/sort"
 import { StyledEnhancedTable } from "./StyledEnhancedTable"
-import { OrderProduct } from "../../schemas/order"
+import { SaleProduct } from "../../schemas/sale"
 
 interface HeadCell {
   disablePadding: boolean
-  id: keyof OrderProduct
+  id: keyof SaleProduct
   label: string
   numeric: boolean
 }
@@ -26,7 +26,7 @@ const headCells: readonly HeadCell[] = [
     id: "productName",
     numeric: false,
     disablePadding: true,
-    label: "Producto",
+    label: "Product",
   },
   {
     id: "quantity",
@@ -45,7 +45,7 @@ const headCells: readonly HeadCell[] = [
 interface EnhancedTableProps {
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof OrderProduct,
+    property: keyof SaleProduct,
   ) => void
   order: Order
   orderBy: string
@@ -54,7 +54,7 @@ interface EnhancedTableProps {
 function EnhancedTableHead(props: EnhancedTableProps) {
   const { order, orderBy, onRequestSort } = props
   const createSortHandler =
-    (property: keyof OrderProduct) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof SaleProduct) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property)
     }
 
@@ -87,17 +87,17 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   )
 }
 
-export default function EnhancedTable({ data }: { data: OrderProduct[] }) {
-  const rows: OrderProduct[] = data
+export default function EnhancedTable({ data }: { data: SaleProduct[] }) {
+  const rows: SaleProduct[] = data
   const [order, setOrder] = useState<Order>("asc")
-  const [orderBy, setOrderBy] = useState<keyof OrderProduct>("productName")
+  const [orderBy, setOrderBy] = useState<keyof SaleProduct>("productName")
   const [page, setPage] = useState(0)
   const [dense, setDense] = useState(false)
   const [rowsPerPage, setRowsPerPage] = useState(5)
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof OrderProduct,
+    property: keyof SaleProduct,
   ) => {
     const isAsc = orderBy === property && order === "asc"
     setOrder(isAsc ? "desc" : "asc")

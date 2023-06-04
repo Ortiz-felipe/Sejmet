@@ -10,3 +10,16 @@ export const formatDate = (dateToFormat: string | undefined): string => {
     return '';
   }
 }
+
+export const validateObject = <T>(object: T, initialState: ValidationState<T>): ValidationState<T> => {
+  const validationState: ValidationState<T> = { ...initialState };
+
+  for (const property in object) {
+    if (property !== 'id' && !object[property as keyof T]) {
+      validationState[property as keyof T] = true;
+    }
+  }
+
+  return validationState;
+};
+

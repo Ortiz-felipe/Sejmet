@@ -12,6 +12,7 @@ import Pedidos from "./pages/pedidos/Pedidos"
 import StyledEngineProvider from "@mui/material/StyledEngineProvider"
 import { ThemeProvider } from "styled-components"
 import { theme } from "./ui/theme/theme"
+import NewClient from "./pages/NewClient/NewClient"
 
 const router = createBrowserRouter([
   {
@@ -28,8 +29,12 @@ const router = createBrowserRouter([
   },
   {
     path: "/ventas",
-    element: <Ventas className="home" />,
+    element: <Ventas className="home" />
   },
+  {
+    path: "/nuevoCliente",
+    element: <NewClient className="home" />
+  }
 ])
 
 function App() {
