@@ -1,5 +1,5 @@
 export interface Orders {
-    id: string,
+    id?: string,
     providerId: string,
     providerName: string,
     totalAmount: number,
