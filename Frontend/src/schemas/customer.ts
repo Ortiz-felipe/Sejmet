@@ -11,3 +11,9 @@ export interface Customer {
   provinceId: number
   phoneNumber: string
 }
+
+export interface CustomerInfo {
+  id: string
+  customerName: string
+  healthcareProviderName: string
+}

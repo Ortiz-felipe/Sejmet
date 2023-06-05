@@ -13,6 +13,7 @@ import StyledEngineProvider from "@mui/material/StyledEngineProvider"
 import { ThemeProvider } from "styled-components"
 import { theme } from "./ui/theme/theme"
 import NewClient from "./pages/NewClient/NewClient"
+import NewSale from "./pages/NewSale/NewSale"
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
   {
     path: "/nuevoCliente",
     element: <NewClient className="home" />
+  },
+  {
+    path: "/nuevaVenta",
+    element: <NewSale className="home" />
   }
 ])
 
