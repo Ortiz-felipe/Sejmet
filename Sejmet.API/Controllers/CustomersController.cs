@@ -23,9 +23,19 @@ namespace Sejmet.API.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(IList<CustomerDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAllAsync([FromQuery]QueryRequest queryRequest)
+        public async Task<IActionResult> GetAllAsync([FromQuery] QueryRequest queryRequest)
         {
-            return await _mediator.Send(queryRequest).ConfigureAwait(false); 
+            return await _mediator.Send(queryRequest).ConfigureAwait(false);
+        }
+
+        [HttpGet]
+        [Route("{Dni}")]
+        [ProducesResponseType(typeof(CustomerInfoDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetCustomerByDniAsync([FromRoute] Queries.Customers.GetByDNI.QueryRequest queryRequest)
+        {
+            return await _mediator.Send(queryRequest).ConfigureAwait(false);
         }
 
         [HttpPost]

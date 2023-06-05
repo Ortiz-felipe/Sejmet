@@ -50,6 +50,13 @@ namespace Sejmet.API.Repositories
             }
         }
 
+        public async Task<CustomerInfoDTO?> GetCustomerByDniAsync(string dni, CancellationToken cancellationToken)
+        {
+            var customer = await _dbContext.Customers.Include(x => x.HealtcareProvider).FirstOrDefaultAsync(x => x.Dni == dni, cancellationToken);
+
+            return customer is null ? null : _mapper.Map<CustomerInfoDTO?>(customer);
+        }
+
         public async Task<CustomerDTO> CreateCustomerAsync(CustomerDTO customerDTO, CancellationToken cancellationToken)
         {
             var customer = _mapper.Map<Customer>(customerDTO);

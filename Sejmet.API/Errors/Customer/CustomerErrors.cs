@@ -58,5 +58,10 @@
 
         public static ApiError CustomerNotFound =>
             new(MajorErrorCodes.Customers, 22, "Customer information was not found");
+
+        public static ApiError CustomerDniIsEmpty => new(MajorErrorCodes.Customers, 23, "Customer DNI cannot be empty");
+
+        public static ApiError GetCustomerByDniError =>
+            new(MajorErrorCodes.Customers, 24, "Get customer by DNI has failed");
     }
 }
