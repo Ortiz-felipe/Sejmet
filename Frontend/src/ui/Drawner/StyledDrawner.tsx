@@ -7,28 +7,34 @@ export const StyledNavBar = styled.div`
      color: white;
      display: flex;
      flex-direction: column;
-     justify-content: left;
-     padding: 2rem;
+     justify-content: center;
+     align-content: center;
+     gap: 5rem;
+     width: 6rem !important;
      z-index: 5;
+     width: auto;
      box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
      position: relative;
-     grid-column: 1/2;
-     grid-row: 2/4;
-
+    .drawner {
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+    }
  
  `
 
-export const StyledButtonDrawner = styled(Button)`
-    .button {
-        color: white  !important;
-
-    }
+export const StyledButtonDrawner = styled(Button)`  
         border: none;
         background-color: transparent;
         font-size: x-large;
-        border-bottom: 2px solid white;
-        padding: 1rem;
-        width: 100%;
+        display: flex;
+        width: 2rem;
+        justify-content: start;
+        padding-left: 1.5rem;
+        gap: 2rem;
+        .MuiPopper-root {
+            font-size: 2rem;
+        }
     
 `
 

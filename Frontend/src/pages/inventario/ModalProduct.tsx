@@ -6,18 +6,18 @@ import useFetch from "../../hook/useFetch";
 import { Products } from "../../schemas/products";
 import Button from "@mui/material/Button"
 import CloseIcon from '@mui/icons-material/Close';
-import { StyledModal } from "./StyledModal";
+import { StyledModal } from "../../ui/Modal/StyledModal";
 
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 800,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
     boxShadow: 24,
-    p: 4,
+    borderRadius: '2rem',
+    p: 6,
 };
 
 const baseURL = import.meta.env.VITE_BACKEND_URL;
@@ -39,29 +39,29 @@ const ModalProduct = ({ open, setOpen, upc }) => {
 
             <Box sx={style}>
                 <Button variant="contained" onClick={handleClose} endIcon={<CloseIcon />} />
-                <Typography id="modal-modal-title" variant="h6" component="h2">
+                <Typography id="modal-modal-title" variant="h4" component="h4">
                     {data?.tradeName}
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    UPC: {data?.upc}
+                    <strong>UPC:</strong> {data?.upc}
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    Laboratory: {data?.laboratoryName}
+                    <strong>Laboratory:</strong> {data?.laboratoryName}
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    Dosage Form Name: {data?.dosageFormName}
+                    <strong>Dosage Form Name:</strong> {data?.dosageFormName}
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    Active Ingredient: {data?.activeCompoundName}
+                    <strong>Active Ingredient:</strong>{data?.activeCompoundName}
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    Container: {data?.container}
+                    <strong>Container:</strong> {data?.container}
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    Price: {data?.price}
+                    <strong>Price:</strong> {data?.price}
                 </Typography>
                 <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                    Current Stock: {data?.currentStock}
+                    <strong>Current Stock:</strong> {data?.currentStock}
                 </Typography>
             </Box>
         </StyledModal>

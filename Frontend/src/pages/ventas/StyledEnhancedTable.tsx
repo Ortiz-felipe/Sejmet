@@ -6,4 +6,8 @@ export const StyledEnhancedTable = styled(Box)`
         align-self: end;
 	color: ${props => props.theme.colors.primary};;
   }
+  .MuiPaper-root {
+    box-shadow: none;
+    background-color: transparent;
+}
 `

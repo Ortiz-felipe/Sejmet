@@ -6,12 +6,23 @@ export const StyledPedidos = styled.div`
     grid-column: 2/3;
     grid-row: 2/3;
     background-color: tomato;
+    width: 100%;
+
     .pedidos {
         // whit this create a 4 x 4 grid
-        display: grid;
-        background-color: orange;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+  
         gap: 1rem;
         padding: 2rem;
+        background-color: ${props => props.theme.colors.back};
         height: -webkit-fill-available;
+        border-top-left-radius: 2rem;
+        border-bottom-left-radius: 2rem;
+        width: calc(100% - 2rem);
+        left: -2rem;
+        z-index: 100;
+        position: relative;
    } 
 `

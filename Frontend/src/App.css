@@ -51,14 +51,17 @@ h1{
 .App {
 	max-width: 100%;
 	max-height: 100%;
-	display: grid;
+	display: flex;
 	width: 100vw;
 	height: 100vh;
-	grid-template-columns: 18rem minmax(10px, 4fr);
-	grid-template-rows: 5rem minmax(10px, 4fr)
-
 }
 
 .MuiButton-root {
 	color: white;
   }
+  .MuiTooltip-popper {
+	font-size: 4rem !important;
+}
+.MuiPopper-root {
+	font-size: 4rem !important;
+}

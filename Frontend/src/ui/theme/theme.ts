@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
 export const theme = {
   colors: {
-    primary: "#7d6BF2",
-    secondary: "#4b1Df2",
-    back: "#f2f2f2",
+    primary: "#245dd0",
+    secondary: "#fe6756",
+    back: "#E9EAEC",
     primaryLight: "#c4bdf2",
     secondaryStrong: "#4218d9",
   },

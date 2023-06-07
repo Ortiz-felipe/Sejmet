@@ -167,7 +167,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         }),
       }}
     >
-      {numSelected > 0 ? (
+      {numSelected > 0 && (
         <Typography
           sx={{ flex: "1 1 100%" }}
           color="inherit"
@@ -176,26 +176,11 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         >
           {numSelected} seleccionados
         </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Products
-        </Typography>
       )}
-      {numSelected > 0 ? (
+      {numSelected > 0 && (
         <Tooltip title="Delete">
           <IconButton>
             <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
           </IconButton>
         </Tooltip>
       )}

@@ -153,7 +153,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         }),
       }}
     >
-      {numSelected > 0 ? (
+      {numSelected > 0 && (
         <Typography
           sx={{ flex: "1 1 100%" }}
           color="inherit"
@@ -162,26 +162,11 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         >
           {numSelected} selected
         </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Ventas
-        </Typography>
       )}
-      {numSelected > 0 ? (
+      {numSelected > 0 && (
         <Tooltip title="Delete">
           <IconButton>
             <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
           </IconButton>
         </Tooltip>
       )}
@@ -278,14 +263,14 @@ export default function EnhancedTable({
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows = 0
 
-//   const visibleRows = React.useMemo(
-//     () =>
-//       stableSort(rows, getComparator(order, orderBy)).slice(
-//         page * rowsPerPage,
-//         page * rowsPerPage + rowsPerPage,
-//       ),
-//     [order, orderBy, page, rowsPerPage],
-//   )
+  //   const visibleRows = React.useMemo(
+  //     () =>
+  //       stableSort(rows, getComparator(order, orderBy)).slice(
+  //         page * rowsPerPage,
+  //         page * rowsPerPage + rowsPerPage,
+  //       ),
+  //     [order, orderBy, page, rowsPerPage],
+  //   )
 
   return (
     <StyledEnhancedTable sx={{ width: "100%" }}>
