@@ -23,6 +23,7 @@
     "@mui/x-date-pickers": "^6.6.0",
     "@reduxjs/toolkit": "^1.8.1",
     "dayjs": "^1.11.8",
+    "fluentvalidation-ts": "^3.1.0",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
     "react": "^18.2.0",
