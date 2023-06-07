@@ -27,13 +27,13 @@ const headCells: readonly HeadCell[] = [
     id: "tradeName",
     numeric: false,
     disablePadding: true,
-    label: "Trade Name",
+    label: "Nombre comercial",
   },
   {
     id: "laboratoryName",
     numeric: false,
     disablePadding: true,
-    label: "Laboratory Name",
+    label: "Laboratorio",
   },
 ]
 
