@@ -19,11 +19,15 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import { visuallyHidden } from "@mui/utils"
 import { Products } from "../../schemas/products"
-import { getComparator, stableSort, Order } from "../../utils/sort"
+import { getComparator, stableSort } from "../../utils/sort"
 import ModalProduct from "./ModalProduct"
 import Button from "@mui/material/Button"
 import { StyledEnhancedTable } from "./StyledEnhancedTable"
-
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
+import { useAppSelector, useAppDispatch } from "../../app/hooks"
+import { addElement, addAllElements, removeAllElement, removeElement, selectCarroCantidad, selectCarroSelected } from "../../features/carro/carroSlice"
+import { OrderProduct, Orders } from "../../schemas/order"
 interface HeadCell {
   disablePadding: boolean
   id: keyof Products
@@ -76,10 +80,12 @@ interface EnhancedTableProps {
     event: React.MouseEvent<unknown>,
     property: keyof Products,
   ) => void
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onSelectAllClick: (selected: boolean, rows: Order[]) => void
   order: Order
   orderBy: string
-  rowCount: number
+  rowCount: number,
+  allSelected: boolean,
+  rows: Orders[]
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
@@ -87,9 +93,9 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     onSelectAllClick,
     order,
     orderBy,
-    numSelected,
-    rowCount,
     onRequestSort,
+    allSelected,
+    rows
   } = props
   const createSortHandler =
     (property: keyof Products) => (event: React.MouseEvent<unknown>) => {
@@ -100,15 +106,19 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              "aria-label": "select all products",
-            }}
-          />
+          {!allSelected ?
+            <Tooltip title="Seleccionar Todo">
+              <IconButton select={true} onClick={() => onSelectAllClick(true, rows)}>
+                <AddShoppingCartIcon />
+              </IconButton>
+            </Tooltip>
+            :
+            <Tooltip title="Deseleccionar Todo">
+              <IconButton onClick={() => onSelectAllClick(false, rows)} >
+                <RemoveShoppingCartIcon />
+              </IconButton>
+            </Tooltip>
+          }
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
@@ -157,7 +167,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         }),
       }}
     >
-      {numSelected > 0 ? (
+      {numSelected > 0 && (
         <Typography
           sx={{ flex: "1 1 100%" }}
           color="inherit"
@@ -166,26 +176,11 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         >
           {numSelected} seleccionados
         </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Products
-        </Typography>
       )}
-      {numSelected > 0 ? (
+      {numSelected > 0 && (
         <Tooltip title="Delete">
           <IconButton>
             <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
           </IconButton>
         </Tooltip>
       )}
@@ -211,10 +206,13 @@ export default function EnhancedTable({
   const rows: Products[] = data
   const [order, setOrder] = useState<Order>("asc")
   const [orderBy, setOrderBy] = useState<keyof Products>("tradeName")
-  const [selected, setSelected] = useState<readonly string[]>([])
-  const [dense, setDense] = useState(false)
   const [openModal, setOpenModal] = useState(false)
   const [upc, setUpc] = useState("")
+  const [allSelected, setAllSelected] = useState(false)
+  const cantidad = useAppSelector(selectCarroCantidad)
+  const selectedCarro = useAppSelector(selectCarroSelected)
+  const dispatch = useAppDispatch()
+
   const handleOpen = (upc: string) => {
     setOpenModal(true)
     setUpc(upc)
@@ -228,33 +226,29 @@ export default function EnhancedTable({
     setOrderBy(property)
   }
 
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelected = rows.map((n) => n.upc)
-      setSelected(newSelected)
+  const handleSelectAllClick = (selected: boolean, row: Orders) => {
+    if (!selected) {
+      dispatch(removeAllElement(row))
+      setAllSelected(false)
       return
     }
-    setSelected([])
+    dispatch(addAllElements(row))
+    setAllSelected(true)
+    return
   }
 
-  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-    const selectedIndex = selected.indexOf(name)
-    let newSelected: readonly string[] = []
-
+  const handleClick = (event: React.MouseEvent<unknown>, row: Orders) => {
+    const selectedIndex = selectedCarro.indexOf(row.upc)
+    console.log('el nomber es', row.upc, selectedIndex)
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name)
+      dispatch(addElement(row))
     } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1))
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1))
+      dispatch(removeElement(row))
+    } else if (selectedIndex === selectedCarro.length - 1) {
+      dispatch(removeElement(row))
     } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      )
+      dispatch(removeElement(row))
     }
-
-    setSelected(newSelected)
   }
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -275,7 +269,7 @@ export default function EnhancedTable({
     onPageChange(0)
   }
 
-  const isSelected = (name: string) => selected.indexOf(name) !== -1
+  const isSelected = (name: string) => selectedCarro.indexOf(name) !== -1
 
   //whit this code void a layout jump when reaching the last currentPage with empty rows, but don't work fine.
   //const emptyRows =  currentPage > 0 ? Math.max(0, (1 + currentPage) * pageSize - rows.length) : 0
@@ -289,7 +283,7 @@ export default function EnhancedTable({
       )
       return pepe;
     }
-      ,
+    ,
     [order, orderBy, currentPage, pageSize],
   )
 
@@ -299,30 +293,31 @@ export default function EnhancedTable({
         <ModalProduct open={openModal} setOpen={setOpenModal} upc={upc} />
       )}
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar numSelected={cantidad} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size={dense ? "small" : "medium"}
+            size="medium"
           >
             <EnhancedTableHead
-              numSelected={selected.length}
               order={order}
               orderBy={orderBy}
+              rows={rows}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
+              allSelected={allSelected}
+              numSelected={cantidad}
             />
             <TableBody>
               {rows.map((row, index) => {
                 const isItemSelected = isSelected(row.upc)
                 const labelId = `enhanced-table-checkbox-${index}`
-                console.log('el row total es', rows, emptyRows, visibleRows)
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.upc)}
+                    onClick={(event) => handleClick(event, row)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
@@ -331,13 +326,20 @@ export default function EnhancedTable({
                     sx={{ cursor: "pointer" }}
                   >
                     <TableCell padding="checkbox">
-                      <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
+                      {!isItemSelected ?
+                        <Tooltip title="Delete">
+                          <IconButton>
+                            <AddShoppingCartIcon />
+                          </IconButton>
+                        </Tooltip>
+                        :
+                        <Tooltip title="Filter list">
+                          <IconButton>
+                            <RemoveShoppingCartIcon />
+                          </IconButton>
+                        </Tooltip>
+                      }
+
                     </TableCell>
                     <TableCell
                       align="left"
@@ -363,7 +365,7 @@ export default function EnhancedTable({
               {emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: (dense ? 33 : 53) * emptyRows,
+                    height: (53) * emptyRows,
                   }}
                 >
                   <TableCell colSpan={6} />

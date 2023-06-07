@@ -1,15 +1,18 @@
 /* eslint-disable prettier/prettier */
 import { StyledButtonDrawner } from "./StyledDrawner"
+import Tooltip from '@mui/material/Tooltip';
 
 interface buttonDrwanerItf {
-    title: string
+    title?: string
     location: string,
     icon: React.ReactNode
 }
 
 const ButtonDrawner = ({ title, location, icon }: buttonDrwanerItf) => {
     return (
-        <StyledButtonDrawner classes={"button"} type="button" size="large" href={location} startIcon={icon}>{title}</StyledButtonDrawner>
+        <Tooltip title={title} placement="left" arrow>
+            <StyledButtonDrawner classes={"button"} type="button" size="large" href={location} startIcon={icon}></StyledButtonDrawner>
+        </Tooltip>
     )
 }
 export default ButtonDrawner

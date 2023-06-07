@@ -47,10 +47,8 @@ function App() {
     <ThemeProvider theme={theme}>
       <div className="App">
         <StyledEngineProvider injectFirst>
-          <NavBar className="navBar" />
           <Drawner className="drawner" />
           <RouterProvider router={router} />
-          <Footer className="footer" />
         </StyledEngineProvider>
       </div>
     </ThemeProvider>

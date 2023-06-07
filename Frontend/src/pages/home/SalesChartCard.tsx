@@ -11,7 +11,7 @@ const SalesChartCard = () => {
   )
 
   return (
-    <StyledCard>
+    <StyledCard size="WideRectangle" floor="1floor">
       <div className="inventario">
         {data && data?.length < 0 ? (
           <p>Loading...</p>

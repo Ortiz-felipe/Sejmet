@@ -4,6 +4,7 @@ import styled from "styled-components"
 export const StyledTables = styled(Box)`
 .MuiPaper-root {
   box-shadow: none;
+  background-color: transparent;
 
 }
     .MuiCheckbox-root {
