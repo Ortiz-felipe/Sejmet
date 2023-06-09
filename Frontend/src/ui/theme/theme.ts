@@ -6,6 +6,7 @@ export const theme = {
     back: "#E9EAEC",
     primaryLight: "#c4bdf2",
     secondaryStrong: "#4218d9",
+    backGradient:  "linear-gradient(180deg, rgba(36,93,208,1) 0%, rgba(36,138,208,1) 100%)"
   },
   fonts: ["sans-serif", "Roboto"],
   fontSizes: {

@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+import { useState } from "react"
 import "./Reset.css"
 import "./App.css"
 import NavBar from "./ui/NavBar/NavBar"
@@ -14,8 +15,10 @@ import { ThemeProvider } from "styled-components"
 import { theme } from "./ui/theme/theme"
 import NewClient from "./pages/NewClient/NewClient"
 import NewSale from "./pages/NewSale/NewSale"
+import Login from "./pages/login/login"
 
 const router = createBrowserRouter([
+
   {
     path: "/",
     element: <Home className="home" />,
@@ -43,15 +46,21 @@ const router = createBrowserRouter([
 ])
 
 function App() {
+  const [loged, setLoged] = useState(false)
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
         <StyledEngineProvider injectFirst>
-          <Drawner className="drawner" />
-          <RouterProvider router={router} />
+          {!loged ? <Login setLoged={setLoged} /> :
+            <>
+              <Drawner className="drawner" />
+              <RouterProvider router={router} />
+            </>
+          }
         </StyledEngineProvider>
+
       </div>
-    </ThemeProvider>
+    </ThemeProvider >
   )
 }
 
