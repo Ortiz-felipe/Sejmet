@@ -10,5 +10,6 @@
         public static int Sales => 600;
         public static int Provinces => 700;
         public static int Cities => 800;
+        public static int Providers => 900;
     }
 }
