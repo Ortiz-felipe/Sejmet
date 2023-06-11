@@ -11,7 +11,7 @@ import SaveRoundedIcon from "@mui/icons-material/SaveRounded"
 import PersonAddIcon from "@mui/icons-material/PersonAdd"
 import Card from "../../ui/Card/Card"
 import { StyledNewSale } from "./StyledNewSale"
-import { Sale } from "../../schemas/sale"
+import { CreateSale, Sale } from "../../schemas/sale"
 import * as dayjs from "dayjs"
 import { CustomerInfo } from "../../schemas/customer"
 import usePagedFetch from "../../hook/usePagedFetch"
@@ -19,6 +19,10 @@ import { PagedResponse } from "../../schemas/pagedResponse"
 import { Products } from "../../schemas/products"
 import EnhancedTable from "./EnhancedTable"
 import { useNavigate } from "react-router-dom"
+import { useAppSelector } from "../../app/hooks"
+import { soldProducts, totalSaleAmount } from "../../features/sale/saleSlice"
+import { SaleValidator } from "../../validators/NewSale/newSaleValidator"
+import { ValidationErrors } from "fluentvalidation-ts"
 
 const baseURL = import.meta.env.VITE_BACKEND_URL
 interface PaginationOptions {
@@ -28,9 +32,10 @@ interface PaginationOptions {
 }
 
 const NewSale = () => {
-    const navigate = useNavigate();
-  const [saleData, setSaleData] = useState<Sale>({
-    id: "",
+  const navigate = useNavigate()
+  const products = useAppSelector(soldProducts)
+  const totalAmountSale = useAppSelector(totalSaleAmount)
+  const [saleData, setSaleData] = useState<CreateSale>({
     customerId: "",
     customerName: "",
     saleDate: "",
@@ -47,7 +52,7 @@ const NewSale = () => {
     useState<string>("")
   const [searchExpression, setSearchExpression] = useState<string>("")
   const [saleValidationState, setSaleValidationState] = useState<
-    ValidationState<Sale>
+    ValidationErrors<Sale>
   >({})
 
   const [userNotFound, setUserNotFound] = useState(false)
@@ -63,6 +68,15 @@ const NewSale = () => {
       paginationOptions.currentPage + 1
     }&PageSize=${paginationOptions.pageSize}`,
   )
+
+  useEffect(() => {
+    updateSaleData("soldProducts", products)
+  }, [products])
+
+  useEffect(() => {
+    updateSaleData("saleDate", dayjs().toJSON())
+    updateSaleData("totalAmount", totalAmountSale)
+  }, [totalAmountSale])
 
   useEffect(() => {
     if (data && data?.totalRecords && data?.currentPage && data?.pageSize) {
@@ -99,7 +113,7 @@ const NewSale = () => {
   }
 
   const addNewClientHandler = () => {
-    navigate("/nuevoCliente");
+    navigate("/nuevoCliente")
   }
 
   const inputChangeHandler = (
@@ -121,7 +135,7 @@ const NewSale = () => {
   ) => {
     if (event.keyCode === 13) {
       // Make an HTTP GET request to the URL specified by the input element
-      await makeGetRequest(customerDni)
+      await getCustomerInfoAsync(customerDni)
     }
   }
 
@@ -139,7 +153,7 @@ const NewSale = () => {
     }
   }
 
-  const makeGetRequest = async (customerDni: string) => {
+  const getCustomerInfoAsync = async (customerDni: string) => {
     const URL = `${baseURL}/Customers/${customerDni}`
     try {
       const response = await fetch(URL)
@@ -154,6 +168,37 @@ const NewSale = () => {
     } catch (error) {
       console.error(error)
     }
+  }
+
+  const postNewSaleAsync = async () => {
+    const URL = `${baseURL}/Sales`
+    const requestConfig: RequestInit = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        body: saleData
+      }),
+    }
+
+    const validationStatus = new SaleValidator().validate(saleData)
+
+    if(Object.keys(validationStatus).length === 0) {
+      try {
+        const response = await fetch(URL, requestConfig)
+  
+        if (!response.ok) {
+          throw new Error('Failed to create new Sale')
+        } else {
+          navigate('/ventas')
+        }
+      } catch (error) {
+        console.error("Error creating sale:", error)
+      }
+    } else {
+      setSaleValidationState(validationStatus)
+    }    
   }
 
   return (
@@ -189,9 +234,18 @@ const NewSale = () => {
               label="Obra social"
               value={customerInfo.healthcareProviderName}
             />
-            <Button variant="contained" startIcon={<PersonAddIcon />} onClick={addNewClientHandler}>
+            <Button
+              variant="contained"
+              startIcon={<PersonAddIcon />}
+              onClick={addNewClientHandler}
+            >
               Agregar cliente
             </Button>
+            <div>
+              <Typography variant="body">
+                Total a pagar: {totalAmountSale}
+              </Typography>
+            </div>
           </div>
           <div>
             <TextField
@@ -216,7 +270,7 @@ const NewSale = () => {
             )}
           </div>
           <div>
-            <Button variant="contained" startIcon={<SaveRoundedIcon />}>
+            <Button variant="contained" startIcon={<SaveRoundedIcon />} onClick={postNewSaleAsync}>
               Guardar
             </Button>
           </div>
