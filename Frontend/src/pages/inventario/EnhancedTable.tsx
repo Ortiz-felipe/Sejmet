@@ -26,7 +26,7 @@ import { StyledEnhancedTable } from "./StyledEnhancedTable"
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 import { useAppSelector, useAppDispatch } from "../../app/hooks"
-import { addElement, addAllElements, removeAllElement, removeElement, selectCarroCantidad, selectCarroSelected } from "../../features/carro/carroSlice"
+import { addProduct, addAllSelectedProducts, removeProduct, removeAllSelectedProducts,selectedOrderedProductsLength, selectedProducts } from "../../features/carro/carroSlice"
 import { OrderProduct, Orders } from "../../schemas/order"
 interface HeadCell {
   disablePadding: boolean
@@ -209,8 +209,8 @@ export default function EnhancedTable({
   const [openModal, setOpenModal] = useState(false)
   const [upc, setUpc] = useState("")
   const [allSelected, setAllSelected] = useState(false)
-  const cantidad = useAppSelector(selectCarroCantidad)
-  const selectedCarro = useAppSelector(selectCarroSelected)
+  const cantidad = useAppSelector(selectedOrderedProductsLength)
+  const selectedCarro = useAppSelector(selectedProducts)
   const dispatch = useAppDispatch()
 
   const handleOpen = (upc: string) => {
@@ -226,28 +226,44 @@ export default function EnhancedTable({
     setOrderBy(property)
   }
 
-  const handleSelectAllClick = (selected: boolean, row: Orders) => {
+  const handleSelectAllClick = (selected: boolean, rows: Products[]) => {
     if (!selected) {
-      dispatch(removeAllElement(row))
+      const deselectedProducts: string[] = rows.map(row => row.id)
+      dispatch(removeAllSelectedProducts(deselectedProducts))
       setAllSelected(false)
       return
     }
-    dispatch(addAllElements(row))
+    const selectItems: OrderProduct[] = rows.map(row => {
+      const orderProduct: OrderProduct = {
+        productId: row.id,
+        productName: row.tradeName,
+        quantity: 1,
+        unitPrice: row.price
+      }
+      return orderProduct
+    })
+    dispatch(addAllSelectedProducts(selectItems))
     setAllSelected(true)
     return
   }
 
-  const handleClick = (event: React.MouseEvent<unknown>, row: Orders) => {
+  const handleClick = (event: React.MouseEvent<unknown>, row: Products) => {
     const selectedIndex = selectedCarro.indexOf(row.upc)
     console.log('el nomber es', row.upc, selectedIndex)
     if (selectedIndex === -1) {
-      dispatch(addElement(row))
+      const orderProduct: OrderProduct = {
+        productId: row.id,
+        productName: row.tradeName,
+        quantity: 1,
+        unitPrice: row.price
+      }
+      dispatch(addProduct(orderProduct))
     } else if (selectedIndex === 0) {
-      dispatch(removeElement(row))
+      dispatch(removeProduct(row.id))
     } else if (selectedIndex === selectedCarro.length - 1) {
-      dispatch(removeElement(row))
+      dispatch(removeProduct(row.id))
     } else if (selectedIndex > 0) {
-      dispatch(removeElement(row))
+      dispatch(removeProduct(row.id))
     }
   }
 
@@ -312,7 +328,7 @@ export default function EnhancedTable({
             />
             <TableBody>
               {rows.map((row, index) => {
-                const isItemSelected = isSelected(row.upc)
+                const isItemSelected = isSelected(row.id)
                 const labelId = `enhanced-table-checkbox-${index}`
                 return (
                   <TableRow
