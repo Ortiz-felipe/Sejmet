@@ -20,7 +20,7 @@ namespace Sejmet.API.Commands.Customers.Create
             try
             {
                 var createdCustomer = await _customersRepository.CreateCustomerAsync(request.Body, cancellationToken);
-                return new CreatedAtRouteResult(createdCustomer.Id, createdCustomer);
+                return this.CreatedAtRoute("GetCustomerByDniAsync", createdCustomer.Dni, createdCustomer);
             }
             catch (Exception)
             {

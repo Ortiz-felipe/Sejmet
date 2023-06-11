@@ -20,7 +20,7 @@ namespace Sejmet.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet]
+        [HttpGet("", Name = "GetAllAsync")]
         [ProducesResponseType(typeof(IList<CustomerDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllAsync([FromQuery] QueryRequest queryRequest)
@@ -28,8 +28,7 @@ namespace Sejmet.API.Controllers
             return await _mediator.Send(queryRequest).ConfigureAwait(false);
         }
 
-        [HttpGet]
-        [Route("{Dni}")]
+        [HttpGet("{Dni}", Name = "GetCustomerByDniAsync")]
         [ProducesResponseType(typeof(CustomerInfoDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
@@ -38,7 +37,7 @@ namespace Sejmet.API.Controllers
             return await _mediator.Send(queryRequest).ConfigureAwait(false);
         }
 
-        [HttpPost]
+        [HttpPost(Name = "CreateCustomerAsync")]
         [ProducesResponseType(typeof(CustomerDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateCustomerAsync([FromBody] CommandRequest commandRequest)
