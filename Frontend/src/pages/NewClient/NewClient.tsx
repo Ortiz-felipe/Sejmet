@@ -20,6 +20,8 @@ import SaveRoundedIcon from "@mui/icons-material/SaveRounded"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import * as dayjs from "dayjs"
 import { validateObject } from "../../utils/utils"
+import CustomerValidator, { CustomerData } from "../../validators/NewCustomer/newCustomerValidator"
+import { ValidationErrors } from "fluentvalidation-ts"
 
 const baseURL = import.meta.env.VITE_BACKEND_URL
 
@@ -52,6 +54,19 @@ const NewClient = () => {
     cityId: false,
     provinceId: false,
     phoneNumber: false,
+  })
+
+  const [validationState, setValidationState] = useState<ValidationErrors<CustomerData>>({
+    dni: '',
+    firstName: '',
+    lastName: '',
+    address: '',
+    birthdate: '',
+    age: '',
+    healthcareProviderId: '',
+    cityId: '',
+    provinceId: '',
+    phoneNumber: '',
   })
 
   const [availableCities, setAvailableCities] = useState<City[]>([
@@ -117,7 +132,7 @@ const NewClient = () => {
   }
 
   const dateInputChangeHandler = (value: string) => {
-    updateCustomerData("birthdate", value)
+    updateCustomerData("birthdate", value.toJSON())
   }
 
   const createCustomerHandler = async () => {
@@ -126,6 +141,9 @@ const NewClient = () => {
         customerData,
         customerValidationState,
       )
+
+      const customerValidator = new CustomerValidator();
+      const result = customerValidator.validate(customerData)
 
       if (!Object.values(validState).some((error) => error)) {
         const {id, ...customerInfo} = customerData
@@ -145,6 +163,7 @@ const NewClient = () => {
         }
       } else {
         setCustomerValidationState(validState)
+        setValidationState({...result})
       }
     } catch (error) {
       // Handle any error that occurred during the POST request
@@ -159,19 +178,22 @@ const NewClient = () => {
           <div className="">
             <Typography variant="body1">DNI:</Typography>
             <TextField
-              error={customerValidationState.dni}
+              // error={customerValidationState.dni}
+              error={validationState?.dni !== ''}
               value={customerData?.dni}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                 inputChangeHandler(event, "dni")
               }
+              helperText={validationState?.dni !== '' ? validationState.dni : ''}
             />
             <Typography variant="body1">Nombre:</Typography>
             <TextField
-              error={customerValidationState.firstName}
+              error={validationState?.firstName !== ''}
               value={customerData?.firstName}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                 inputChangeHandler(event, "firstName")
               }
+              helperText={validationState?.firstName !== '' ? validationState.firstName : ''}
             />
             <Typography variant="body1">Apellido:</Typography>
             <TextField
