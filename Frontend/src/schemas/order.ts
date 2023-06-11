@@ -9,6 +9,15 @@ export interface Orders {
     orderedProducts: OrderProduct[]
 }
 
+export interface CreateOrder {
+    providerId: string
+    providerName: string
+    totalAmount: number
+    orderDate: string
+    transactionStatusId: number
+    orderedProducts: OrderProduct[]
+  }
+
 export interface OrderProduct {
     productId: string,
     productName: string,
