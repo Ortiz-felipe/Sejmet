@@ -326,8 +326,8 @@ export default function EnhancedTable({
                       {row.id}
                     </TableCell>
                     <TableCell align="left">{row.customerName}</TableCell>
-                    <TableCell align="left">{formatDate(row.saleDate)}</TableCell>
                     <TableCell align="left">{row.totalAmount}</TableCell>
+                    <TableCell align="left">{formatDate(row.saleDate)}</TableCell>
                     <TableCell align="left">
                       <Button onClick={() => handleOpen(row.id)}>
                         Detalles

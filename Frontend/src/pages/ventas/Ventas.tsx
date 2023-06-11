@@ -5,6 +5,9 @@ import Card from "../../ui/Card/Card"
 import EnhancedTable from "./EnhancedTable"
 import { StyledVentas } from "./StyledVentas"
 import { PagedResponse } from "../../schemas/pagedResponse"
+import { Button } from "@mui/material"
+import AddIcon from "@mui/icons-material/Add"
+import { useNavigate } from "react-router-dom"
 
 const baseURL = import.meta.env.VITE_BACKEND_URL
 
@@ -16,6 +19,7 @@ interface PaginationOptions {
 
 // this home is whit 2 squares and 1 rectangle
 const Ventas = () => {
+  const navigate = useNavigate()
   const [paginationOptions, setPaginationOptions] = useState<PaginationOptions>(
     {
       currentPage: 0,
@@ -67,12 +71,19 @@ const Ventas = () => {
     })
   }
 
+  const addNewSaleHandler = () => {
+    navigate('/nuevaVenta')
+  }
+
   if (dataTable.length < 1) return <p>Loading...</p>
 
   return (
     <StyledVentas>
       <div className="ventas">
         <Card title="Ventas">
+          <Button variant="contained" startIcon={<AddIcon />} onClick={addNewSaleHandler}>
+            Nueva venta
+          </Button>
           <EnhancedTable
             data={dataTable}
             count={paginationOptions.totalRecords || 0}
