@@ -16,6 +16,9 @@ import { theme } from "./ui/theme/theme"
 import NewClient from "./pages/NewClient/NewClient"
 import NewSale from "./pages/NewSale/NewSale"
 import Login from "./pages/login/login"
+import NewOrder from "./pages/NewOrder/NewOrder"
+import { useAppSelector } from "./app/hooks"
+import { isLoggedIn } from "./features/userCredentials/userCredentialsSlice"
 
 const router = createBrowserRouter([
 
@@ -42,16 +45,20 @@ const router = createBrowserRouter([
   {
     path: "/nuevaVenta",
     element: <NewSale className="home" />
+  },
+  {
+    path: '/nuevaOrden',
+    element: <NewOrder className="home" />
   }
 ])
 
 function App() {
-  const [loged, setLoged] = useState(false)
+  const loggedIn = useAppSelector(isLoggedIn)
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
         <StyledEngineProvider injectFirst>
-          {!loged ? <Login setLoged={setLoged} /> :
+          {!loggedIn ? <Login /> :
             <>
               <Drawner className="drawner" />
               <RouterProvider router={router} />

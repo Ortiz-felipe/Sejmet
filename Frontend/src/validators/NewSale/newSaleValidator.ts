@@ -1,7 +1,6 @@
 import { Validator } from "fluentvalidation-ts"
 
 type Sale = {
-  id: string
   customerId: string
   customerName: string
   totalAmount: number
@@ -30,9 +29,7 @@ class SaleProductValidator extends Validator<SaleProduct> {
   }
 }
 
-const saleProductValidator = new SaleProductValidator()
-
-class SaleValidator extends Validator<Sale> {
+export class SaleValidator extends Validator<Sale> {
   constructor() {
     super()
 

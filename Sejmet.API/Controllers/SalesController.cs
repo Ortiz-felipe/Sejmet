@@ -19,7 +19,7 @@ namespace Sejmet.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet]
+        [HttpGet("" , Name = "GetAllSalesAsync")]
         [ProducesResponseType(typeof(PagedResponseDTO<SaleDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllSalesAsync([FromQuery]QueryRequest queryRequest)
@@ -27,8 +27,8 @@ namespace Sejmet.API.Controllers
             return await _mediator.Send(queryRequest);
         }
 
-        [HttpGet]
-        [Route("{Id}")]
+        [HttpGet("{Id}", Name = "GetSaleByIdAsync")]
+        //[Route("{Id}")]
         [ProducesResponseType(typeof(SaleDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
@@ -37,8 +37,8 @@ namespace Sejmet.API.Controllers
             return await _mediator.Send(queryRequest);
         }
 
-        [HttpGet]
-        [Route("GetSalesByMonth/{Year}")]
+        [HttpGet("GetSalesByMonth/{Year}", Name = "GetSalesByMonthAsync")]
+        //[Route("GetSalesByMonth/{Year}")]
         [ProducesResponseType(typeof(IList<SalesByMonthDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetSalesByMonthAsync(
@@ -47,7 +47,7 @@ namespace Sejmet.API.Controllers
             return await _mediator.Send(queryRequest);
         }
 
-        [HttpPost]
+        [HttpPost(Name = "CreateSaleAsync")]
         [ProducesResponseType(typeof(CreateSaleDTO), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]

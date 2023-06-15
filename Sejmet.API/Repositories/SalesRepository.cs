@@ -24,6 +24,7 @@ namespace Sejmet.API.Repositories
             var query = _context.Sales.Include(x => x.Customer)
                                                     .Include(x => x.SaleProducts)
                                                     .ThenInclude(x => x.Product)
+                                                    .OrderByDescending(x => x.SaleDate)
                                                     .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(customerName))
@@ -60,6 +61,21 @@ namespace Sejmet.API.Repositories
         public async Task<CreateSaleDTO> CreateSaleAsync(CreateSaleDTO sale, CancellationToken cancellationToken)
         {
             var newSale = _mapper.Map<Sale>(sale);
+
+            var saleProductsList = newSale.SaleProducts.ToList();
+            // Deduct sold items from the current stock
+            foreach (var saleProduct in saleProductsList)
+            {
+                var product1 = saleProduct;
+                var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == product1.ProductId, cancellationToken);
+
+                if (product is not null)
+                {
+                    // Deduct the sold quantity from the current stock
+                    product.CurrentStock -= saleProduct.Quantity;
+                }
+            }
+
 
             await _context.Sales.AddAsync(newSale, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);

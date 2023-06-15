@@ -25,8 +25,7 @@ namespace Sejmet.API.Commands.Orders.Create
             try
             {
                 var createdOrder = await _ordersRepository.CreateOrderAsync(request.Body, cancellationToken);
-
-                return this.CreatedAtRoute("orders", createdOrder.OrderId, createdOrder);
+                return this.CreatedAtRoute("GetOrderByIdAsync", createdOrder.OrderId, createdOrder);
             }
             catch (Exception)
             {

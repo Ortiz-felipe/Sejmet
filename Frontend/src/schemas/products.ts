@@ -1,4 +1,5 @@
 export interface Products {
+    id: string;
     upc: string;
     tradeName: string;
     laboratoryName: string;

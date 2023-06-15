@@ -20,7 +20,7 @@ namespace Sejmet.API.Controllers
             this.mediator = mediator;
         }
 
-        [HttpGet]
+        [HttpGet("", Name = "GetAllOrdersAsync")]
         [ProducesResponseType(typeof(PagedResponseDTO<OrderDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllOrdersAsync([FromQuery] QueryRequest queryRequest)
@@ -28,8 +28,7 @@ namespace Sejmet.API.Controllers
             return await mediator.Send(queryRequest).ConfigureAwait(false);
         }
 
-        [HttpGet]
-        [Route("{OrderId}")]
+        [HttpGet("{OrderId}", Name = "GetOrderByIdAsync")]
         [ProducesResponseType(typeof(OrderDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
@@ -39,8 +38,7 @@ namespace Sejmet.API.Controllers
         }
 
 
-        [HttpGet]
-        [Route("GetTopLatestOrders")]
+        [HttpGet("GetTopLatestOrders", Name = "GetTopLatestOrdersAsync")]
         [ProducesResponseType(typeof(IList<LatestOrderDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ExtendedProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetTopLatestOrdersAsync(

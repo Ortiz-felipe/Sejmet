@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Sejmet.API.Controllers;
 using Sejmet.API.Errors.Sales;
 using Sejmet.API.Extensions;
 using Sejmet.API.Repositories.Interfaces;
@@ -25,7 +26,7 @@ namespace Sejmet.API.Commands.Sales.Create
             try
             {
                 var createdSale = await _salesRepository.CreateSaleAsync(request.Body, cancellationToken);
-                return this.CreatedAtRoute("sales", createdSale.SaleId, createdSale);
+                return this.CreatedAtRoute("GetSaleByIdAsync", new { Id = createdSale.SaleId }, createdSale);
             }
             catch (Exception)
             {

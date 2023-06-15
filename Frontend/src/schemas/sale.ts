@@ -15,11 +15,10 @@ export interface SaleProduct {
 }
 
 export interface CreateSale {
-    saleId: string,
     customerId: string,
     customerName: string,
     totalAmount: number,
-    saleDate: Date,
+    saleDate: string,
     soldProducts: SaleProduct[]
 }
 

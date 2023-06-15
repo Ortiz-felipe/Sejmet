@@ -9,6 +9,7 @@ namespace Sejmet.API.Models.Mappings
         public ProductProfile()
         {
             this.CreateMap<Product, ProductDTO>()
+                .ForMember(destination => destination.Id, origin => origin.MapFrom(x => x.Id))
                 .ForMember(destination => destination.Upc, origin => origin.MapFrom(x => x.Upc))
                 .ForMember(destination => destination.TradeName, origin => origin.MapFrom(x => x.TradeName))
                 .ForMember(destination => destination.LaboratoryName, origin => origin.MapFrom(x => x.Laboratory.Name))

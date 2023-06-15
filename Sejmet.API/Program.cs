@@ -53,6 +53,7 @@ builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
 builder.Services.AddScoped<ILaboratoriesRepository, LaboratoriesRepository>();
 builder.Services.AddScoped<ISalesRepository, SalesRepository>();
 builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
+builder.Services.AddScoped<IProvidersRepository, ProvidersRepository>();
 builder.Services.AddScoped<IProvincesRepository, ProvincesRepository>();
 builder.Services.AddScoped<ICitiesRepository, CitiesRepository>();
 

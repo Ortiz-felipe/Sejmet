@@ -29,50 +29,36 @@ import { SaleProduct } from "../../schemas/sale"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import { addProductToSale, soldProducts } from "../../features/sale/saleSlice"
 import { removeProductFromSale } from "../../features/sale/saleSlice"
+import {
+  decrementProductQuantity,
+  incrementProductQuantity,
+} from "../../features/carro/carroSlice"
 
 interface HeadCell {
   disablePadding: boolean
-  id: keyof Products
+  id: keyof OrderProduct
   label: string
   numeric: boolean
 }
 
 const headCells: readonly HeadCell[] = [
   {
-    id: "tradeName",
+    id: "productName",
     numeric: false,
     disablePadding: true,
-    label: "Nombre comercial",
+    label: "Producto",
   },
   {
-    id: "laboratoryName",
+    id: "unitPrice",
     numeric: false,
     disablePadding: true,
-    label: "Laboratorio",
+    label: "Precio por unidad",
   },
   {
-    id: "activeCompoundName",
+    id: "totalPrice",
     numeric: false,
     disablePadding: true,
-    label: "Principio activo",
-  },
-  {
-    id: "currentStock",
-    numeric: false,
-    disablePadding: true,
-    label: "Stock disponible",
-  },
-  {
-    id: "price",
-    numeric: false,
-    disablePadding: true,
-    label: "Precio",
-  },
-  {
-    id: "details",
-    numeric: false,
-    disablePadding: false,
-    label: "Detalles",
+    label: "Precio final",
   },
   {
     id: "quantity",
@@ -83,35 +69,26 @@ const headCells: readonly HeadCell[] = [
 ]
 
 interface EnhancedTableProps {
-  numSelected: number
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof Products,
+    property: keyof OrderProduct,
   ) => void
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void
   order: Order
   orderBy: string
   rowCount: number
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-  const {
-    onSelectAllClick,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort,
-  } = props
+  const { order, orderBy, rowCount, onRequestSort } = props
   const createSortHandler =
-    (property: keyof Products) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof OrderProduct) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property)
     }
 
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
+        {/* <TableCell padding="checkbox">
           <Checkbox
             color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -121,7 +98,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
               "aria-label": "select all products",
             }}
           />
-        </TableCell>
+        </TableCell> */}
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -208,38 +185,37 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 export default function EnhancedTable({
   data,
   count,
-  currentPage,
-  pageSize,
-  onPageChange,
-  onPageSizeChange,
-}: {
-  data: Products[]
+}: //   currentPage,
+//   pageSize,
+//   onPageChange,
+//   onPageSizeChange,
+{
+  data: OrderProduct[]
   count: number
-  currentPage: number
-  pageSize: number
-  onPageChange: (currentPage: number) => void
-  onPageSizeChange: (pageSize: number) => void
+  //   currentPage: number
+  //   pageSize: number
+  //   onPageChange: (currentPage: number) => void
+  //   onPageSizeChange: (pageSize: number) => void
 }) {
   const dispatch = useAppDispatch()
 
-  const rows: Products[] = data
-  const [availableProducts, setAvailableProducts] = useState<Products[]>(data)
+  const rows: OrderProduct[] = data
+  const [availableProducts, setAvailableProducts] =
+    useState<OrderProduct[]>(data)
   const [order, setOrder] = useState<Order>("asc")
-  const [orderBy, setOrderBy] = useState<keyof Products>("tradeName")
+  const [orderBy, setOrderBy] = useState<keyof OrderProduct>("productName")
   const [selected, setSelected] = useState<readonly string[]>([])
   const [dense, setDense] = useState(false)
-  const [orderedProducts, setOrderedProducts] = useState<SaleProduct[]>([])
-
-  const currentlySoldProducts = useAppSelector(soldProducts)
+  const [page, setPage] = useState<number>(0)
+  const [rowsPerPage, setRowsPerPage] = useState<number>(5)
 
   useEffect(() => {
     setAvailableProducts(data)
   }, [data])
-  
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof Products,
+    property: keyof OrderProduct,
   ) => {
     const isAsc = orderBy === property && order === "asc"
     setOrder(isAsc ? "desc" : "asc")
@@ -276,117 +252,22 @@ export default function EnhancedTable({
   }
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    console.log("se va a cambiar la pagina", newPage, currentPage, event)
-    onPageChange(newPage)
+    setPage(newPage)
   }
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    console.log(
-      "se va a cambiar la cantidad de elementos",
-      event.target.value,
-      pageSize,
-    )
-
-    onPageSizeChange(parseInt(event.target.value))
-    onPageChange(0)
+    setRowsPerPage(parseInt(event.target.value, 10))
+    setPage(0)
   }
 
-  const addToCartHandler = (
-    productId: string,
-    productName: string,
-    unitPrice: number,
-  ) => {
-    const product = availableProducts.find((x) => x.id === productId)
-    if (product && product?.currentStock > 0) {
-      setOrderedProducts((prevState) => {
-        const previouslyAddedProduct = prevState.find(
-          (x) => x.productId === productId,
-        )
-
-        if (previouslyAddedProduct === undefined) {
-          console.log(prevState)
-          return [
-            ...prevState,
-            {
-              productId: productId,
-              productName: productName,
-              quantity: 1,
-              unitPrice: unitPrice,
-            },
-          ]
-        } else {
-          return prevState.map((product) => {
-            if (product.productId === previouslyAddedProduct?.productId) {
-              return { ...product, quantity: product.quantity + 1 }
-            }
-            return product
-          })
-        }
-      })
-      const product: SaleProduct = {
-        productId: productId,
-        productName: productName,
-        quantity: 1,
-        unitPrice: unitPrice,
-      }
-
-      dispatch(addProductToSale(product))
-      setAvailableProducts(prevState => {
-        return prevState.map(product => {
-          if (product.id === productId) {
-            return {
-              ...product,
-              currentStock: product.currentStock - 1
-            }
-          }
-          return product
-        })
-      })
-    }
+  const incrementProductQuantityHandler = (productId: string) => {
+    dispatch(incrementProductQuantity(productId))
   }
 
-  const removeFromCartHandler = (productId: string) => {
-    setOrderedProducts((prevState) => {
-      const previouslyAddedProduct = prevState.find(
-        (x) => x.productId === productId,
-      )
-
-      if (previouslyAddedProduct === undefined) {
-        return prevState
-      } else {
-        if (previouslyAddedProduct.quantity > 1) {
-          return prevState.map((product) => {
-            if (product.productId === previouslyAddedProduct.productId) {
-              return {
-                ...product,
-                quantity: product.quantity - 1,
-              }
-            }
-            return product
-          })
-        }
-        return prevState.filter(
-          (x) => x.productId !== previouslyAddedProduct.productId,
-        )
-      }
-    })
-    const product: SaleProduct = {
-      productId: productId,
-    }
-    dispatch(removeProductFromSale(product))
-    setAvailableProducts(prevState => {
-      return prevState.map(product => {
-        if (product.id === productId) {
-          return {
-            ...product,
-            currentStock: product.currentStock + 1
-          }
-        }
-        return product
-      })
-    })
+  const decrementProductQuantityHandler = (productId: string) => {
+    dispatch(decrementProductQuantity(productId))
   }
 
   // const isSelected = (name: string) => currentlySoldProducts.indexOf(name) !== -1
@@ -398,18 +279,18 @@ export default function EnhancedTable({
   //const emptyRows =  currentPage > 0 ? Math.max(0, (1 + currentPage) * pageSize - rows.length) : 0
   const emptyRows = 0
 
-  const visibleRows = React.useMemo(() => {
-    const pepe = stableSort(rows, getComparator(order, orderBy)).slice(
-      currentPage * pageSize,
-      currentPage * pageSize + pageSize,
-    )
-    return pepe
-  }, [order, orderBy, currentPage, pageSize])
+  //   const visibleRows = React.useMemo(() => {
+  //     const pepe = stableSort(rows, getComparator(order, orderBy)).slice(
+  //       currentPage * pageSize,
+  //       currentPage * pageSize + pageSize,
+  //     )
+  //     return pepe
+  //   }, [order, orderBy, currentPage, pageSize])
 
   return (
     <StyledEnhancedTable sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={currentlySoldProducts.length} />
+        {/* <EnhancedTableToolbar numSelected={currentlySoldProducts.length} /> */}
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -417,38 +298,33 @@ export default function EnhancedTable({
             size={dense ? "small" : "medium"}
           >
             <EnhancedTableHead
-              numSelected={currentlySoldProducts.length}
               order={order}
               orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={availableProducts.length}
             />
             <TableBody>
-              {availableProducts.map((row, index) => {
-                const isItemSelected = isSelectedHandler(row.id)
+              {(rowsPerPage > 0
+                ? availableProducts.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage,
+                  )
+                : availableProducts
+              ).map((row, index) => {
+                // const isItemSelected = isSelectedHandler(row.id)
                 const labelId = `enhanced-table-checkbox-${index}`
-                console.log("el row total es", rows, emptyRows, visibleRows)
+                // console.log("el row total es", rows, emptyRows, visibleRows)
                 return (
                   <TableRow
                     hover
                     // onClick={(event) => handleClick(event, row.upc)}
                     role="checkbox"
-                    aria-checked={isItemSelected}
+                    // aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row.upc}
-                    selected={isItemSelected}
+                    key={row.productId}
+                    // selected={isItemSelected}
                     sx={{ cursor: "pointer" }}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
                     <TableCell
                       align="left"
                       component="th"
@@ -456,26 +332,20 @@ export default function EnhancedTable({
                       scope="row"
                       padding="none"
                     >
-                      {row.tradeName}
+                      {row.productName}
                     </TableCell>
-                    <TableCell align="left">{row.laboratoryName}</TableCell>
-                    <TableCell align="left">{row.activeCompoundName}</TableCell>
-                    <TableCell align="left">{row.currentStock}</TableCell>
-                    <TableCell align="left">{row.price}</TableCell>
+                    <TableCell align="left">{row.unitPrice}</TableCell>
                     <TableCell align="left">
-                      <Button onClick={() => handleOpen(row.upc)}>
-                        Detalles
-                      </Button>
+                      {row.unitPrice * row.quantity}
                     </TableCell>
                     <TableCell>
-                      <IconButton onClick={() => removeFromCartHandler(row.id)}>
+                      <IconButton onClick={() => decrementProductQuantityHandler(row.productId)}>
                         <RemoveIcon />
                       </IconButton>
-                      {currentlySoldProducts.find((x) => x.productId === row.id)
-                        ?.quantity || 0}
+                      {row.quantity}
                       <IconButton
                         onClick={() =>
-                          addToCartHandler(row.id, row.tradeName, row.price)
+                          incrementProductQuantityHandler(row.productId)
                         }
                       >
                         <AddIcon />
@@ -499,9 +369,9 @@ export default function EnhancedTable({
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={count}
-          rowsPerPage={pageSize}
-          page={currentPage}
+          count={availableProducts.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />

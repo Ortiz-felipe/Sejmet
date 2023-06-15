@@ -23,7 +23,8 @@ namespace Sejmet.API.Repositories
             var query = _context.Orders
                                             .Include(x => x.Provider)
                                             .Include(x => x.OrderProducts)
-                                            .ThenInclude(x => x.Product).AsQueryable();
+                                            .ThenInclude(x => x.Product)
+                                            .OrderByDescending(x => x.OrderDate).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(providerName))
             {
