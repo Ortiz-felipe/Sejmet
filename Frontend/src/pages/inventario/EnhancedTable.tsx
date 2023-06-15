@@ -254,6 +254,10 @@ export default function EnhancedTable({
   const handleChangePage = (event: unknown, newPage: number) => {
     console.log("se va a cambiar la pagina", newPage, currentPage, event)
     onPageChange(newPage)
+    console.log('largo de el row', rows.length)
+    if (rows.length === 5) {
+      setAllSelected(false)
+    }
   }
 
   const handleChangeRowsPerPage = (
@@ -271,22 +275,7 @@ export default function EnhancedTable({
 
   const isSelected = (name: string) => selectedCarro.indexOf(name) !== -1
 
-  //whit this code void a layout jump when reaching the last currentPage with empty rows, but don't work fine.
-  //const emptyRows =  currentPage > 0 ? Math.max(0, (1 + currentPage) * pageSize - rows.length) : 0
   const emptyRows = 0
-
-  const visibleRows = React.useMemo(
-    () => {
-      const pepe = stableSort(rows, getComparator(order, orderBy)).slice(
-        currentPage * pageSize,
-        currentPage * pageSize + pageSize,
-      )
-      return pepe;
-    }
-    ,
-    [order, orderBy, currentPage, pageSize],
-  )
-
   return (
     <StyledEnhancedTable sx={{ width: "100%" }}>
       {openModal && (

@@ -44,8 +44,7 @@ const Inventario = () => {
   // }, [url])
 
   const { data, error } = usePagedFetch<PagedResponse<Products>>(
-    `${baseURL}/Products?CurrentPage=${
-      paginationOptions.currentPage + 1
+    `${baseURL}/Products?CurrentPage=${paginationOptions.currentPage + 1
     }&PageSize=${paginationOptions.pageSize}`,
   )
 
