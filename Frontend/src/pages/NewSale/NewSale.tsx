@@ -26,6 +26,9 @@ import { SaleValidator } from "../../validators/NewSale/newSaleValidator"
 import { ValidationErrors } from "fluentvalidation-ts"
 import Table from "../../ui/Table/Table"
 import { newSaleHead } from "./newSaleHead"
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import Drawner from "../../ui/Drawner/Drawner"
 
 const baseURL = import.meta.env.VITE_BACKEND_URL
 interface PaginationOptions {
@@ -216,92 +219,98 @@ const NewSale = () => {
   }
 
   return (
-    <StyledNewSale>
-      <div className="newClient">
-        <Card title="Nueva Venta">
-          <div className="flex column">
-            <div className="flex row">
-              <Typography variant="body">Ingrese el DNI del cliente</Typography>
+    <>
+      <Drawner className="drawner" />
+
+      <StyledNewSale>
+        <div className="newClient">
+          <Card title="Nueva Venta">
+            <div className="flex column">
+              <div className="flex row">
+                <Typography variant="body">Ingrese el DNI del cliente</Typography>
+                <TextField
+                  error={userNotFound}
+                  variant="outlined"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <PersonIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  value={customerDni}
+                  onChange={onDniChangeHandler}
+                  helperText={
+                    userNotFound && "Cliente no existe o numero de DNI incorrecto"
+                  }
+                  onKeyDown={customerSearchHandler}
+                />
+              </div>
+              {customerInfo.customerName || customerInfo.healthcareProviderName && (
+                <div className="flex row">
+                  {customerInfo.customerName && (<h3>Nombre del cliente {customerInfo.customerName}</h3>)}
+                  {customerInfo.healthcareProviderName && (<h3>Obra social {customerInfo.healthcareProviderName}</h3>)}
+                </div>)
+              }
+
+
+              <div className="flex row spaceBetween">
+                <Typography variant="body">
+                  Total a pagar: {totalAmountSale}
+                </Typography>
+                <Button
+                  variant="contained"
+                  startIcon={<PersonAddIcon />}
+                  onClick={addNewClientHandler}
+                >
+                  Agregar cliente
+                </Button>
+              </div>
+            </div>
+            <div>
               <TextField
-                error={userNotFound}
-                variant="outlined"
+                value={productSearchExpression}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <PersonIcon />
+                      <SearchIcon />
                     </InputAdornment>
                   ),
                 }}
-                value={customerDni}
-                onChange={onDniChangeHandler}
-                helperText={
-                  userNotFound && "Cliente no existe o numero de DNI incorrecto"
+                placeholder="Ingrese un principio activo o una marca comercial"
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  setProductSearchExpression(event.target.value)
                 }
-                onKeyDown={customerSearchHandler}
+                onKeyDown={productSearchHandler}
               />
+              {!data?.items ? (
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+                  <CircularProgress />
+                </Box>
+              ) : (
+                <Table
+                  data={products || []}
+                  count={paginationOptions.totalRecords || 0}
+                  currentPage={paginationOptions.currentPage}
+                  pageSize={paginationOptions.pageSize}
+                  onPageChange={pageChangeHandler}
+                  onPageSizeChange={pageSizeHandler}
+                  headCells={newSaleHead}
+                  isSelectable={false}
+                  toolbarVisibility={false}
+
+                />
+              )}
             </div>
-            {customerInfo.customerName || customerInfo.healthcareProviderName && (
-              <div className="flex row">
-                {customerInfo.customerName && (<h3>Nombre del cliente {customerInfo.customerName}</h3>)}
-                {customerInfo.healthcareProviderName && (<h3>Obra social {customerInfo.healthcareProviderName}</h3>)}
-              </div>)
-            }
-
-
-            <div className="flex row spaceBetween">
-              <Typography variant="body">
-                Total a pagar: {totalAmountSale}
-              </Typography>
-              <Button
-                variant="contained"
-                startIcon={<PersonAddIcon />}
-                onClick={addNewClientHandler}
-              >
-                Agregar cliente
+            <div>
+              <Button variant="contained" startIcon={<SaveRoundedIcon />} onClick={postNewSaleAsync}>
+                Guardar
               </Button>
             </div>
-          </div>
-          <div>
-            <TextField
-              value={productSearchExpression}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-              placeholder="Ingrese un principio activo o una marca comercial"
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                setProductSearchExpression(event.target.value)
-              }
-              onKeyDown={productSearchHandler}
-            />
-            {!data?.items ? (
-              <p>Loading...</p>
-            ) : (
-              <Table
-                data={products || []}
-                count={paginationOptions.totalRecords || 0}
-                currentPage={paginationOptions.currentPage}
-                pageSize={paginationOptions.pageSize}
-                onPageChange={pageChangeHandler}
-                onPageSizeChange={pageSizeHandler}
-                headCells={newSaleHead}
-                isSelectable={false}
-                toolbarVisibility={false}
-
-              />
-            )}
-          </div>
-          <div>
-            <Button variant="contained" startIcon={<SaveRoundedIcon />} onClick={postNewSaleAsync}>
-              Guardar
-            </Button>
-          </div>
-        </Card>
-      </div>
-    </StyledNewSale>
+          </Card>
+        </div>
+      </StyledNewSale>
+    </>
   )
 }
 

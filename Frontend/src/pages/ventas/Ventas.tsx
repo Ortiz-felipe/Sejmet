@@ -9,6 +9,9 @@ import AddIcon from "@mui/icons-material/Add"
 import { useNavigate } from "react-router-dom"
 import Table from "../../ui/Table/Table"
 import { ventasHead } from "./ventasHead"
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import Drawner from "../../ui/Drawner/Drawner"
 
 const baseURL = import.meta.env.VITE_BACKEND_URL
 
@@ -74,28 +77,34 @@ const Ventas = () => {
     navigate('/nuevaVenta')
   }
 
-  if (dataTable.length < 1) return <p>Loading...</p>
+  if (dataTable.length < 1) return <Box sx={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+    <CircularProgress />
+  </Box>
 
   return (
-    <StyledVentas>
-      <div className="ventas">
-        <Card title="Ventas">
-          <Button variant="contained" startIcon={<AddIcon />} onClick={addNewSaleHandler}>
-            Nueva venta
-          </Button>
-          <Table
-            data={dataTable}
-            count={paginationOptions.totalRecords || 0}
-            currentPage={paginationOptions.currentPage}
-            pageSize={paginationOptions.pageSize}
-            onPageChange={pageChangeHandler}
-            onPageSizeChange={pageSizeHandler}
-            headCells={ventasHead}
+    <>
+      <Drawner className="drawner" />
+      <StyledVentas>
 
-          />
-        </Card>
-      </div>
-    </StyledVentas>
+        <div className="ventas">
+          <Card title="Ventas">
+            <Button variant="contained" startIcon={<AddIcon />} onClick={addNewSaleHandler}>
+              Nueva venta
+            </Button>
+            <Table
+              data={dataTable}
+              count={paginationOptions.totalRecords || 0}
+              currentPage={paginationOptions.currentPage}
+              pageSize={paginationOptions.pageSize}
+              onPageChange={pageChangeHandler}
+              onPageSizeChange={pageSizeHandler}
+              headCells={ventasHead}
+
+            />
+          </Card>
+        </div>
+      </StyledVentas>
+    </>
   )
 }
 export default Ventas

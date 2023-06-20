@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { useState } from "react"
+import { useState, useRef } from "react"
 import "./Reset.css"
 import "./App.css"
 import NavBar from "./ui/NavBar/NavBar"
@@ -53,14 +53,16 @@ const router = createBrowserRouter([
 ])
 
 function App() {
+
   const loggedIn = useAppSelector(isLoggedIn)
+  const LoggedInRef = useRef(loggedIn);
   return (
     <ThemeProvider theme={theme}>
+
       <div className="App">
         <StyledEngineProvider injectFirst>
-          {!loggedIn ? <Login /> :
+          {!LoggedInRef ? <Login /> :
             <>
-              <Drawner className="drawner" />
               <RouterProvider router={router} />
             </>
           }

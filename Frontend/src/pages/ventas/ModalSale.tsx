@@ -53,7 +53,7 @@ const ModalSale = ({
         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
           Fecha del pedido: {formatDate(data?.saleDate)}
         </Typography>
-        <Typography id="modal-modal-description" className="sp" sx={{ mt: 2, mb: 2 }}>
+        <Typography id="modal-modal-description" sx={{ mt: 2, mb: 2 }}>
           Total: {data?.totalAmount}
         </Typography>
         {data?.soldProducts && (

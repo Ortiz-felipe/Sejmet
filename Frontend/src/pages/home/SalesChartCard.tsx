@@ -1,9 +1,11 @@
-import {Typography} from '@mui/material'
+import { Typography } from '@mui/material'
 import useFetch from "../../hook/useFetch"
 import { SalesByMonth } from "../../schemas/sale"
 import { StyledCard } from "../../ui/Card/StyledCard"
 import SalesChart from "./SalesChart"
 import shortNumber from '../../utils/shortNumber'
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 const baseURL = import.meta.env.VITE_BACKEND_URL
 
@@ -23,7 +25,9 @@ const SalesChartCard = () => {
       <div className="inventario">
         <Typography variant='h6'>Historico de ventas</Typography>
         {data && data?.length < 0 ? (
-          <p>Loading...</p>
+          <Box sx={{ display: 'flex' }}>
+            <CircularProgress />
+          </Box>
         ) : (
           <SalesChart data={data || []} />
         )}

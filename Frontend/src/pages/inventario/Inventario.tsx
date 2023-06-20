@@ -14,6 +14,10 @@ import { useNavigate } from "react-router-dom"
 import { selectedOrderedProductsLength } from "../../features/carro/carroSlice"
 import Table from "../../ui/Table/Table"
 import { inventarioHead } from "./inventarioHead"
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import Drawner from "../../ui/Drawner/Drawner"
+
 const baseURL = import.meta.env.VITE_BACKEND_URL
 
 interface PaginationOptions {
@@ -65,38 +69,44 @@ const Inventario = () => {
     navigate('/nuevaOrden');
   }
 
-  // if (data?.items && data.items.length < 1) return <p>Loading...</p>
 
   return (
-    <StyledInventario>
-      <div className="inventario">
-        <Card title="Inventario">
-          <Button
-            variant="contained"
-            startIcon={<ShoppingCartCheckoutIcon />}
-            disabled={selectedItems.length === 0}
-            onClick={createNewOrderHandler}
-            aria-disabled={selectedItems.length === 0}
+    <>
+      <Drawner className="drawner" />
 
-          >
-            Crear nueva orden
-          </Button>
-          {!data?.items ? (
-            <p>Loading...</p>
-          ) : (
-            <Table
-              data={data.items || []}
-              count={paginationOptions.totalRecords || 0}
-              currentPage={paginationOptions.currentPage}
-              pageSize={paginationOptions.pageSize}
-              onPageChange={pageChangeHandler}
-              onPageSizeChange={pageSizeHandler}
-              headCells={inventarioHead}
-            />
-          )}
-        </Card>
-      </div>
-    </StyledInventario>
+      <StyledInventario>
+
+        <div className="inventario">
+          <Card title="Inventario">
+            <Button
+              variant="contained"
+              startIcon={<ShoppingCartCheckoutIcon />}
+              disabled={selectedItems.length === 0}
+              onClick={createNewOrderHandler}
+              aria-disabled={selectedItems.length === 0}
+
+            >
+              Crear nueva orden
+            </Button>
+            {!data?.items ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', alignContent: "center" }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <Table
+                data={data.items || []}
+                count={paginationOptions.totalRecords || 0}
+                currentPage={paginationOptions.currentPage}
+                pageSize={paginationOptions.pageSize}
+                onPageChange={pageChangeHandler}
+                onPageSizeChange={pageSizeHandler}
+                headCells={inventarioHead}
+              />
+            )}
+          </Card>
+        </div>
+      </StyledInventario>
+    </>
   )
 }
 export default Inventario

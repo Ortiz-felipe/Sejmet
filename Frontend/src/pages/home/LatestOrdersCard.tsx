@@ -2,7 +2,8 @@ import useFetch from "../../hook/useFetch"
 import { LatestOrder } from "../../schemas/order"
 import { StyledCard } from "../../ui/Card/StyledCard"
 import LatestOrdersTable from "./LatestOrdersTable"
-
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 const baseURL = import.meta.env.VITE_BACKEND_URL
 
 const LatestOrdersCard = () => {
@@ -14,7 +15,9 @@ const LatestOrdersCard = () => {
     <StyledCard size="3lines" floor="2floor">
       <div className="inventario">
         {data && data?.length < 0 ? (
-          <p>Loading...</p>
+          <Box sx={{ display: 'flex' }}>
+            <CircularProgress />
+          </Box>
         ) : (
           <LatestOrdersTable data={data || []} />
         )}

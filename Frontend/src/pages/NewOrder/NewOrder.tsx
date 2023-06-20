@@ -26,6 +26,7 @@ import * as dayjs from "dayjs"
 import { OrderValidator } from "../../validators/NewOrder/newOrderValidator"
 import Table from "../../ui/Table/Table"
 import { newOrderCells } from "./newOrderHead"
+import Drawner from "../../ui/Drawner/Drawner"
 
 const NewOrder = () => {
   const navigate = useNavigate()
@@ -122,54 +123,57 @@ const NewOrder = () => {
   }
 
   return (
-    <StyledNewOrder>
-      <div className="newOrder">
-        <Card title="Nueva orden de productos">
-          <div className="flex">
+    <>
+      <Drawner className="drawner" />
+      <StyledNewOrder>
+        <div className="newOrder">
+          <Card title="Nueva orden de productos">
             <div className="flex">
-              <Typography variant="body1">Nombre del proveedor</Typography>
-              <Select
-                //   error={orderValidationErrors?.providerName}
-                value={orderData.providerId}
-                onChange={(event: SelectChangeEvent) =>
-                  inputChangeHandler(event, "providerId")
-                }
-              >
-                <MenuItem disabled value="0">
-                  <em>Seleccione un proveedor</em>
-                </MenuItem>
-                {availableProviders &&
-                  availableProviders.length > 0 &&
-                  availableProviders.map((provider) => (
-                    <MenuItem key={provider.id} value={provider.id}>
-                      {provider.providerName}
-                    </MenuItem>
-                  ))}
-              </Select>
+              <div className="flex">
+                <Typography variant="body1">Nombre del proveedor</Typography>
+                <Select
+                  //   error={orderValidationErrors?.providerName}
+                  value={orderData.providerId}
+                  onChange={(event: SelectChangeEvent) =>
+                    inputChangeHandler(event, "providerId")
+                  }
+                >
+                  <MenuItem disabled value="0">
+                    <em>Seleccione un proveedor</em>
+                  </MenuItem>
+                  {availableProviders &&
+                    availableProviders.length > 0 &&
+                    availableProviders.map((provider) => (
+                      <MenuItem key={provider.id} value={provider.id}>
+                        {provider.providerName}
+                      </MenuItem>
+                    ))}
+                </Select>
+              </div>
+              <Typography variant="body1">
+                Total de la orden: {currentTotalOrderAmount.toFixed(2)}
+              </Typography>
             </div>
-            <Typography variant="body1">
-              Total de la orden: {currentTotalOrderAmount.toFixed(2)}
-            </Typography>
-          </div>
-          <Table
-            data={selectedOrderProducts}
-            count={selectedOrderProducts.length}
-            headCells={newOrderCells}
-            isSelectable={false}
-            toolbarVisibility={false}
-          />
-          <div>
-            <Button
-              variant="contained"
-              startIcon={<SaveRoundedIcon />}
-              onClick={createNewOrderHandler}
-            >
-              Guardar
-            </Button>
-          </div>
-        </Card>
-      </div>
-    </StyledNewOrder >
+            <Table
+              data={selectedOrderProducts}
+              count={selectedOrderProducts.length}
+              headCells={newOrderCells}
+              isSelectable={false}
+              toolbarVisibility={false}
+            />
+            <div>
+              <Button
+                variant="contained"
+                startIcon={<SaveRoundedIcon />}
+                onClick={createNewOrderHandler}
+              >
+                Guardar
+              </Button>
+            </div>
+          </Card>
+        </div>
+      </StyledNewOrder >
+    </>
   )
 }
 
