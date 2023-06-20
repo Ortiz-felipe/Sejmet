@@ -23,8 +23,9 @@ import {
   totalOrderAmount,
 } from "../../features/carro/carroSlice"
 import * as dayjs from "dayjs"
-import EnhancedTable from "./EnhancedTable"
 import { OrderValidator } from "../../validators/NewOrder/newOrderValidator"
+import Table from "../../ui/Table/Table"
+import { newOrderCells } from "./newOrderHead"
 
 const NewOrder = () => {
   const navigate = useNavigate()
@@ -108,15 +109,15 @@ const NewOrder = () => {
         const response = await fetch(createNewOrder, requestConfig)
 
         if (!response.ok) {
-            throw new Error("Failed to create new order")
+          throw new Error("Failed to create new order")
         } else {
-            navigate("/Pedidos")
+          navigate("/Pedidos")
         }
       } catch (error) {
         console.error("Error creating order:", error)
       }
     } else {
-        setOrderValidationErrors(validationStatus)
+      setOrderValidationErrors(validationStatus)
     }
   }
 
@@ -124,46 +125,50 @@ const NewOrder = () => {
     <StyledNewOrder>
       <div className="newOrder">
         <Card title="Nueva orden de productos">
-          <div className="">
-            <Typography variant="body1">Nombre del proveedor</Typography>
-            <Typography variant="body1">
-              Total de la orden: {currentTotalOrderAmount}
-            </Typography>
-            <Select
-              //   error={orderValidationErrors?.providerName}
-              value={orderData.providerId}
-              onChange={(event: SelectChangeEvent) =>
-                inputChangeHandler(event, "providerId")
-              }
-            >
-              <MenuItem disabled value="0">
-                <em>Seleccione un proveedor</em>
-              </MenuItem>
-              {availableProviders &&
-                availableProviders.length > 0 &&
-                availableProviders.map((provider) => (
-                  <MenuItem key={provider.id} value={provider.id}>
-                    {provider.providerName}
-                  </MenuItem>
-                ))}
-            </Select>
-            <EnhancedTable
-              data={selectedOrderProducts}
-              count={selectedOrderProducts.length}
-            />
-            <div>
-              <Button
-                variant="contained"
-                startIcon={<SaveRoundedIcon />}
-                onClick={createNewOrderHandler}
+          <div className="flex">
+            <div className="flex">
+              <Typography variant="body1">Nombre del proveedor</Typography>
+              <Select
+                //   error={orderValidationErrors?.providerName}
+                value={orderData.providerId}
+                onChange={(event: SelectChangeEvent) =>
+                  inputChangeHandler(event, "providerId")
+                }
               >
-                Guardar
-              </Button>
+                <MenuItem disabled value="0">
+                  <em>Seleccione un proveedor</em>
+                </MenuItem>
+                {availableProviders &&
+                  availableProviders.length > 0 &&
+                  availableProviders.map((provider) => (
+                    <MenuItem key={provider.id} value={provider.id}>
+                      {provider.providerName}
+                    </MenuItem>
+                  ))}
+              </Select>
             </div>
+            <Typography variant="body1">
+              Total de la orden: {currentTotalOrderAmount.toFixed(2)}
+            </Typography>
+          </div>
+          <Table
+            data={selectedOrderProducts}
+            count={selectedOrderProducts.length}
+            headCells={newOrderCells}
+            isSelectable={false}
+          />
+          <div>
+            <Button
+              variant="contained"
+              startIcon={<SaveRoundedIcon />}
+              onClick={createNewOrderHandler}
+            >
+              Guardar
+            </Button>
           </div>
         </Card>
       </div>
-    </StyledNewOrder>
+    </StyledNewOrder >
   )
 }
 

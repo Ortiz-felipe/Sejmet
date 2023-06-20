@@ -21,7 +21,7 @@ import { visuallyHidden } from "@mui/utils"
 import { Products } from "../../schemas/products"
 import { getComparator, stableSort, Order } from "../../utils/sort"
 import Button from "@mui/material/Button"
-import { StyledEnhancedTable } from "./StyledEnhancedTable"
+import { StyledEnhancedTable } from "./StyledEnhancedTable.bk"
 import AddIcon from "@mui/icons-material/Add"
 import RemoveIcon from "@mui/icons-material/Remove"
 import { OrderProduct } from "../../schemas/order"
@@ -235,7 +235,7 @@ export default function EnhancedTable({
   useEffect(() => {
     setAvailableProducts(data)
   }, [data])
-  
+
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,

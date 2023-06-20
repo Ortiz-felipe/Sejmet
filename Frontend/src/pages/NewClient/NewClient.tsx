@@ -146,7 +146,7 @@ const NewClient = () => {
       const result = customerValidator.validate(customerData)
 
       if (!Object.values(validState).some((error) => error)) {
-        const {id, ...customerInfo} = customerData
+        const { id, ...customerInfo } = customerData
         const payload = {
           body: customerInfo
         }
@@ -163,7 +163,7 @@ const NewClient = () => {
         }
       } else {
         setCustomerValidationState(validState)
-        setValidationState({...result})
+        setValidationState({ ...result })
       }
     } catch (error) {
       // Handle any error that occurred during the POST request
@@ -175,17 +175,7 @@ const NewClient = () => {
     <StyledNewClient>
       <div className="newClient">
         <Card title="Nuevo Cliente">
-          <div className="">
-            <Typography variant="body1">DNI:</Typography>
-            <TextField
-              // error={customerValidationState.dni}
-              error={validationState?.dni !== ''}
-              value={customerData?.dni}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                inputChangeHandler(event, "dni")
-              }
-              helperText={validationState?.dni !== '' ? validationState.dni : ''}
-            />
+          <div className="grid-new-client">
             <Typography variant="body1">Nombre:</Typography>
             <TextField
               error={validationState?.firstName !== ''}
@@ -203,6 +193,29 @@ const NewClient = () => {
                 inputChangeHandler(event, "lastName")
               }
             />
+
+
+            <Typography variant="body1">DNI:</Typography>
+            <TextField
+              // error={customerValidationState.dni}
+              error={validationState?.dni !== ''}
+              value={customerData?.dni}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                inputChangeHandler(event, "dni")
+              }
+              helperText={validationState?.dni !== '' ? validationState.dni : ''}
+            />
+
+            <Typography variant="body1">Telefono:</Typography>
+            <TextField
+              error={customerValidationState.phoneNumber}
+              value={customerData?.phoneNumber}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                inputChangeHandler(event, "phoneNumber")
+              }
+            />
+
+
             <Typography variant="body1">Fecha de nacimiento:</Typography>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
@@ -231,6 +244,9 @@ const NewClient = () => {
                   </MenuItem>
                 ))}
             </Select>
+          </div>
+          <div className="flex-address">
+
             <Typography variant="body1">Domicilio:</Typography>
             <TextField
               value={customerData?.address}
@@ -279,28 +295,20 @@ const NewClient = () => {
                   ))}
               </Select>
             </FormControl>
+          </div>
 
-            <Typography variant="body1">Telefono:</Typography>
-            <TextField
-              error={customerValidationState.phoneNumber}
-              value={customerData?.phoneNumber}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                inputChangeHandler(event, "phoneNumber")
-              }
-            />
-            <div>
-              <Button
-                variant="contained"
-                startIcon={<SaveRoundedIcon />}
-                onClick={createCustomerHandler}
-              >
-                Guardar
-              </Button>
-            </div>
+          <div>
+            <Button
+              variant="contained"
+              startIcon={<SaveRoundedIcon />}
+              onClick={createCustomerHandler}
+            >
+              Guardar
+            </Button>
           </div>
         </Card>
-      </div>
-    </StyledNewClient>
+      </div >
+    </StyledNewClient >
   )
 }
 

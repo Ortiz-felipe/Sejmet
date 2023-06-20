@@ -25,5 +25,14 @@ export const StyledInventario = styled.div`
    } 
    .MuiButton-root {
 	color: ${props => props.theme.colors.back};;
-    background-color: ${props => props.theme.colors.primary};  }
+    background-color: ${props => props.theme.colors.primary};
+
+    width: fit-content;
+    align-self: end;
+        
+    }
+    .MuiButton-root:disabled {
+    	background-color: ${props => props.theme.colors.back};;
+        color: ${props => props.theme.colors.primary};
+    }
 `

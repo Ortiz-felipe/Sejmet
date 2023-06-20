@@ -43,6 +43,7 @@ export const OrderSlice = createSlice({
     },
     incrementProductQuantity: (state, action: PayloadAction<string>) => {
       state.orderedProducts = state.orderedProducts.map((product) => {
+        console.log('payload', product.productId, action.payload)
         if (product.productId === action.payload) {
           return {
             ...product,

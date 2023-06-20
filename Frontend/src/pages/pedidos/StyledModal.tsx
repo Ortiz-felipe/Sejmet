@@ -9,6 +9,7 @@ export const StyledModal = styled(Modal)`
         flex: 1rem ;
         border-radius: 2rem !important ;
         border: none !important;
+        z-index: 150000;
     
     .MuiButton-root {
         position: absolute;

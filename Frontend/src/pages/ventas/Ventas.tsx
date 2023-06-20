@@ -2,12 +2,13 @@
 import { useState, useEffect } from "react"
 import { Sale } from "../../schemas/sale"
 import Card from "../../ui/Card/Card"
-import EnhancedTable from "./EnhancedTable"
 import { StyledVentas } from "./StyledVentas"
 import { PagedResponse } from "../../schemas/pagedResponse"
 import { Button } from "@mui/material"
 import AddIcon from "@mui/icons-material/Add"
 import { useNavigate } from "react-router-dom"
+import Table from "../../ui/Table/Table"
+import { ventasHead } from "./ventasHead"
 
 const baseURL = import.meta.env.VITE_BACKEND_URL
 
@@ -27,8 +28,7 @@ const Ventas = () => {
     },
   )
   const [url, setUrl] = useState<string>(
-    `${baseURL}/Sales?CurrentPage=${
-      paginationOptions.currentPage + 1
+    `${baseURL}/Sales?CurrentPage=${paginationOptions.currentPage + 1
     }&PageSize=${paginationOptions.pageSize}`,
   )
   const [dataTable, setDataTable] = useState<Sale[]>([])
@@ -47,8 +47,7 @@ const Ventas = () => {
     console.log("currentPage", paginationOptions.currentPage)
     console.log("pageSize", paginationOptions.pageSize)
     setUrl(
-      `${baseURL}/Sales?CurrentPage=${
-        paginationOptions.currentPage + 1
+      `${baseURL}/Sales?CurrentPage=${paginationOptions.currentPage + 1
       }&PageSize=${paginationOptions.pageSize}`,
     )
   }, [paginationOptions.currentPage, paginationOptions.pageSize])
@@ -84,13 +83,15 @@ const Ventas = () => {
           <Button variant="contained" startIcon={<AddIcon />} onClick={addNewSaleHandler}>
             Nueva venta
           </Button>
-          <EnhancedTable
+          <Table
             data={dataTable}
             count={paginationOptions.totalRecords || 0}
             currentPage={paginationOptions.currentPage}
             pageSize={paginationOptions.pageSize}
             onPageChange={pageChangeHandler}
             onPageSizeChange={pageSizeHandler}
+            headCells={ventasHead}
+
           />
         </Card>
       </div>

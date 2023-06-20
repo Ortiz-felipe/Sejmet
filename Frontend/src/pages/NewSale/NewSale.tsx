@@ -11,7 +11,7 @@ import SaveRoundedIcon from "@mui/icons-material/SaveRounded"
 import PersonAddIcon from "@mui/icons-material/PersonAdd"
 import Card from "../../ui/Card/Card"
 import { StyledNewSale } from "./StyledNewSale"
-import { CreateSale, Sale } from "../../schemas/sale"
+import { CreateSale, Sale, SaleProduct } from "../../schemas/sale"
 import * as dayjs from "dayjs"
 import { CustomerInfo } from "../../schemas/customer"
 import usePagedFetch from "../../hook/usePagedFetch"
@@ -19,10 +19,12 @@ import { PagedResponse } from "../../schemas/pagedResponse"
 import { Products } from "../../schemas/products"
 import EnhancedTable from "./EnhancedTable"
 import { useNavigate } from "react-router-dom"
-import { useAppSelector } from "../../app/hooks"
-import { soldProducts, totalSaleAmount } from "../../features/sale/saleSlice"
+import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { soldProducts, soldProductsUpdate, totalSaleAmount } from "../../features/sale/saleSlice"
 import { SaleValidator } from "../../validators/NewSale/newSaleValidator"
 import { ValidationErrors } from "fluentvalidation-ts"
+import Table from "../../ui/Table/Table"
+import { newSaleHead } from "./newSaleHead"
 
 const baseURL = import.meta.env.VITE_BACKEND_URL
 interface PaginationOptions {
@@ -62,10 +64,10 @@ const NewSale = () => {
       pageSize: 5,
     },
   )
+  const dispatch = useAppDispatch()
 
   const { data, error } = usePagedFetch<PagedResponse<Products>>(
-    `${baseURL}/Products?SearchExpression=${searchExpression}&CurrentPage=${
-      paginationOptions.currentPage + 1
+    `${baseURL}/Products?SearchExpression=${searchExpression}&CurrentPage=${paginationOptions.currentPage + 1
     }&PageSize=${paginationOptions.pageSize}`,
   )
 
@@ -77,7 +79,18 @@ const NewSale = () => {
     updateSaleData("saleDate", dayjs().toJSON())
     updateSaleData("totalAmount", totalAmountSale)
   }, [totalAmountSale])
-
+  useEffect(() => {
+    if (data) {
+      console.log('antes del reducer', data.items)
+      dispatch(soldProductsUpdate(data.items))
+      setSaleData((prevState) => {
+        return {
+          ...prevState,
+          soldProducts: data.items,
+        }
+      })
+    }
+  }, [data])
   useEffect(() => {
     if (data && data?.totalRecords && data?.currentPage && data?.pageSize) {
       setPaginationOptions((prevState) => {
@@ -184,10 +197,10 @@ const NewSale = () => {
 
     const validationStatus = new SaleValidator().validate(saleData)
 
-    if(Object.keys(validationStatus).length === 0) {
+    if (Object.keys(validationStatus).length === 0) {
       try {
         const response = await fetch(URL, requestConfig)
-  
+
         if (!response.ok) {
           throw new Error('Failed to create new Sale')
         } else {
@@ -198,53 +211,53 @@ const NewSale = () => {
       }
     } else {
       setSaleValidationState(validationStatus)
-    }    
+    }
   }
 
   return (
     <StyledNewSale>
       <div className="newClient">
         <Card title="Nueva Venta">
-          <div className="">
-            <Typography variant="body">Ingrese el DNI del cliente</Typography>
-            <TextField
-              error={userNotFound}
-              variant="outlined"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <PersonIcon />
-                  </InputAdornment>
-                ),
-              }}
-              value={customerDni}
-              onChange={onDniChangeHandler}
-              helperText={
-                userNotFound && "Cliente no existe o numero de DNI incorrecto"
-              }
-              onKeyDown={customerSearchHandler}
-            />
-            <TextField
-              disabled
-              label="Nombre del cliente"
-              value={customerInfo.customerName}
-            />
-            <TextField
-              disabled
-              label="Obra social"
-              value={customerInfo.healthcareProviderName}
-            />
-            <Button
-              variant="contained"
-              startIcon={<PersonAddIcon />}
-              onClick={addNewClientHandler}
-            >
-              Agregar cliente
-            </Button>
-            <div>
+          <div className="flex column">
+            <div className="flex row">
+              <Typography variant="body">Ingrese el DNI del cliente</Typography>
+              <TextField
+                error={userNotFound}
+                variant="outlined"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <PersonIcon />
+                    </InputAdornment>
+                  ),
+                }}
+                value={customerDni}
+                onChange={onDniChangeHandler}
+                helperText={
+                  userNotFound && "Cliente no existe o numero de DNI incorrecto"
+                }
+                onKeyDown={customerSearchHandler}
+              />
+            </div>
+            {customerInfo.customerName || customerInfo.healthcareProviderName && (
+              <div className="flex row">
+                {customerInfo.customerName && (<h3>Nombre del cliente {customerInfo.customerName}</h3>)}
+                {customerInfo.healthcareProviderName && (<h3>Obra social {customerInfo.healthcareProviderName}</h3>)}
+              </div>)
+            }
+
+
+            <div className="flex row spaceBetween">
               <Typography variant="body">
                 Total a pagar: {totalAmountSale}
               </Typography>
+              <Button
+                variant="contained"
+                startIcon={<PersonAddIcon />}
+                onClick={addNewClientHandler}
+              >
+                Agregar cliente
+              </Button>
             </div>
           </div>
           <div>
@@ -259,13 +272,17 @@ const NewSale = () => {
             {!data?.items ? (
               <p>Loading...</p>
             ) : (
-              <EnhancedTable
-                data={data.items || []}
+              <Table
+                data={products || []}
                 count={paginationOptions.totalRecords || 0}
                 currentPage={paginationOptions.currentPage}
                 pageSize={paginationOptions.pageSize}
                 onPageChange={pageChangeHandler}
                 onPageSizeChange={pageSizeHandler}
+                headCells={newSaleHead}
+                isSelectable={false}
+                toolbarVisibility={false}
+
               />
             )}
           </div>

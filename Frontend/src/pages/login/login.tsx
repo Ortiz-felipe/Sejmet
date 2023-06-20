@@ -46,8 +46,8 @@ const Login = () => {
   useAuth()
 
   useEffect(() => {
-    console.log(email)
-    console.log(password)
+    // console.log(email)
+    // console.log(password)
   }, [email, password])
 
   //TODO: This should be the Register User Method

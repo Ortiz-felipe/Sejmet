@@ -25,4 +25,9 @@ export const StyledPedidos = styled.div`
         z-index: 100;
         position: relative;
    } 
+   .MuiButton-root {
+	color: ${props => props.theme.colors.back};;
+    background-color: ${props => props.theme.colors.primary};
+
+    }
 `

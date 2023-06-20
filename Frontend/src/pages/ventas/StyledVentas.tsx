@@ -27,4 +27,11 @@ export const StyledVentas = styled.div`
         flex-direction: column;
         justify-content: center;
    } 
+   .MuiButton-root {
+	color: ${props => props.theme.colors.back};;
+    background-color: ${props => props.theme.colors.primary};
+
+    width: fit-content;
+    align-self: end;
+    }
 `

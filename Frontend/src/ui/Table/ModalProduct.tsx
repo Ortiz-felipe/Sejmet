@@ -6,7 +6,7 @@ import useFetch from "../../hook/useFetch";
 import { Products } from "../../schemas/products";
 import Button from "@mui/material/Button"
 import CloseIcon from '@mui/icons-material/Close';
-import { StyledModal } from "../../ui/Modal/StyledModal";
+import { StyledModal } from "../Modal/StyledModal";
 
 const style = {
     position: 'absolute' as 'absolute',

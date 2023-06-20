@@ -14,7 +14,42 @@ export const SaleSlice = createSlice({
   name: "Sale",
   initialState,
   reducers: {
+    soldProductsUpdate: (state, action: PayloadAction<SaleProduct[]>) => {
+      state.soldProducts = action.payload.map((product) => {return {"productId": product.id , "productName": product.tradeName, "quantity": product.quantity || 1, "unitPrice": product.price}}  )   
+     },
+     incrementSaleQuantity: (state, action: PayloadAction<string>) => {
+      state.soldProducts = state.soldProducts.map((product) => {
+        console.log('payload', product.productId, action.payload)
+        if (product.productId === action.payload) {
+          return {
+            ...product,
+            quantity: product.quantity + 1,
+          }
+        }
+        return product
+      })
+     },
+     decrementSalesQuantity: (state, action: PayloadAction<string>) => {
+      const updatedProducts = state.soldProducts.map((product) => {
+        if (product.productId === action.payload) {
+          if (product.quantity === 1) {
+            return null
+          } else {
+            return {
+              ...product,
+              quantity: product.quantity - 1,
+            } as SaleProduct
+          }
+        }
+        return product
+      })
+
+      state.soldProducts = updatedProducts.filter(
+        (product): product is SaleProduct => product !== null,
+      )
+     },
     updateSaleData: (state, action: PayloadAction<Sale>) => {
+      console.log('updateSaleData', action.payload)
       state = action.payload
     },
     addProductToSale: (state, action: PayloadAction<SaleProduct>) => {
@@ -70,7 +105,7 @@ export const SaleSlice = createSlice({
   },
 })
 
-export const { addProductToSale, removeProductFromSale, updateSaleData } =
+export const { addProductToSale, removeProductFromSale, updateSaleData, soldProductsUpdate, incrementSaleQuantity, decrementSalesQuantity, removeQuantity } =
   SaleSlice.actions
 export const totalSaleAmount = (state: RootState) =>
   state.sale.soldProducts.reduce((accumulator, product) => {

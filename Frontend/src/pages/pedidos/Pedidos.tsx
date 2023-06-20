@@ -3,9 +3,11 @@ import { Orders } from "../../schemas/order";
 import { PagedResponse } from "../../schemas/pagedResponse";
 import Card from "../../ui/Card/Card"
 import { PaginationOptions } from "../../utils/sort";
-import EnhancedTable from "./EnhancedTable"
+import EnhancedTable from "./EnhancedTable.bbk"
 import { StyledPedidos } from "./StyledPedidos"
 import { useState, useEffect } from "react";
+import Table from "../../ui/Table/Table"
+import { pedidosHead } from "./pedidosHead";
 
 const baseURL = import.meta.env.VITE_BACKEND_URL
 
@@ -18,8 +20,7 @@ const Pedidos = () => {
     },
   )
   const [url, setUrl] = useState<string>(
-    `${baseURL}/Orders?CurrentPage=${
-      paginationOptions.currentPage + 1
+    `${baseURL}/Orders?CurrentPage=${paginationOptions.currentPage + 1
     }&PageSize=${paginationOptions.pageSize}`,
   )
   const [dataTable, setDataTable] = useState<Orders[]>([])
@@ -38,8 +39,7 @@ const Pedidos = () => {
     console.log("currentPage", paginationOptions.currentPage)
     console.log("pageSize", paginationOptions.pageSize)
     setUrl(
-      `${baseURL}/Orders?CurrentPage=${
-        paginationOptions.currentPage + 1
+      `${baseURL}/Orders?CurrentPage=${paginationOptions.currentPage + 1
       }&PageSize=${paginationOptions.pageSize}`,
     )
   }, [paginationOptions.currentPage, paginationOptions.pageSize])
@@ -67,15 +67,17 @@ const Pedidos = () => {
     <StyledPedidos>
       <div className="pedidos">
         <Card title="Pedidos">
-          {" "}
           Lista de Pedidos
-          <EnhancedTable
+          {console.log("dataTable", dataTable)}
+          <Table
             data={dataTable}
             count={paginationOptions.totalRecords || 0}
             currentPage={paginationOptions.currentPage}
             pageSize={paginationOptions.pageSize}
             onPageChange={pageChangeHandler}
             onPageSizeChange={pageSizeHandler}
+            headCells={pedidosHead}
+
           />
         </Card>
       </div>

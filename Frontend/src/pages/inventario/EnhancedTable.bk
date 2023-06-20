@@ -12,21 +12,18 @@ import TableSortLabel from "@mui/material/TableSortLabel"
 import Toolbar from "@mui/material/Toolbar"
 import Typography from "@mui/material/Typography"
 import Paper from "@mui/material/Paper"
-import Checkbox from "@mui/material/Checkbox"
 import IconButton from "@mui/material/IconButton"
 import Tooltip from "@mui/material/Tooltip"
 import DeleteIcon from "@mui/icons-material/Delete"
-import FilterListIcon from "@mui/icons-material/FilterList"
 import { visuallyHidden } from "@mui/utils"
 import { Products } from "../../schemas/products"
-import { getComparator, stableSort } from "../../utils/sort"
-import ModalProduct from "./ModalProduct"
+import ModalProduct from "../../ui/Table/ModalProduct"
 import Button from "@mui/material/Button"
-import { StyledEnhancedTable } from "./StyledEnhancedTable"
+import { StyledEnhancedTable } from "./StyledEnhancedTable.bk"
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 import { useAppSelector, useAppDispatch } from "../../app/hooks"
-import { addProduct, addAllSelectedProducts, removeProduct, removeAllSelectedProducts,selectedOrderedProductsLength, selectedProducts } from "../../features/carro/carroSlice"
+import { addProduct, addAllSelectedProducts, removeProduct, removeAllSelectedProducts, selectedOrderedProductsLength, selectedProducts } from "../../features/carro/carroSlice"
 import { OrderProduct, Orders } from "../../schemas/order"
 interface HeadCell {
   disablePadding: boolean
@@ -247,10 +244,10 @@ export default function EnhancedTable({
     return
   }
 
-  const handleClick = (event: React.MouseEvent<unknown>, row: Products) => {
+  const handleClick = (isItemSelected: boolean, row: Products) => {
     const selectedIndex = selectedCarro.indexOf(row.upc)
     console.log('el nomber es', row.upc, selectedIndex)
-    if (selectedIndex === -1) {
+    if (!isItemSelected) {
       const orderProduct: OrderProduct = {
         productId: row.id,
         productName: row.tradeName,
@@ -258,11 +255,7 @@ export default function EnhancedTable({
         unitPrice: row.price
       }
       dispatch(addProduct(orderProduct))
-    } else if (selectedIndex === 0) {
-      dispatch(removeProduct(row.id))
-    } else if (selectedIndex === selectedCarro.length - 1) {
-      dispatch(removeProduct(row.id))
-    } else if (selectedIndex > 0) {
+    } else {
       dispatch(removeProduct(row.id))
     }
   }
@@ -322,7 +315,7 @@ export default function EnhancedTable({
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row)}
+                    onClick={(event) => handleClick(isItemSelected, row)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
