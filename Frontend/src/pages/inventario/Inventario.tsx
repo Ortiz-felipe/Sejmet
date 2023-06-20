@@ -50,14 +50,12 @@ const Inventario = () => {
   }, [data])
 
   const pageChangeHandler = (currentPage: number): void => {
-    console.log("current Page", currentPage)
     setPaginationOptions((prev) => {
       return { ...prev, currentPage: currentPage }
     })
   }
 
   const pageSizeHandler = (pageSize: number): void => {
-    console.log("pageSize", pageSize)
     setPaginationOptions((prev) => {
       return { ...prev, currentPage: 0, pageSize: pageSize }
     })

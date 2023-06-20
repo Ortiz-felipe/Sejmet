@@ -10,8 +10,9 @@ export const StyledModal = styled(Modal)`
     top: 0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.5);
-      display: flex;
-      flex-direction: column;
+    display: flex;
+    flex-direction: column;
+    width: auto;
     h4 {
       margin-bottom: 2rem;
     }  
@@ -23,7 +24,7 @@ export const StyledModal = styled(Modal)`
     }
   
       
-    
+   
     .MuiButton-root {
         position: absolute;
         top: 2rem;
@@ -34,6 +35,7 @@ export const StyledModal = styled(Modal)`
         padding: 0.5rem;
 	    color: ${props => props.theme.colors.back};
         background-color: ${props => props.theme.colors.primary};
+        z-index: 1500;
       span {
         margin: 0px
       }

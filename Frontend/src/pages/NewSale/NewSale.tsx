@@ -9,6 +9,7 @@ import {
 import PersonIcon from "@mui/icons-material/Person"
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded"
 import PersonAddIcon from "@mui/icons-material/PersonAdd"
+import SearchIcon from '@mui/icons-material/Search';
 import Card from "../../ui/Card/Card"
 import { StyledNewSale } from "./StyledNewSale"
 import { CreateSale, Sale, SaleProduct } from "../../schemas/sale"
@@ -263,6 +264,13 @@ const NewSale = () => {
           <div>
             <TextField
               value={productSearchExpression}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
               placeholder="Ingrese un principio activo o una marca comercial"
               onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                 setProductSearchExpression(event.target.value)

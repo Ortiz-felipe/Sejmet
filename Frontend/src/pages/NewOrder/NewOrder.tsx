@@ -156,6 +156,7 @@ const NewOrder = () => {
             count={selectedOrderProducts.length}
             headCells={newOrderCells}
             isSelectable={false}
+            toolbarVisibility={false}
           />
           <div>
             <Button

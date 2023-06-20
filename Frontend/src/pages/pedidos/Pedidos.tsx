@@ -77,6 +77,8 @@ const Pedidos = () => {
             onPageChange={pageChangeHandler}
             onPageSizeChange={pageSizeHandler}
             headCells={pedidosHead}
+            toolbarVisibility={false}
+
 
           />
         </Card>

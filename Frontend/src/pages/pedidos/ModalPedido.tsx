@@ -2,19 +2,20 @@ import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import useFetch from "../../hook/useFetch"
 import Button from "@mui/material/Button"
-import { StyledModal } from "./StyledModal"
 import { Orders } from "../../schemas/order"
 import { formatDate } from "../../utils/utils"
 import { TransactionStatusNames } from "../../schemas/transactionStatusEnum"
-import EnhancedTable from "./EnhancedTableOrderProducts"
+import Table from "../../ui/Table/Table"
 import CloseIcon from '@mui/icons-material/Close';
+import { OrderProductHead } from "./OrderProductHead"
+import { StyledModal } from "../../ui/Modal/StyledModal";
 
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 'auto',
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -26,16 +27,17 @@ const baseURL = import.meta.env.VITE_BACKEND_URL
 const ModalProduct = ({
   open,
   setOpen,
-  orderId,
+  id,
 }: {
   open: boolean
   setOpen: (value: boolean) => void
-  orderId: string
+  id: string
 }) => {
-  const url = `${baseURL}/Orders/${orderId}`
+  const url = `${baseURL}/Orders/${id}`
   const { data, error } = useFetch<Orders>(url)
   const handleClose = () => setOpen(false)
 
+  console.log('order id', data)
   return (
     <StyledModal
       open={open}
@@ -44,7 +46,7 @@ const ModalProduct = ({
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-      <Button variant="contained" onClick={handleClose} endIcon={<CloseIcon />} />
+        <Button variant="contained" onClick={handleClose} endIcon={<CloseIcon />} />
         <Typography id="modal-modal-title" variant="h6" component="h2">
           Detalles
         </Typography>
@@ -58,11 +60,11 @@ const ModalProduct = ({
           Estado de la orden:{" "}
           {TransactionStatusNames[data?.transactionStatusId || 1]}
         </Typography>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+        <Typography id="modal-modal-description" sx={{ mt: 2, mb: 2 }}>
           Total: {data?.totalAmount}
         </Typography>
         {data?.orderedProducts && (
-          <EnhancedTable data={data.orderedProducts} />
+          <Table data={data.orderedProducts} toolbarVisibility={false} isSelectable={false} headCells={OrderProductHead} />
         )}
       </Box>
     </StyledModal>

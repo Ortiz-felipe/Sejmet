@@ -18,32 +18,23 @@ export const OrderSlice = createSlice({
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
     addProduct: (state, action: PayloadAction<OrderProduct>) => {
-      console.log("payload", action.payload)
       state.orderedProducts = [...state.orderedProducts, action.payload]
-      console.log("state", state.orderedProducts)
     },
     addAllSelectedProducts: (state, action: PayloadAction<OrderProduct[]>) => {
-      console.log("payload", action.payload)
       state.orderedProducts = [...state.orderedProducts, ...action.payload]
-      console.log("state", state.orderedProducts)
     },
     removeProduct: (state, action: PayloadAction<string>) => {
-      console.log("payload pero para borrar", action.payload)
-      console.log("state borrado", state.orderedProducts)
       state.orderedProducts = state.orderedProducts.filter(
         (item) => item.productId !== action.payload,
       )
     },
     removeAllSelectedProducts: (state, action: PayloadAction<string[]>) => {
-      console.log("payload pero para borrar", action.payload)
-      console.log("state borrado", state.orderedProducts)
       state.orderedProducts = state.orderedProducts.filter(
         (item) => !action.payload.some((item2) => item.productId === item2),
       )
     },
     incrementProductQuantity: (state, action: PayloadAction<string>) => {
       state.orderedProducts = state.orderedProducts.map((product) => {
-        console.log('payload', product.productId, action.payload)
         if (product.productId === action.payload) {
           return {
             ...product,

@@ -17,7 +17,9 @@ import Tooltip from "@mui/material/Tooltip"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { visuallyHidden } from "@mui/utils"
 import { Products } from "../../schemas/products"
-import ModalProduct from "./ModalProduct"
+import ModalPedidos from "../../pages/pedidos/ModalPedido"
+import ModalProduct from "../../pages/inventario/ModalProduct"
+import ModalSale from "../../pages/ventas/ModalSale"
 import Button from "@mui/material/Button"
 import { StyledTable } from "./StyledTable"
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
@@ -179,7 +181,7 @@ export default function EnhancedTable({
     const [orderedProducts, setOrderedProducts] = useState([])
     const [orderBy, setOrderBy] = useState<keyof Products>("tradeName")
     const [openModal, setOpenModal] = useState(false)
-    const [upc, setUpc] = useState("")
+    const [id, setId] = useState("")
     const [allSelected, setAllSelected] = useState(false)
     const cantidad = useAppSelector(selectedOrderedProductsLength)
     const selectedCarro = useAppSelector(selectedProducts)
@@ -187,9 +189,9 @@ export default function EnhancedTable({
     const currentlySoldProducts = useAppSelector(soldProducts)
     const matches = useMatches();
 
-    const handleOpen = (upc: string) => {
+    const handleOpen = (id: string) => {
+        setId(id)
         setOpenModal(true)
-        setUpc(upc)
     }
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
@@ -223,7 +225,6 @@ export default function EnhancedTable({
 
     const handleClick = (isItemSelected: boolean, row: Products) => {
         const selectedIndex = selectedCarro.indexOf(row.upc)
-        console.log('el nomber es', row.upc, selectedIndex)
         if (!isItemSelected) {
             const orderProduct: OrderProduct = {
                 productId: row.id,
@@ -375,11 +376,22 @@ export default function EnhancedTable({
     const isSelected = (name: string) => selectedCarro.indexOf(name) !== -1
 
     const emptyRows = 0
+    function getModal(): React.ReactNode {
+        switch (matches[0].pathname) {
+            case '/Inventario':
+                return <ModalProduct open={openModal} setOpen={setOpenModal} id={id} />;
+            case '/Pedidos':
+                console.log('pedidos modal')
+                return <ModalPedidos open={openModal} setOpen={setOpenModal} id={id} />;
+            case '/Ventas':
+                console.log('ventasss modal')
+                return <ModalSale open={openModal} setOpen={setOpenModal} id={id} />;
+        }
+    }
+
     return (
         <StyledTable sx={{ width: "100%" }}>
-            {openModal && (
-                <ModalProduct open={openModal} setOpen={setOpenModal} upc={upc} />
-            )}
+            {openModal && getModal()}
             <Paper sx={{ width: "100%", mb: 2 }}>
                 <EnhancedTableToolbar numSelected={cantidad} isVisible={toolbarVisibility} />
                 <TableContainer>
@@ -438,7 +450,7 @@ export default function EnhancedTable({
                                             switch (headCell.id) {
                                                 case "details":
                                                     return (
-                                                        <TableCell align="left"> <Button onClick={() => handleOpen(row.upc)}>Detalles</Button></TableCell>
+                                                        <TableCell align="left"> <Button onClick={() => handleOpen(row.upc ?? row.id)}>Detalles</Button></TableCell>
                                                     )
                                                     break;
                                                 case "totalPrice":

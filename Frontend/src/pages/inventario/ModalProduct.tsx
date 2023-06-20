@@ -6,14 +6,14 @@ import useFetch from "../../hook/useFetch";
 import { Products } from "../../schemas/products";
 import Button from "@mui/material/Button"
 import CloseIcon from '@mui/icons-material/Close';
-import { StyledModal } from "../Modal/StyledModal";
+import { StyledModal } from "../../ui/Modal/StyledModal";
 
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 800,
+    width: '30rem',
     bgcolor: 'background.paper',
     boxShadow: 24,
     borderRadius: '2rem',
@@ -22,10 +22,10 @@ const style = {
 
 const baseURL = import.meta.env.VITE_BACKEND_URL;
 
-const ModalProduct = ({ open, setOpen, upc }) => {
+const ModalProduct = ({ open, setOpen, id }) => {
     let { userUPC } = useParams();
 
-    const url = `${baseURL}/Products/${upc}`
+    const url = `${baseURL}/Products/${id}`
     const { data, error } = useFetch<Products>(url)
     const handleClose = () => setOpen(false);
 
