@@ -10,6 +10,8 @@ export const StyledCard = styled.div(({ size, floor }: { size: "square" | "WideR
     borderRadius: `2rem`,
     flexDirection: `column`,
     backgroundColor: `#fcfcfe`,
+    transition: `auto 2s`,
+    minHeight: '70%'
 }))
 
 

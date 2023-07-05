@@ -15,6 +15,10 @@ export const StyledNewOrder = styled.div`
         gap: 2rem;
     }    
     .newOrder {
+        transition: auto;
+        min-height: 90%;
+        transition: auto;
+        min-height: 90%;
         display: flex;
         gap: 1rem;
         padding: 2rem;

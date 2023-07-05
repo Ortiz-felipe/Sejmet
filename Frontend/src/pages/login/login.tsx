@@ -46,7 +46,7 @@ const Login = () => {
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [userCredentials, setUserCredentials] = useState<UserCredential>()
-  const [error, setError] = useState<string>("sin error")
+  const [error, setError] = useState<string>("")
   useAuth()
 
   useEffect(() => {

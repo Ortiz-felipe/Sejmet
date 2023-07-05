@@ -6,6 +6,8 @@ export const StyledNewClient = styled.div`
     width: 100%;
     display: flex;
     .newClient {
+        transition: auto;
+        min-height: 90%;
         display: flex;
         gap: 1rem;
         padding: 2rem;

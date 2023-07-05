@@ -6,7 +6,9 @@ export const StyledInventario = styled.div`
     width: 100%;
 
     .inventario {
-        // whit this create a 4 x 4 grid
+
+        transition: auto;
+        min-height: 90%;
         display: flex;
         gap: 1rem;
         padding: 2rem;

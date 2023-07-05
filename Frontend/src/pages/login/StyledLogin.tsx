@@ -5,6 +5,7 @@ import Card from "../ui/Card/Card"
 export const StyledLogin = styled.div`
     display: flex;
     width: 100vw;
+
     .logo {
         background: ${props => props.theme.colors.backGradient};
         flex: 1;

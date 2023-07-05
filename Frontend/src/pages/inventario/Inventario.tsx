@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 import Card from "../../ui/Card/Card"
-import EnhancedTable from "./EnhancedTable.bk"
 import { StyledInventario } from "./StyledInventario"
 import usePagedFetch from "../../hook/usePagedFetch"
 import { PagedResponse } from "../../schemas/pagedResponse"

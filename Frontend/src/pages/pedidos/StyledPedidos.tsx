@@ -9,11 +9,11 @@ export const StyledPedidos = styled.div`
     width: 100%;
 
     .pedidos {
-        // whit this create a 4 x 4 grid
+        transition: auto;
+        min-height: 90%;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-  
+        justify-content: center;  
         gap: 1rem;
         padding: 2rem;
         background-color: ${props => props.theme.colors.back};

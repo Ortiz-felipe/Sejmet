@@ -19,7 +19,7 @@ const SalesChart = ({ data }: { data: SalesByMonth[] }) => {
   }
 
   return (
-    <ResponsiveContainer width="95%" height={300} >
+    <ResponsiveContainer width="95%" height={280} >
       <LineChart
         data={data}
         margin={{ top: 5, right: 20, bottom: 5, left: 0 }}

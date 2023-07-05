@@ -8,7 +8,8 @@ export const StyledTemplate3 = styled.div`
     grid-row: 2/3;
     background-color: tomato;
     .home {
-        // whit this create a 4 x 4 grid
+        transition: auto;
+        min-height: 90%;
         display: grid;
         background-color: orange;
         gap: 1rem;
