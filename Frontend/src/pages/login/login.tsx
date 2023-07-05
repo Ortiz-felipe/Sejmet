@@ -14,6 +14,7 @@ import Typography from "@mui/material/Typography"
 import Container from "@mui/material/Container"
 import { StyledLogin } from "./StyledLogin"
 import {
+  AuthError,
   UserCredential,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -21,6 +22,7 @@ import {
 import { auth } from "../../firebase"
 import { useAuth } from "../../hook/useAuth"
 import { useNavigate } from "react-router-dom"
+import { FirebaseError } from "firebase/app"
 
 function Copyright(props: any) {
   return (
@@ -44,7 +46,7 @@ const Login = () => {
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [userCredentials, setUserCredentials] = useState<UserCredential>()
-
+  const [error, setError] = useState<string>("sin error")
   useAuth()
 
   useEffect(() => {
@@ -75,7 +77,21 @@ const Login = () => {
       navigate("/")
 
     } catch (error) {
-      console.error(error)
+      switch (error.code) {
+        case "auth/invalid-email":
+          setError("El email ingresado no es valido")
+          break;
+        case "auth/user-not-found":
+          setError("El usuario no existe")
+          break;
+        case "auth/wrong-password":
+          setError("La contraseña es incorrecta")
+          break;
+        default:
+          setError("Error desconocido")
+
+      }
+      console.error('el error es ', error.message, error.code)
     }
   }
 
@@ -85,9 +101,10 @@ const Login = () => {
         <img src={loginLogo} />
       </div>
       <div className="form">
-        <Avatar sx={{ m: 3, bgcolor: "secondary.main" }}>
+        <Avatar sx={{ m: 3, bgcolor: "primary.main" }}>
           <LockOutlinedIcon />
         </Avatar>
+        <h3 className="error">{error}</h3>
         <Typography component="h1" variant="h5">
           Ingresar
         </Typography>

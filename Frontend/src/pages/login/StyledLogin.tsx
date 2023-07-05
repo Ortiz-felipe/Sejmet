@@ -13,6 +13,12 @@ export const StyledLogin = styled.div`
         justify-content: center;
         align-items: center;
     }
+    .error {
+        color: tomato;
+        padding-bottom: 1rem;
+        visibility: visible;
+        height: 1rem;
+    }
     .form {
         flex: 1;       
         display: flex;
