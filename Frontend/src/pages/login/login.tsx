@@ -64,7 +64,30 @@ const Login = () => {
   //         console.error(error)
   //     }
   // }
-
+  const handleCreateUser = async (event) => {
+    event.preventDefault()
+    try {
+      const userCredentials = await createUserWithEmailAndPassword(auth, email, password)
+      console.log('userCredentials usuario creado correctamente', userCredentials)
+      setUserCredentials(userCredentials)
+      navigate("/")
+    } catch (error) {
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          setError("El email ingresado ya esta en uso")
+          break;
+        case "auth/invalid-email":
+          setError("El email ingresado no es valido")
+          break;
+        case "auth/weak-password":
+          setError("La contraseña es muy debil")
+          break;
+        default:
+          setError("Error desconocido")
+      }
+      console.error(error)
+    }
+  }
   const handleSubmit = async (event) => {
     event.preventDefault()
     try {
@@ -139,15 +162,27 @@ const Login = () => {
             control={<Checkbox value="remember" color="primary" />}
             label="Recordarme"
           />
-          <Button
-            className="button"
-            type="submit"
-            fullWidth
-            variant="contained"
-            onClick={handleSubmit}
-          >
-            Ingresar
-          </Button>
+          <div className="options">
+            <Button
+              id="usuario"
+              type="submit"
+              fullWidth
+
+              variant="outlined"
+              onClick={handleCreateUser}
+            >
+              Crear Usuario
+            </Button>
+            <Button
+              className="button"
+              type="submit"
+              fullWidth
+              variant="contained"
+              onClick={handleSubmit}
+            >
+              Ingresar
+            </Button>
+          </div>
           <div className="options">
             <Grid item xs>
               <Link href="#" variant="body2">

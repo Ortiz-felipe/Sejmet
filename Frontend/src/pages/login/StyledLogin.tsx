@@ -35,9 +35,13 @@ export const StyledLogin = styled.div`
                 background: ${props => props.theme.colors.backGradient};
             }
             .options {
+                #usuario{
+                    color: ${props => props.theme.colors.primary} !important;
+                }
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                gap: 3rem
             }
         }
     }
