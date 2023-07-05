@@ -17,7 +17,7 @@ export const userCredentialSlice = createSlice({
     setUserData: (state, action: PayloadAction<User>) => {
       state.userData = action.payload
     },
-    clearUserData: (state, action: PayloadAction) => {
+    clearUserData: (state) => {
       state.userData = {}
     },
   },

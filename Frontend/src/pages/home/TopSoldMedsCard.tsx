@@ -17,7 +17,7 @@ const TopSoldMedsCard = () => {
     <StyledCard floor="2floor" size="3lines">
       <div className="inventario">
         {data && data?.length < 0 ? (
-          <Box sx={{ display: 'flex' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignContent: 'center'  }}> 
             <CircularProgress />
           </Box>
         ) : (

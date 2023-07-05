@@ -20,6 +20,7 @@ import {
 } from "firebase/auth"
 import { auth } from "../../firebase"
 import { useAuth } from "../../hook/useAuth"
+import { useNavigate } from "react-router-dom"
 
 function Copyright(props: any) {
   return (
@@ -39,6 +40,7 @@ function Copyright(props: any) {
   )
 }
 const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [userCredentials, setUserCredentials] = useState<UserCredential>()
@@ -70,6 +72,8 @@ const Login = () => {
         password,
       )
       setUserCredentials(userCredentials)
+      navigate("/")
+
     } catch (error) {
       console.error(error)
     }

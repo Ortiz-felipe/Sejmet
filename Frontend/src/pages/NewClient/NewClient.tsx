@@ -22,6 +22,7 @@ import * as dayjs from "dayjs"
 import { validateObject } from "../../utils/utils"
 import CustomerValidator, { CustomerData } from "../../validators/NewCustomer/newCustomerValidator"
 import { ValidationErrors } from "fluentvalidation-ts"
+import Drawner from "../../ui/Drawner/Drawner"
 
 const baseURL = import.meta.env.VITE_BACKEND_URL
 
@@ -172,143 +173,147 @@ const NewClient = () => {
   }
 
   return (
-    <StyledNewClient>
-      <div className="newClient">
-        <Card title="Nuevo Cliente">
-          <div className="grid-new-client">
-            <Typography variant="body1">Nombre:</Typography>
-            <TextField
-              error={validationState?.firstName !== ''}
-              value={customerData?.firstName}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                inputChangeHandler(event, "firstName")
-              }
-              helperText={validationState?.firstName !== '' ? validationState.firstName : ''}
-            />
-            <Typography variant="body1">Apellido:</Typography>
-            <TextField
-              error={customerValidationState.lastName}
-              value={customerData?.lastName}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                inputChangeHandler(event, "lastName")
-              }
-            />
+    <>
+      <Drawner className="drawner" />
 
-
-            <Typography variant="body1">DNI:</Typography>
-            <TextField
-              // error={customerValidationState.dni}
-              error={validationState?.dni !== ''}
-              value={customerData?.dni}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                inputChangeHandler(event, "dni")
-              }
-              helperText={validationState?.dni !== '' ? validationState.dni : ''}
-            />
-
-            <Typography variant="body1">Telefono:</Typography>
-            <TextField
-              error={customerValidationState.phoneNumber}
-              value={customerData?.phoneNumber}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                inputChangeHandler(event, "phoneNumber")
-              }
-            />
-
-
-            <Typography variant="body1">Fecha de nacimiento:</Typography>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                label="Seleccione una fecha"
-                disableFuture
-                value={customerData.birthdate}
-                onChange={(value) => dateInputChangeHandler(value ? value : "")}
+      <StyledNewClient>
+        <div className="newClient">
+          <Card title="Nuevo Cliente">
+            <div className="grid-new-client">
+              <Typography variant="body1">Nombre:</Typography>
+              <TextField
+                error={validationState?.firstName !== ''}
+                value={customerData?.firstName}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  inputChangeHandler(event, "firstName")
+                }
+                helperText={validationState?.firstName !== '' ? validationState.firstName : ''}
               />
-            </LocalizationProvider>
-            <Typography variant="body1">Obra Social:</Typography>
-            <Select
-              error={customerValidationState.healthcareProviderId}
-              value={customerData.healthcareProviderId}
-              onChange={(event: SelectChangeEvent) =>
-                inputChangeHandler(event, "healthcareProviderId")
-              }
-            >
-              <MenuItem disabled value="0">
-                <em>Seleccione una obra social</em>
-              </MenuItem>
-              {providersData.data &&
-                providersData.data?.length > 0 &&
-                providersData.data.map((provider) => (
-                  <MenuItem key={provider.id} value={provider.id}>
-                    {provider.name}
-                  </MenuItem>
-                ))}
-            </Select>
-          </div>
-          <div className="flex-address">
+              <Typography variant="body1">Apellido:</Typography>
+              <TextField
+                error={customerValidationState.lastName}
+                value={customerData?.lastName}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  inputChangeHandler(event, "lastName")
+                }
+              />
 
-            <Typography variant="body1">Domicilio:</Typography>
-            <TextField
-              value={customerData?.address}
-              error={customerValidationState.address}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                inputChangeHandler(event, "address")
-              }
-            />
-            <Typography variant="body1">Provincia:</Typography>
-            <Select
-              error={customerValidationState.provinceId}
-              value={customerData.provinceId.toString()}
-              onChange={(event: SelectChangeEvent) =>
-                inputChangeHandler(event, "provinceId")
-              }
-            >
-              <MenuItem disabled value="0">
-                <em>Seleccione una provincia</em>
-              </MenuItem>
-              {provinceData.data &&
-                provinceData.data?.length > 0 &&
-                provinceData.data.map((province) => (
-                  <MenuItem key={province.id} value={province.id}>
-                    {province.name}
-                  </MenuItem>
-                ))}
-            </Select>
-            <Typography variant="body1">Ciudad:</Typography>
-            <FormControl disabled={customerData.provinceId < 0}>
+
+              <Typography variant="body1">DNI:</Typography>
+              <TextField
+                // error={customerValidationState.dni}
+                error={validationState?.dni !== ''}
+                value={customerData?.dni}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  inputChangeHandler(event, "dni")
+                }
+                helperText={validationState?.dni !== '' ? validationState.dni : ''}
+              />
+
+              <Typography variant="body1">Telefono:</Typography>
+              <TextField
+                error={customerValidationState.phoneNumber}
+                value={customerData?.phoneNumber}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  inputChangeHandler(event, "phoneNumber")
+                }
+              />
+
+
+              <Typography variant="body1">Fecha de nacimiento:</Typography>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Seleccione una fecha"
+                  disableFuture
+                  value={customerData.birthdate}
+                  onChange={(value) => dateInputChangeHandler(value ? value : "")}
+                />
+              </LocalizationProvider>
+              <Typography variant="body1">Obra Social:</Typography>
               <Select
-                error={customerValidationState.cityId}
-                value={customerData.cityId}
+                error={customerValidationState.healthcareProviderId}
+                value={customerData.healthcareProviderId}
                 onChange={(event: SelectChangeEvent) =>
-                  inputChangeHandler(event, "cityId")
+                  inputChangeHandler(event, "healthcareProviderId")
                 }
               >
                 <MenuItem disabled value="0">
-                  <em>Seleccione una ciudad</em>
+                  <em>Seleccione una obra social</em>
                 </MenuItem>
-                {availableCities &&
-                  availableCities.length > 0 &&
-                  availableCities.map((city) => (
-                    <MenuItem key={city.id} value={city.id}>
-                      {city.name}
+                {providersData.data &&
+                  providersData.data?.length > 0 &&
+                  providersData.data.map((provider) => (
+                    <MenuItem key={provider.id} value={provider.id}>
+                      {provider.name}
                     </MenuItem>
                   ))}
               </Select>
-            </FormControl>
-          </div>
+            </div>
+            <div className="flex-address">
 
-          <div>
-            <Button
-              variant="contained"
-              startIcon={<SaveRoundedIcon />}
-              onClick={createCustomerHandler}
-            >
-              Guardar
-            </Button>
-          </div>
-        </Card>
-      </div >
-    </StyledNewClient >
+              <Typography variant="body1">Domicilio:</Typography>
+              <TextField
+                value={customerData?.address}
+                error={customerValidationState.address}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  inputChangeHandler(event, "address")
+                }
+              />
+              <Typography variant="body1">Provincia:</Typography>
+              <Select
+                error={customerValidationState.provinceId}
+                value={customerData.provinceId.toString()}
+                onChange={(event: SelectChangeEvent) =>
+                  inputChangeHandler(event, "provinceId")
+                }
+              >
+                <MenuItem disabled value="0">
+                  <em>Seleccione una provincia</em>
+                </MenuItem>
+                {provinceData.data &&
+                  provinceData.data?.length > 0 &&
+                  provinceData.data.map((province) => (
+                    <MenuItem key={province.id} value={province.id}>
+                      {province.name}
+                    </MenuItem>
+                  ))}
+              </Select>
+              <Typography variant="body1">Ciudad:</Typography>
+              <FormControl disabled={customerData.provinceId < 0}>
+                <Select
+                  error={customerValidationState.cityId}
+                  value={customerData.cityId}
+                  onChange={(event: SelectChangeEvent) =>
+                    inputChangeHandler(event, "cityId")
+                  }
+                >
+                  <MenuItem disabled value="0">
+                    <em>Seleccione una ciudad</em>
+                  </MenuItem>
+                  {availableCities &&
+                    availableCities.length > 0 &&
+                    availableCities.map((city) => (
+                      <MenuItem key={city.id} value={city.id}>
+                        {city.name}
+                      </MenuItem>
+                    ))}
+                </Select>
+              </FormControl>
+            </div>
+
+            <div>
+              <Button
+                variant="contained"
+                startIcon={<SaveRoundedIcon />}
+                onClick={createCustomerHandler}
+              >
+                Guardar
+              </Button>
+            </div>
+          </Card>
+        </div >
+      </StyledNewClient >
+    </>
   )
 }
 

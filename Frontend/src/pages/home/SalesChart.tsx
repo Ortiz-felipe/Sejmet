@@ -6,11 +6,9 @@ import { NameType } from "recharts/types/component/DefaultTooltipContent"
 const SalesChart = ({ data }: { data: SalesByMonth[] }) => {
   console.log('preparacion data', data)
 
-  const CustomTooltip = ({active, payload, label} : TooltipProps<ValueType, NameType>) => {
+  const CustomTooltip = ({ active, payload, label }: TooltipProps<ValueType, NameType>) => {
     if (active && payload && payload.length) {
-      console.log(`Label: ${label}`)
-      console.dir(payload)
-      return(
+      return (
         <div className="custom-tooltip">
           <p>{label.charAt(0).toUpperCase() + label.slice(1)}</p>
           <p>{shortNumber(payload[0]?.value || 0)}</p>
@@ -30,7 +28,7 @@ const SalesChart = ({ data }: { data: SalesByMonth[] }) => {
         <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
         <XAxis dataKey="month" />
         <YAxis dataKey="totalAmount" tickFormatter={(data) => shortNumber(data)} />
-        <Tooltip content={<CustomTooltip />}/>
+        <Tooltip content={<CustomTooltip />} />
       </LineChart>
     </ResponsiveContainer >
   )

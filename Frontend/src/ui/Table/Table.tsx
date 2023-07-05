@@ -33,7 +33,7 @@ import RemoveIcon from "@mui/icons-material/Remove"
 import { soldProducts, addProductToSale, incrementSaleQuantity, decrementSalesQuantity } from "../../features/sale/saleSlice"
 import { SaleProduct } from "../../schemas/sale"
 import { removeProductFromSale, } from "../../features/sale/saleSlice"
-import { useMatches } from "react-router-dom";
+import { useLocation } from 'react-router-dom'
 
 interface EnhancedTableProps {
     numSelected: number
@@ -187,8 +187,8 @@ export default function EnhancedTable({
     const selectedCarro = useAppSelector(selectedProducts)
     const dispatch = useAppDispatch()
     const currentlySoldProducts = useAppSelector(soldProducts)
-    const matches = useMatches();
-
+    let location = useLocation();
+    console.log('locacion', location.pathname)
     const handleOpen = (id: string) => {
         setId(id)
         setOpenModal(true)
@@ -266,12 +266,10 @@ export default function EnhancedTable({
     ) => {
 
         console.log('se suna 1', productId)
-        if (matches[0].pathname === "/nuevaOrden") {
-            console.log('se arranca+', matches)
+        if (location.pathname === "/nuevaOrden") {
             dispatch(incrementProductQuantity(productId))
         }
-        if (matches[0].pathname === "/nuevaVenta") {
-            console.log('se arranca+', matches)
+        if (location.pathname === "/nuevaVenta") {
             dispatch(incrementSaleQuantity(productId))
         }
         const product = availableProducts.find((x) => x.id === productId)
@@ -324,12 +322,10 @@ export default function EnhancedTable({
     }
 
     const removeFromCartHandler = (productId: string) => {
-        if (matches[0].pathname === "/nuevaOrden") {
-            console.log('se arranca+', matches)
+        if (location.pathname === "/nuevaOrden") {
             dispatch(decrementProductQuantity(productId))
         }
-        if (matches[0].pathname === "/nuevaVenta") {
-            console.log('se arranca+', matches)
+        if (location.pathname === "/nuevaVenta") {
             dispatch(decrementSalesQuantity(productId))
         }
         setOrderedProducts((prevState) => {
@@ -377,7 +373,7 @@ export default function EnhancedTable({
 
     const emptyRows = 0
     function getModal(): React.ReactNode {
-        switch (matches[0].pathname) {
+        switch (location.pathname) {
             case '/Inventario':
                 return <ModalProduct open={openModal} setOpen={setOpenModal} id={id} />;
             case '/Pedidos':

@@ -25,7 +25,7 @@ const SalesChartCard = () => {
       <div className="inventario">
         <Typography variant='h6'>Historico de ventas</Typography>
         {data && data?.length < 0 ? (
-          <Box sx={{ display: 'flex' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignContent: 'center'  }}> 
             <CircularProgress />
           </Box>
         ) : (
